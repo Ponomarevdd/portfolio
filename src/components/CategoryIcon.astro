@@ -1,0 +1,8 @@
+---
+import Iconsax from './Iconsax.astro';
+interface Props { category: string }
+const { category } = Astro.props;
+const icons = { 'UX/UI': 'layer', 'Веб-дизайн': 'monitor', 'Дизайн-система': 'grid', 'Брендинг': 'pen', 'Мобильный дизайн': 'mobile' } as const;
+const name = icons[category as keyof typeof icons] ?? 'layer';
+---
+<Iconsax name={name} />

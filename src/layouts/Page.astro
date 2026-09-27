@@ -1,0 +1,15 @@
+---
+import '@fontsource/onest/latin-400.css';
+import '@fontsource/onest/cyrillic-400.css';
+import '../styles/global.css';
+import '../styles/gradient.css';
+import '../styles/pages.css';
+import Navigation from '../components/Navigation.astro';
+import ContactDialog from '../components/ContactDialog.astro';
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="ru">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="robots" content="noindex, nofollow"/><link rel="icon" href="/favicon.svg"/><title>{title} — Дмитрий</title></head>
+<body><Navigation/><ContactDialog/><main><slot/></main><script>import '../scripts/motion'; import '../scripts/buttons';</script></body>
+</html>

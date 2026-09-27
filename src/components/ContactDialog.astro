@@ -1,0 +1,52 @@
+---
+import Iconsax from './Iconsax.astro';
+import '../styles/contact.css';
+---
+<dialog id="contact-dialog" class="contact-dialog" aria-labelledby="contact-title">
+  <button class="contact-close" type="button" aria-label="Закрыть контакты"><span></span><span></span></button>
+  <div class="contact-layout">
+    <section class="contact-intro">
+      <h2 id="contact-title">Хорошие идеи<br />начинаются<br />с разговора.</h2>
+      <p class="contact-description">Расскажите, что задумали.<br />Будет интересно сделать это вместе.</p>
+      <div class="contact-direct" aria-label="Другие способы связи">
+        <button type="button" disabled title="Адрес почты пока не добавлен">Почта <Iconsax name="arrow" size={18} rotate={45} /></button>
+        <button type="button" disabled title="Ссылка на Telegram пока не добавлена">Telegram <Iconsax name="arrow" size={18} rotate={45} /></button>
+      </div>
+      <p class="contact-note">Прямые контакты появятся здесь чуть позже.</p>
+    </section>
+    <form class="contact-form">
+      <div class="contact-field">
+        <label for="contact-name">Как вас зовут?</label>
+        <input id="contact-name" name="name" autocomplete="name" placeholder="Ваше имя" required maxlength="100" />
+      </div>
+      <div class="contact-field">
+        <label for="contact-reply">Как с вами связаться?</label>
+        <input id="contact-reply" name="reply" type="text" placeholder="Телефон, почта или Telegram" required maxlength="200" autocapitalize="off" spellcheck="false" />
+      </div>
+      <fieldset class="contact-topics">
+        <legend>О чём поговорим?</legend>
+        <div class="contact-topic-options">
+          <label><input type="radio" name="topic" value="project" checked /><span>Проект</span></label>
+          <label><input type="radio" name="topic" value="employment" /><span>Трудоустройство</span></label>
+          <label><input type="radio" name="topic" value="other" /><span>Другое</span></label>
+        </div>
+      </fieldset>
+      <div class="contact-field">
+        <label for="contact-message">Немного о вашей идее</label>
+        <textarea id="contact-message" name="message" placeholder="Задача, детали, пожелания — всё, что считаете важным" required maxlength="5000" rows="3"></textarea>
+      </div>
+      <div class="contact-consent">
+        <span class="contact-check"><input id="contact-consent" name="consent" type="checkbox" required /><span class="contact-check-icon"><Iconsax name="tick" size={20} /></span></span>
+        <div><label for="contact-consent">Даю согласие на обработку моих данных.</label> <a href="/personal-data/" target="_blank" rel="noopener">Персональные данные</a></div>
+      </div>
+      <div class="contact-submit-row">
+        <button class="contact-submit" type="submit">Отправить <Iconsax name="arrow" size={22} rotate={45} /></button>
+        <p>Пока это демонстрация формы.<br />Данные никуда не отправляются.</p>
+      </div>
+      <p class="contact-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</dialog>
+<script>
+  import '../scripts/contact';
+</script>

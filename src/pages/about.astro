@@ -1,0 +1,36 @@
+---
+import Page from '../layouts/Page.astro';
+import BackLink from '../components/BackLink.astro';
+import '../styles/about.css';
+---
+<Page title="Обо мне">
+  <div class="about-page">
+    <div class="about-back"><BackLink/></div>
+    <section class="about-hero" aria-labelledby="about-title">
+      <div class="about-photo" role="img" aria-label="Место для фотографии Дмитрия">
+        <span class="about-photo-initial" aria-hidden="true">Д.</span>
+        <span class="about-photo-caption">Здесь будет моя фотография</span>
+      </div>
+      <div class="about-intro">
+        <h1 id="about-title">Привет,<br/>я Дмитрий.</h1>
+        <p class="about-lead">Делаю сайты и интерфейсы, в которых выразительный визуал сочетается с понятным опытом.</p>
+        <p>Мне интересен дизайн, который помогает разобраться в продукте и почувствовать его характер. Люблю чистую типографику, внимание к деталям и движение, у которого есть смысл.</p>
+        <p>В работе начинаю с задачи и сценариев, а затем ищу визуальное решение. Хочется, чтобы результат был не только красивым, но и удобным каждый день.</p>
+        <span class="about-draft">Пока это текст-заглушка — здесь будет моя история.</span>
+      </div>
+    </section>
+    <section class="about-section" aria-labelledby="numbers-title">
+      <div class="about-section-heading"><h2 id="numbers-title">Немного в цифрах</h2><p>Пока примерные значения для макета.</p></div>
+      <div class="about-stats">
+        <article class="stat-card"><div class="stat-surface"><span class="stat-number">5<span class="stat-unit">лет</span></span><h3>опыта в дизайне</h3><p>От первой идеи до работающего интерфейса.</p></div></article>
+        <article class="stat-card"><div class="stat-surface"><span class="stat-number">100<span class="stat-unit">+</span></span><h3>проектов</h3><p>Сайты, сервисы и визуальные истории.</p></div></article>
+        <article class="stat-card"><div class="stat-surface"><span class="stat-number">3</span><h3>направления</h3><p>Веб-дизайн, интерфейсы и визуальная айдентика.</p></div></article>
+        <article class="stat-card"><div class="stat-surface"><span class="stat-number">100<span class="stat-unit">%</span></span><h3>внимания к деталям</h3><p>От типографики до последнего состояния кнопки.</p></div></article>
+        <article class="stat-card"><div class="stat-surface"><span class="stat-number">1</span><h3>общая цель</h3><p>Погружаюсь в задачу и работаю с вами как одна команда.</p></div></article>
+      </div>
+    </section>
+
+  </div>
+</Page>
+
+<script>import "../scripts/about-stats";</script>

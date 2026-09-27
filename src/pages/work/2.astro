@@ -1,0 +1,7 @@
+---
+import BackLink from '../../components/BackLink.astro';
+import Page from '../../layouts/Page.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { allProjects } from '../../data/projects';
+---
+<Page title="Другие работы"><header class="page-heading"><BackLink href="/work/" label="Все работы"/><h1>Другие работы</h1></header><section class="work" id="work" aria-label="Другие работы">{allProjects.slice(6,12).map(project => <ProjectCard project={project}/>)}</section></Page>

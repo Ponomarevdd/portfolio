@@ -1,0 +1,116 @@
+/* Настройки градиента. Меняйте только значения ниже для быстрых проб. */
+:root {
+  --gradient-turquoise: #f83600;
+  --gradient-orange: #fe8c00; 
+  --gradient-pink: #f83600;
+  --gradient-size: 1.4;             /* 1 = исходный размер, 1.4 = +40% */
+  --gradient-offset-y: -10%;       /* отрицательное значение = выше */
+  --gradient-speed: 6s;             /* меньше секунд = быстрее */
+  --gradient-opacity: 0.8;         /* 0 = невидим, 1 = насыщенный */
+  --gradient-blur: 52px;           /* размытие цветных пятен */
+  --gradient-grain-opacity: 0;   /* 0 = без зерна */
+}
+
+.gradient {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  width: 100%;
+  height: calc(500px * var(--gradient-size));
+  left: 0;
+  top: 0;
+  transform: translateY(var(--gradient-offset-y));
+  overflow: clip;
+  opacity: var(--gradient-opacity);
+  mask-image: radial-gradient(ellipse 50% 60% at 50% 30%, #000 30%, transparent 100%);
+}
+
+.gradient__color {
+  position: absolute;
+  inset: -35px 0 0;
+  filter: blur(var(--gradient-blur));
+}
+
+.gradient__blob {
+  position: absolute;
+  width: calc(48% * var(--gradient-size));
+  height: calc(75% * var(--gradient-size));
+  top: 0;
+  border-radius: 50%;
+}
+
+.gradient__blob--turquoise {
+  left: 7%;
+  background: radial-gradient(ellipse, var(--gradient-turquoise) 0% 12%, transparent 90%);
+}
+
+.gradient__blob--orange {
+  left: 27%;
+  top: -2%;
+  background: radial-gradient(ellipse, var(--gradient-orange) 0% 30%, transparent 90%);
+}
+
+.gradient__blob--pink {
+  left: 47%;
+  top: 2%;
+  background: radial-gradient(ellipse, var(--gradient-pink) 0% 27%, transparent 90%);
+}
+
+.gradient__grain {
+  position: absolute;
+  inset: 0;
+  opacity: var(--gradient-grain-opacity);
+  mix-blend-mode: multiply;
+  mask-image: radial-gradient(ellipse 50% 58% at 50% 38%, #000 15%, transparent 100%);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath fill='%23787878' filter='url(%23noise)' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+@media (max-width: 599px) {
+  .gradient {
+    height: calc(540px * var(--gradient-size));
+    mask-image: radial-gradient(ellipse 50% 55% at 50% 30%, #000 15%, transparent 100%);
+  }
+  .gradient__color {
+    inset: 30px -80px 0;
+    filter: blur(calc(var(--gradient-blur) * .8));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .gradient__blob {
+    animation-duration: var(--gradient-speed);
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+  .gradient__blob--turquoise { animation-name: turquoise-flow; }
+  .gradient__blob--orange {
+    animation-name: orange-flow;
+    animation-duration: calc(var(--gradient-speed) * 1.18);
+    animation-delay: -5s;
+  }
+  .gradient__blob--pink {
+    animation-name: pink-flow;
+    animation-duration: calc(var(--gradient-speed) * 1.09);
+    animation-delay: -8s;
+  }
+}
+
+@keyframes turquoise-flow {
+  0% { transform: translate(-15%, -9%) scale(.88); opacity: .78; }
+  50% { transform: translate(30%, 19%) scale(1.18); opacity: 1; }
+  100% { transform: translate(6%, 5%) scale(.96); opacity: .88; }
+}
+@keyframes orange-flow {
+  0% { transform: translate(25%, 16%) scale(.95); opacity: .88; }
+  50% { transform: translate(-24%, -11%) scale(1.15); opacity: 1; }
+  100% { transform: translate(12%, 11%) scale(.92); opacity: .8; }
+}
+@keyframes pink-flow {
+  0% { transform: translate(-26%, 14%) scale(1.14); opacity: 1; }
+  50% { transform: translate(18%, -13%) scale(.91); opacity: .8; }
+  100% { transform: translate(-13%, 20%) scale(1.19); opacity: 1; }
+}
+
+.gradient.is-paused .gradient__blob { animation-play-state: paused; }

@@ -1,0 +1,5 @@
+---
+import Iconsax from './Iconsax.astro';
+const { href = '/', label = 'На главную' } = Astro.props;
+---
+<a class="back-link" href={href}><span class="back-link__arrow"><Iconsax name="arrow" size={20} rotate={-90}/></span><span>{label}</span></a>

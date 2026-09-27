@@ -1,0 +1,42 @@
+---
+import '@fontsource/onest/latin-400.css';
+import '@fontsource/onest/cyrillic-400.css';
+import '../styles/global.css';
+import '../styles/pages.css';
+import ActionButton from '../components/ActionButton.astro';
+import '../styles/gradient.css';
+import Gradient from '../components/Gradient.astro';
+import Navigation from '../components/Navigation.astro';
+import ContactDialog from '../components/ContactDialog.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Дмитрий — дизайнер сайтов и интерфейсов. Избранные работы." />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Дмитрий — сайты и интерфейсы</title>
+  </head>
+  <body>
+    <Gradient />
+    <Navigation />
+    <ContactDialog />
+    <main>
+      <section class="intro" id="intro" aria-labelledby="intro-title">
+        <h1 id="intro-title">Привет, я Дмитрий — дизайнер сайтов и интерфейсов.<br /> Соединяю выразительный визуал с понятным опытом.</h1>
+      </section>
+      <section class="work work--home" id="work" aria-label="Мои работы">
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </section>
+      <div class="action-row"><ActionButton href="/work/" label="Посмотреть все работы"/></div>
+    </main>
+    <script>
+      import '../scripts/motion';
+      import '../scripts/buttons';
+    </script>
+  </body>
+</html>
