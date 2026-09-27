@@ -1,4 +1,5 @@
 ---
+import { siteUrl } from '../utils/url';
 import Iconsax from './Iconsax.astro';
 import '../styles/contact.css';
 ---
@@ -37,7 +38,7 @@ import '../styles/contact.css';
       </div>
       <div class="contact-consent">
         <span class="contact-check"><input id="contact-consent" name="consent" type="checkbox" required /><span class="contact-check-icon"><Iconsax name="tick" size={20} /></span></span>
-        <div><label for="contact-consent">Даю согласие на обработку моих данных.</label> <a href="/personal-data/" target="_blank" rel="noopener">Персональные данные</a></div>
+        <div><label for="contact-consent">Даю согласие на обработку моих данных.</label> <a href={siteUrl('/personal-data/')} target="_blank" rel="noopener">Персональные данные</a></div>
       </div>
       <div class="contact-submit-row">
         <button class="contact-submit" type="submit">Отправить <Iconsax name="arrow" size={22} rotate={45} /></button>

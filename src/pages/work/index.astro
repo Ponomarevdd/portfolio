@@ -1,4 +1,5 @@
 ---
+import { siteUrl } from '../../utils/url';
 import BackLink from '../../components/BackLink.astro';
 import Page from '../../layouts/Page.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
@@ -10,7 +11,7 @@ import { allProjects } from '../../data/projects';
   <section class="work" id="work" aria-label="Мои работы">{allProjects.slice(0,6).map(project => <ProjectCard project={project}/>)}</section>
   <div class="action-row"><ActionButton id="load-more" label="Показать ещё" showIcon={false}/></div>
   <p class="work-status" role="status" aria-live="polite"></p>
-  <noscript><p class="work-status"><a href="/work/2/">Следующие проекты →</a></p></noscript>
+  <noscript><p class="work-status"><a href={siteUrl('/work/2/')}>Следующие проекты →</a></p></noscript>
   <script>
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
     const button = document.querySelector<HTMLButtonElement>('#load-more')!;
@@ -19,7 +20,7 @@ import { allProjects } from '../../data/projects';
       button.disabled = true;
       status.textContent = 'Загружаем работы…';
       try {
-        const response = await fetch('/work/2/');
+        const response = await fetch(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/work/2/`);
         if (!response.ok) throw new Error('Load failed');
         const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
         const cards = doc.querySelectorAll('#work > .project');

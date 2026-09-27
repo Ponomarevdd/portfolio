@@ -1,29 +1,30 @@
 ---
+import { siteUrl } from '../../utils/url';
 import BackLink from '../../components/BackLink.astro';
 import Page from '../../layouts/Page.astro';
 import ActionButton from '../../components/ActionButton.astro';
 ---
 <Page title="ФГИС «Моя школа»">
   <header class="page-heading">
-    <BackLink href="/work/" label="Все работы"/>
+    <BackLink href={siteUrl('/work/')} label="Все работы"/>
     <h1>ФГИС «Моя школа»</h1>
     <p>Обучающая среда, которая помогает педагогам и администраторам освоить цифровую образовательную систему.</p>
   </header>
   <div class="case-content school-case">
-    <img class="case-hero" src="/images/my-school/1.png" width="2968" height="1670" alt="Обучающие лонгриды ФГИС Моя школа" fetchpriority="high"/>
+    <img class="case-hero" src={siteUrl('/images/my-school/1.png')} width="2968" height="1670" alt="Обучающие лонгриды ФГИС Моя школа" fetchpriority="high"/>
     <section class="case-overview">
       <div><h2>О проекте</h2><p>«Моя школа» — федеральная государственная информационная система с единым доступом к цифровым сервисам и учебным материалам для учащихся, педагогов и родителей.</p><p>При внедрении платформы в регионах пользователи сталкивались с высоким порогом входа. Обучение было фрагментированным: разобраться в системе было сложно, возникали ошибки и росла нагрузка на поддержку.</p></div>
       <aside class="case-meta"><h3>Период</h3><p>Август — октябрь 2023</p><h3>Направления работы</h3><ul><li>UX/UI</li><li>Обучающие лонгриды</li><li>UI-kit</li><li>Иллюстрации</li></ul><h3>Аудитория</h3><p>Педагоги и администраторы образовательных организаций.</p></aside>
     </section>
     <section class="case-section"><h2>Задача</h2><p>Снизить порог входа и ускорить обучение через масштабируемую обучающую среду. Для пользователей — понятные инструкции без перегрузки теорией и возможность учиться в своём темпе. Для платформы — сокращение времени адаптации и обращений в поддержку, рост вовлечённости.</p></section>
     <section class="case-section"><h2>Что показало исследование</h2><p>Качественные интервью с учителями и администраторами выявили три основные проблемы: трудно найти нужное в большом объёме текста, непонятно, с чего начать, и нет уверенности в правильности своих действий.</p><p>Пользователи редко дочитывали длинные материалы, перескакивали между разделами и возвращались к одним и тем же инструкциям. Поэтому в основе решения — короткие смысловые блоки и чёткая последовательность шагов.</p></section>
-    <section class="case-section"><h2>Одна карточка — одна мысль</h2><p>Лонгриды разбиты на самостоятельные смысловые блоки. Визуальная иерархия помогает быстро найти главное, а нумерация поддерживает сценарии, в которых важен порядок действий.</p><div class="school-images"><img src="/images/my-school/2.png" width="1160" height="750" alt="Смысловые карточки обучающего материала" loading="lazy"/><img src="/images/my-school/3.png" width="1160" height="764" alt="Визуальная иерархия и последовательность шагов в лонгриде" loading="lazy"/></div></section>
-    <section class="case-section"><h2>Иллюстрации с характером</h2><p>Тематические иллюстрации делают объёмные учебные материалы живее и помогают поддерживать интерес к обучению.</p><div class="school-images"><img src="/images/my-school/4.png" width="1160" height="480" alt="Иллюстрации по тематике курса" loading="lazy"/><img src="/images/my-school/5.png" width="1278" height="576" alt="Визуальные материалы для обучающих лонгридов" loading="lazy"/><img src="/images/my-school/6.png" width="1276" height="648" alt="Примеры иллюстраций в едином стиле" loading="lazy"/></div></section>
-    <section class="case-section"><h2>Система для 45 лонгридов</h2><p>Подробный UI-kit и урок-шаблон позволили быстро собирать новые материалы, подключать других дизайнеров и сохранять единый визуальный язык. Компоненты легко адаптируются под содержание каждого урока.</p><div class="school-images"><img src="/images/my-school/7.png" width="1661" height="2216" alt="UI-kit и шаблон для масштабирования обучающих материалов" loading="lazy"/></div></section>
-    <section class="case-section"><h2>Несколько способов учиться</h2><p>Каждый урок объединяет лонгрид, видео, краткий конспект и интерактивные задания. Пользователь может выбрать подходящий формат и вернуться к нужной инструкции.</p><div class="school-images"><img src="/images/my-school/8.png" width="1622" height="1043" alt="Модульная структура учебного контента" loading="lazy"/></div></section>
+    <section class="case-section"><h2>Одна карточка — одна мысль</h2><p>Лонгриды разбиты на самостоятельные смысловые блоки. Визуальная иерархия помогает быстро найти главное, а нумерация поддерживает сценарии, в которых важен порядок действий.</p><div class="school-images"><img src={siteUrl('/images/my-school/2.png')} width="1160" height="750" alt="Смысловые карточки обучающего материала" loading="lazy"/><img src={siteUrl('/images/my-school/3.png')} width="1160" height="764" alt="Визуальная иерархия и последовательность шагов в лонгриде" loading="lazy"/></div></section>
+    <section class="case-section"><h2>Иллюстрации с характером</h2><p>Тематические иллюстрации делают объёмные учебные материалы живее и помогают поддерживать интерес к обучению.</p><div class="school-images"><img src={siteUrl('/images/my-school/4.png')} width="1160" height="480" alt="Иллюстрации по тематике курса" loading="lazy"/><img src={siteUrl('/images/my-school/5.png')} width="1278" height="576" alt="Визуальные материалы для обучающих лонгридов" loading="lazy"/><img src={siteUrl('/images/my-school/6.png')} width="1276" height="648" alt="Примеры иллюстраций в едином стиле" loading="lazy"/></div></section>
+    <section class="case-section"><h2>Система для 45 лонгридов</h2><p>Подробный UI-kit и урок-шаблон позволили быстро собирать новые материалы, подключать других дизайнеров и сохранять единый визуальный язык. Компоненты легко адаптируются под содержание каждого урока.</p><div class="school-images"><img src={siteUrl('/images/my-school/7.png')} width="1661" height="2216" alt="UI-kit и шаблон для масштабирования обучающих материалов" loading="lazy"/></div></section>
+    <section class="case-section"><h2>Несколько способов учиться</h2><p>Каждый урок объединяет лонгрид, видео, краткий конспект и интерактивные задания. Пользователь может выбрать подходящий формат и вернуться к нужной инструкции.</p><div class="school-images"><img src={siteUrl('/images/my-school/8.png')} width="1622" height="1043" alt="Модульная структура учебного контента" loading="lazy"/></div></section>
     <section class="case-section"><h2>Результаты</h2><div class="school-results"><div><strong>45</strong><span>обучающих лонгридов</span></div><div><strong>2</strong><span>курса: для педагогов и администраторов</span></div></div><p>Шаблоны сократили время создания новых материалов, а карточная структура улучшила навигацию и читаемость контента.</p><p>По обратной связи от ФГИС «Моя школа», снизилось количество обращений в поддержку, выросли завершение курсов и вовлечённость. Количественные показатели этих изменений в материалах кейса не приводятся.</p></section>
   </div>
-  <div class="action-row"><ActionButton href="/work/" label="Посмотреть все работы"/></div>
+  <div class="action-row"><ActionButton href={siteUrl('/work/')} label="Посмотреть все работы"/></div>
 </Page>
 <style>
 .school-images { display: grid; gap: 24px; margin-top: 32px; }

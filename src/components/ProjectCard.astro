@@ -1,4 +1,5 @@
 ---
+import { siteUrl } from '../utils/url';
 import type { Project } from '../data/projects';
 import CategoryIcon from './CategoryIcon.astro';
 interface Props { project: Project }
@@ -8,27 +9,27 @@ const Tile = href ? 'a' : 'div';
 ---
 <article class="project" aria-labelledby={`project-${project.slug}`}>
   <div class="project__gallery">
-    <Tile href={href} class="project__cover project__cover--main">
-      <img src={project.cover} alt={project.alt} width={project.width} height={project.height} loading={project.slug === 'put' ? 'eager' : 'lazy'} decoding="async" />
+    <Tile href={siteUrl(href)} class="project__cover project__cover--main">
+      <img src={siteUrl(project.cover)} alt={project.alt} width={project.width} height={project.height} loading={project.slug === 'put' ? 'eager' : 'lazy'} decoding="async" />
     </Tile>
     {project.previews ? project.previews.map((preview) => (
-      <Tile href={href} class="project__cover project__cover--preview">
-        <img src={preview.src} alt={preview.alt} width={preview.width} height={preview.height} loading="lazy" decoding="async" />
+      <Tile href={siteUrl(href)} class="project__cover project__cover--preview">
+        <img src={siteUrl(preview.src)} alt={preview.alt} width={preview.width} height={preview.height} loading="lazy" decoding="async" />
       </Tile>
     )) : <>
-    <Tile href={href} class="project__identity" style={`--identity-bg: ${project.identity.background}; --identity-color: ${project.identity.color}`}>
+    <Tile href={siteUrl(href)} class="project__identity" style={`--identity-bg: ${project.identity.background}; --identity-color: ${project.identity.color}`}>
       <span class="project__identity-symbol" aria-hidden="true">✳</span>
       <span class="project__identity-name">{project.identity.name}</span>
       <span class="project__identity-tagline">{project.identity.tagline}</span>
     </Tile>
-    <Tile href={href} class="project__cover project__cover--detail">
-      <img src={project.cover} alt={`Деталь визуальной концепции проекта «${project.identity.name}»`} width={project.width} height={project.height} loading="lazy" decoding="async" />
+    <Tile href={siteUrl(href)} class="project__cover project__cover--detail">
+      <img src={siteUrl(project.cover)} alt={`Деталь визуальной концепции проекта «${project.identity.name}»`} width={project.width} height={project.height} loading="lazy" decoding="async" />
     </Tile>
     </>}
 
   </div>
   <div class="project__details">
-    <h2 id={`project-${project.slug}`}>{href ? <a href={href}>{project.title}</a> : project.title}</h2>
+    <h2 id={`project-${project.slug}`}>{href ? <a href={siteUrl(href)}>{project.title}</a> : project.title}</h2>
     <ul class="project__categories" aria-label="Категории проекта">
       {project.categories.slice(0, 2).map((category) => <li><CategoryIcon category={category} /><span>{category}</span></li>)}
     </ul>

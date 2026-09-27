@@ -1,22 +1,23 @@
 ---
+import { siteUrl } from '../../utils/url';
 import BackLink from '../../components/BackLink.astro';
 import Page from '../../layouts/Page.astro';
 import ActionButton from '../../components/ActionButton.astro';
 ---
 <Page title="Путь — сервис путешествий">
   <header class="page-heading">
-    <BackLink href="/work/" label="Все работы"/>
+    <BackLink href={siteUrl('/work/')} label="Все работы"/>
     <h1>Путь — сервис<br/>для путешествий</h1>
     <p>От первого «хочу уехать» до маршрута, в котором есть место для открытий. Концепт сервиса для самостоятельных путешествий.</p>
   </header>
   <div class="case-content">
-    <img class="case-hero" src="/images/travel.png" width="1566" height="1004" alt="Путь: главный экран сервиса и маршрут по Италии" fetchpriority="high"/>
+    <img class="case-hero" src={siteUrl('/images/travel.png')} width="1566" height="1004" alt="Путь: главный экран сервиса и маршрут по Италии" fetchpriority="high"/>
     <section class="case-overview">
       <div><h2>О проекте</h2><p>Подготовка к поездке часто превращается в десятки вкладок, заметок и сохранённых мест. «Путь» собирает вдохновение и планирование в одном пространстве.</p><p>Идея концепта — помочь выбрать направление, собрать маршрут по дням и сохранить важные детали. В центре интерфейса — фотографии мест, понятные шаги и ощущение предстоящего путешествия.</p></div>
       <aside class="case-meta"><h3>Что сделано</h3><ul><li>UX/UI</li><li>Веб-дизайн</li><li>Визуальная концепция</li></ul><h3>Инструменты и технологии</h3><ul><li>Figma</li><li>Astro</li><li>TypeScript</li><li>GSAP</li></ul><p class="case-note">Демонстрационный кейс. Описание и стек — примеры наполнения; заменим их на фактические данные проекта.</p></aside>
     </section>
-    <section class="case-section"><h2>От вдохновения к маршруту</h2><p>Крупные фотографии помогают почувствовать место. Карточки направлений и маршрут по дням переводят это впечатление в конкретный план поездки.</p><div class="case-panels"><div class="case-brand"><strong>Путь</strong><span>Новые места. Ближе к себе.</span></div><div class="case-detail"><img src="/images/travel.png" width="1566" height="1004" alt="Деталь маршрута по Италии" loading="lazy"/></div></div></section>
+    <section class="case-section"><h2>От вдохновения к маршруту</h2><p>Крупные фотографии помогают почувствовать место. Карточки направлений и маршрут по дням переводят это впечатление в конкретный план поездки.</p><div class="case-panels"><div class="case-brand"><strong>Путь</strong><span>Новые места. Ближе к себе.</span></div><div class="case-detail"><img src={siteUrl('/images/travel.png')} width="1566" height="1004" alt="Деталь маршрута по Италии" loading="lazy"/></div></div></section>
     <section class="case-section"><h2>Спокойный визуальный язык</h2><p>Природная палитра, мягкие формы и простая типографика оставляют больше внимания самому путешествию. Интерфейс сопровождает человека от выбора места до готового маршрута.</p></section>
   </div>
-  <div class="action-row"><ActionButton href="/work/" label="Посмотреть все работы"/></div>
+  <div class="action-row"><ActionButton href={siteUrl('/work/')} label="Посмотреть все работы"/></div>
 </Page>

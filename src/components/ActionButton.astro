@@ -1,6 +1,7 @@
 ---
+import { siteUrl } from '../utils/url';
 import Iconsax from './Iconsax.astro';
 const { href, label, id, showIcon = true } = Astro.props;
 const Tag = href ? 'a' : 'button';
 ---
-<Tag class="action-button" href={href} id={id} type={href ? undefined : 'button'}><span>{label}</span>{showIcon && <Iconsax name="arrow" size={20} rotate={45} />}</Tag>
+<Tag class="action-button" href={siteUrl(href)} id={id} type={href ? undefined : 'button'}><span>{label}</span>{showIcon && <Iconsax name="arrow" size={20} rotate={45} />}</Tag>
