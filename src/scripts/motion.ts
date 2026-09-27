@@ -170,7 +170,7 @@ document.fonts.ready.then(() => {
         });
       },
     }) : null;
-    gsap.from('.header', { y: -12, opacity: 0, duration: .7, ease: 'power2.out' });
+    gsap.from('.header', { y: -12, opacity: 0, duration: .7, ease: 'power2.out', clearProps: 'transform,opacity' });
     gsap.utils.toArray<HTMLElement>('.project').forEach((project) => {
       gsap.from(project, {
         y: 32, opacity: 0, duration: .9, ease: 'power3.out',
