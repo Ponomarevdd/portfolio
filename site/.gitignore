@@ -3,6 +3,3 @@ dist/
 .astro/
 .sites-runtime/
 .DS_Store
-.env
-.env.*
-!.env.example
