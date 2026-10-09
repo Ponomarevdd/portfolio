@@ -1,16 +1,14 @@
 ---
-import layer from '../assets/iconsax/layer-bold.svg?raw';
-import monitor from '../assets/iconsax/monitor-bold.svg?raw';
-import grid from '../assets/iconsax/element-4-bold.svg?raw';
-import pen from '../assets/iconsax/pen-tool-bold.svg?raw';
-import mobile from '../assets/iconsax/mobile-bold.svg?raw';
-import arrow from '../assets/iconsax/arrow-up-linear.svg?raw';
-import tick from '../assets/iconsax/tick-square-linear.svg?raw';
-const icons = { tick, layer, monitor, grid, pen, mobile, arrow };
-interface Props { name: keyof typeof icons; size?: number; rotate?: number }
-const { name, size = 16, rotate = 0 } = Astro.props;
+const files = import.meta.glob('../assets/iconsax/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const bySlug = Object.fromEntries(Object.entries(files).map(([path, svg]) => [path.split('/').pop()!.replace('.svg', ''), svg]));
+// Short aliases used by existing components.
+const aliases: Record<string, string> = { tick: 'tick-square-linear', layer: 'layer-bold', monitor: 'monitor-bold', grid: 'element-4-bold', pen: 'pen-tool-bold', mobile: 'mobile-bold', arrow: 'arrow-up-linear' };
+interface Props { name: string; size?: number; rotate?: number; class?: string }
+const { name, size = 16, rotate = 0, class: className } = Astro.props;
+const svg = bySlug[aliases[name] ?? name];
+if (!svg) throw new Error(`Iconsax icon not found: ${name}`);
 ---
-<span class="iconsax" aria-hidden="true" style={`--icon-size:${size}px;transform:rotate(${rotate}deg)`} set:html={icons[name]} />
+<span class:list={['iconsax', className]} aria-hidden="true" style={`--icon-size:${size}px;transform:rotate(${rotate}deg)`} set:html={svg} />
 <style>
   .iconsax { display: inline-flex; align-items: center; justify-content: center; width: var(--icon-size); height: var(--icon-size); flex: 0 0 var(--icon-size); line-height: 0; }
   .iconsax :global(svg) { display: block; width: var(--icon-size); height: var(--icon-size); flex: none; }

@@ -86,12 +86,12 @@ export const moreProjects: Project[] = [
   ['sreda', 'Среда — предметы для дома', 5],
 ].map(([slug, title, source]) => ({ ...projects[Number(source)], slug: String(slug), title: String(title), description: 'Демонстрационный проект для проверки каталога. Здесь появится краткое описание задачи и решения.', identity: { ...projects[Number(source)].identity, name: String(title).split(' — ')[0] } }));
 const school: Project = {
-  slug: 'my-school', href: '/cases/my-school/', title: 'ФГИС «Моя школа»', year: 2023,
+  slug: 'my-school', href: '/cases/my-school/', title: 'Цифровая платформа для школ', year: 2023,
   categories: ['UX/UI', 'Веб-дизайн'],
-  description: 'Обучающая среда для педагогов и администраторов: 45 лонгридов и два курса, которые помогают освоить ФГИС «Моя школа». Карточная структура, тематические иллюстрации и единая система компонентов.',
-  cover: '/images/my-school/1.png', width: 2968, height: 1670,
-  alt: 'Обучающие материалы ФГИС «Моя школа»',
-  identity: { name: 'Моя школа', tagline: 'Понятное обучение работе с системой', background: '#eef2ff', color: '#4659aa' },
+  description: 'Система обучения для педагогов и администраторов школ: 45 лонгридов, LMS и дизайн-система, по которой команда выпускает уроки потоком. Проект под NDA.',
+  cover: '/images/school-platform/cover.png', width: 2400, height: 1400,
+  alt: 'Фрагменты обучающего урока и LMS Цифровой платформы для школ',
+  identity: { name: 'Школы', tagline: 'Цифровая платформа для школ', background: '#eef2ff', color: '#4659aa' },
   previews: [
     { src: '/images/my-school/2.png', alt: 'Карточная структура обучающего лонгрида', width: 1160, height: 750 },
     { src: '/images/my-school/4.png', alt: 'Тематические иллюстрации для обучающих курсов', width: 1160, height: 480 },
