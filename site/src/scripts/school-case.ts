@@ -31,7 +31,7 @@ const observer = new IntersectionObserver((entries) => {
     if (el.dataset.anim === 'once') { if (entry.isIntersecting) { el.classList.add('is-in'); observer.unobserve(el); } continue; }
     el.classList.toggle('is-in', entry.isIntersecting);
   }
-}, { threshold: .25 });
+}, { rootMargin: '-12% 0px -12% 0px' });
 
 document.querySelectorAll<HTMLElement>('.sc [data-anim], .sc [data-count]').forEach((el) => observer.observe(el));
 

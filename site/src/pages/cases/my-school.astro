@@ -4,6 +4,8 @@ import BackLink from '../../components/BackLink.astro';
 import Page from '../../layouts/Page.astro';
 import ActionButton from '../../components/ActionButton.astro';
 import Iconsax from '../../components/Iconsax.astro';
+import ru from '../../data/russia-dots.json';
+import profiles from '../../data/school-profiles.json';
 import '@fontsource/geologica/latin-300.css';
 import '@fontsource/geologica/cyrillic-300.css';
 import '@fontsource/geologica/latin-500.css';
@@ -14,12 +16,10 @@ import '../../styles/school-case.css';
 
 const img = (name: string) => siteUrl(`/images/school-platform/${name}`);
 
-// Дот-сетка для блока «Контекст»: 22 × 9 точек, часть «зажигается» волной.
-const dots = Array.from({ length: 22 * 9 }, (_, i) => {
-  const x = i % 22, y = Math.floor(i / 22);
-  const lit = (x * 7 + y * 13) % 5 !== 0 && !(y < 2 && x > 15) && !(y > 6 && x < 4);
-  return { lit, delay: ((x + y * .6) * .08).toFixed(2) };
-});
+// Точечная карта России для блока «Контекст»: точки сетки внутри границы, одним path.
+const r = ru.step * .32;
+const dotPath = ru.pts.map(([x, y]) => `M${x - r} ${y}a${r} ${r} 0 1 0 ${r * 2} 0a${r} ${r} 0 1 0 ${-r * 2} 0`).join('');
+const cities = Object.values(ru.cities) as [number, number][];
 
 const journey = [
   { stage: 'Регистрация', y: 46 },
@@ -35,6 +35,12 @@ const queue = [
   { text: 'Где создать шаблон задания?', from: 'Школа № 41 · 08:19', same: true },
   { text: 'Не вижу раздел «Тесты»', from: 'Гимназия № 7 · 08:21' },
   { text: 'Где создать шаблон задания?', from: 'Школа № 105 · 08:22', same: true },
+];
+const lessons = [
+  { title: 'С чего начать работу в Цифровой платформе', course: 'Модуль 1 · Знакомство с системой', format: 'Лонгрид', icon: 'document-text-bold', time: '10 мин' },
+  { title: 'Роль педагогического работника в Цифровой платформе', course: 'Модуль 1 · Знакомство с системой', format: 'Лонгрид', icon: 'document-text-bold', time: '10 мин' },
+  { title: 'Самопроверка', course: 'Модуль 1 · Знакомство с системой', format: 'Тест', icon: 'tick-square-bold', time: '5 мин' },
+  { title: 'Знакомство с подсистемами', course: 'Модуль 2 · Подсистемы', format: 'Лонгрид', icon: 'document-text-bold', time: '12 мин' },
 ];
 const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}`).join(' ');
 ---
@@ -79,7 +85,7 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
 
     <div class="sc-body">
       <section class="sc-sec" aria-labelledby="h-context">
-        <div class="sc-head"><span class="sc-num">01</span><h2 id="h-context">Контекст</h2></div>
+        <div class="sc-head"><h2 id="h-context">Контекст</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Цифровая платформа для школ объединяет электронный журнал, библиотеку контента, тесты и работу с файлами. Её внедряли по всей стране одновременно, и каждому педагогу нужно было перейти на неё в течение учебного года.</p>
           <div class="sc-context" data-anim>
@@ -88,13 +94,17 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
               <li><strong class="sc-word">десятки тысяч</strong><span>школ</span></li>
               <li><strong class="sc-word">сотни тысяч</strong><span>педагогов</span></li>
             </ul>
-            <div class="sc-dots" aria-hidden="true">{dots.map((d) => <i class={d.lit ? 'on' : ''} style={`--d:${d.delay}s`}></i>)}</div>
+            <div class="sc-map" aria-hidden="true">
+              <svg viewBox={`0 0 ${ru.w} ${ru.h}`}><path class="sc-map__base" d={dotPath}/></svg>
+              <div class="sc-map__reveal"><div><svg viewBox={`0 0 ${ru.w} ${ru.h}`}><path class="sc-map__lit" d={dotPath}/></svg></div></div>
+              {cities.map(([x, y]) => <span class="sc-map__city" style={`left:${x / ru.w * 100}%;top:${y / ru.h * 100}%;--x:${(x / ru.w).toFixed(2)}`}></span>)}
+            </div>
           </div>
         </div>
       </section>
 
       <section class="sc-sec" aria-labelledby="h-problem">
-        <div class="sc-head"><span class="sc-num">02</span><h2 id="h-problem">Задача и проблема</h2></div>
+        <div class="sc-head"><h2 id="h-problem">Задача и проблема</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Платформу внедряли быстрее, чем люди успевали её освоить. Обучающих материалов для педагогов не было, и поддержка тонула в одинаковых вопросах из разных регионов.</p>
           <figure class="sc-queue" data-anim>
@@ -108,7 +118,7 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       </section>
 
       <section class="sc-sec" aria-labelledby="h-roles">
-        <div class="sc-head"><span class="sc-num">03</span><h2 id="h-roles">Для кого: две роли</h2></div>
+        <div class="sc-head"><h2 id="h-roles">Для кого: две роли</h2></div>
         <div class="sc-main">
           <div class="sc-roles">
             <div class="sc-role">
@@ -124,15 +134,11 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
               <ul><li>Отвечает за всю школу сразу</li><li>Редкие, но сложные сценарии</li><li>Вопросы коллег идут к нему</li></ul>
             </div>
           </div>
-          <div class="sc-decision">
-            <Iconsax name="lamp-bold" size={24}/>
-            <div><h3>Решение: без переключателя ролей</h3><p>Пользователь регистрируется сразу как педагог или как администратор и видит только свою программу. Переключатель добавлял выбор там, где человек и так знает ответ, и смешивал в одном интерфейсе два разных курса.</p></div>
-          </div>
         </div>
       </section>
 
       <section class="sc-sec" aria-labelledby="h-research">
-        <div class="sc-head"><span class="sc-num">04</span><h2 id="h-research">Исследование</h2></div>
+        <div class="sc-head"><h2 id="h-research">Исследование</h2></div>
         <div class="sc-main">
           <p class="sc-lead">12 интервью с педагогами и администраторами в 5 регионах. Мы прошли с ними путь от регистрации до первого задания и отметили, где падает уверенность.</p>
           <figure class="sc-journey" data-anim="once">
@@ -153,19 +159,18 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       </section>
 
       <section class="sc-sec" aria-labelledby="h-principles">
-        <div class="sc-head"><span class="sc-num">05</span><h2 id="h-principles">Принципы</h2></div>
+        <div class="sc-head"><h2 id="h-principles">Принципы</h2></div>
         <div class="sc-main">
           <ol class="sc-principles">
-            <li><span>01</span><h3>Одна мысль на экран</h3><p>Карточка отвечает на один вопрос. Длинные перечни уходят во вкладки.</p></li>
-            <li><span>02</span><h3>Прогресс всегда виден</h3><p>Человек знает, где он, сколько прошёл и сколько осталось.</p></li>
-            <li><span>03</span><h3>Проверь себя, прежде чем идти в систему</h3><p>Самопроверка и тренажёр до работы с настоящим классом.</p></li>
-            <li><span>04</span><h3>Доступно по умолчанию</h3><p>Контраст, фокус и семантика заложены в компоненты.</p></li>
+            <li><h3>Одна мысль на экран</h3><p>Карточка отвечает на один вопрос. Длинные перечни уходят во вкладки.</p></li>
+            <li><h3>Прогресс всегда виден</h3><p>Человек знает, где он, сколько прошёл и сколько осталось.</p></li>
+            <li><h3>Проверь себя, прежде чем идти в систему</h3><p>Самопроверка и тренажёр до работы с настоящим классом.</p></li>
           </ol>
         </div>
       </section>
 
       <section class="sc-sec" aria-labelledby="h-arch">
-        <div class="sc-head"><span class="sc-num">06</span><h2 id="h-arch">Архитектура и user flow</h2></div>
+        <div class="sc-head"><h2 id="h-arch">Архитектура и user flow</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Курс педагога: 18 уроков в 4 модулях. Каждый урок собран из форматов, и человек выбирает тот, что удобнее прямо сейчас.</p>
           <div class="sc-tree" aria-label="Структура курса">
@@ -194,7 +199,7 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       </section>
 
       <section class="sc-sec" aria-labelledby="h-wire">
-        <div class="sc-head"><span class="sc-num">07</span><h2 id="h-wire">От вайрфрейма к интерфейсу</h2></div>
+        <div class="sc-head"><h2 id="h-wire">От вайрфрейма к интерфейсу</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Шапка урока прошла три состояния: структура, серый макет и готовый блок на токенах дизайн-системы.</p>
           <div class="sc-states" data-anim aria-label="Шапка урока в трёх состояниях" role="img">
@@ -240,7 +245,7 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       </section>
 
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-anatomy">
-        <div class="sc-head"><span class="sc-num">08</span><h2 id="h-anatomy">Анатомия урока</h2></div>
+        <div class="sc-head"><h2 id="h-anatomy">Анатомия урока</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Каждый блок урока закрывает конкретную боль из исследования.</p>
           <div class="sc-anatomy">
@@ -254,7 +259,7 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
               <div class="sc-part__stage ui">
                 <p class="ui-h ui-h--xs">Содержание</p><p class="ui-cap">Изучено 3 из 5 разделов</p>
                 <div class="ui-toc__list"><span class="ui-toc__rail"><span class="a-rail"></span></span>
-                  {['О платформе', 'Задачи', 'Разделы', 'Создание шаблона', 'Видео и конспект'].map((t, i) => <span class="ui-toc__item"><i class="a-dot" style={`animation-delay:${i * .9}s`}></i>{t}</span>)}
+                  {['О платформе', 'Задачи', 'Разделы', 'Создание шаблона', 'Самопроверка'].map((t, i) => <span class="ui-toc__item"><i class="a-dot" style={`animation-delay:${i * .9}s`}></i>{t}</span>)}
                 </div>
               </div>
               <h3>Содержание с прогрессом</h3><p class="sc-pain"><span>Закрывает боль</span>«Слишком много текста, не найти нужное»</p>
@@ -267,14 +272,18 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
               <h3>Вкладки</h3><p class="sc-pain"><span>Закрывает боль</span>«Бросаю длинный материал на середине»</p>
             </div>
             <div class="sc-part" data-anim>
-              <div class="sc-part__stage sc-part__stage--row ui">
-                <div class="ui-video"><Iconsax name="play-circle-bold" size={40}/><span class="ui-video__bar"><span class="a-play"></span></span></div>
-                <div class="ui-notes">
-                  <p class="ui-h ui-h--xs">Конспект видео</p>
-                  {[['0:40', 'Где найти раздел «Тесты»'], ['2:15', 'Типы заданий'], ['4:30', 'Как сохранить шаблон']].map(([t, l], i) => <span class="ui-note a-note" style={`--i:${i}`}><b>{t}</b>{l}</span>)}
-                </div>
+              <div class="sc-part__stage ui">
+                <div class="ui-video"><Iconsax name="play-circle-bold" size={44}/><span class="ui-video__bar"><span class="a-play"></span></span></div>
+                <div class="ui-video__meta"><span class="ui-badge">Видео</span><span class="ui-cap">Раздел «Шаблоны» · 6 мин</span></div>
               </div>
-              <h3>Видео с конспектом</h3><p class="sc-pain"><span>Закрывает боль</span>«Нет времени смотреть видео целиком»</p>
+              <h3>Видео</h3><p class="sc-pain"><span>Закрывает боль</span>«Проще один раз увидеть, чем читать»</p>
+            </div>
+            <div class="sc-part" data-anim>
+              <div class="sc-part__stage ui">
+                <div class="ui-doc"><span class="ui-doc__ic"><Iconsax name="document-download-bold" size={24}/></span><span><b>Конспект урока</b><small>PDF · 2 страницы</small></span></div>
+                {['Где найти раздел «Тесты»', 'Какие бывают типы заданий', 'Как сохранить шаблон'].map((l, i) => <span class="ui-note a-note" style={`--i:${i}`}><Iconsax name="tick-circle-bold" size={16}/>{l}</span>)}
+              </div>
+              <h3>Конспект</h3><p class="sc-pain"><span>Закрывает боль</span>«Нужно быстро вспомнить главное перед уроком»</p>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
@@ -290,83 +299,97 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       </section>
 
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-lms">
-        <div class="sc-head"><span class="sc-num">09</span><h2 id="h-lms">LMS</h2></div>
+        <div class="sc-head"><h2 id="h-lms">LMS</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Экраны «Моё обучение» и «Страница курса». Главное действие всегда одно: продолжить с того места, где остановился.</p>
-          <div class="sc-lms ui" data-anim>
-            <div class="ui-appbar"><span class="ui-nda">NDA</span><span class="ui-nav ui-nav--on">Моё обучение</span><span class="ui-nav">Курсы</span><span class="ui-nav">Вебинары</span><span class="ui-search"><Iconsax name="search-normal1-linear" size={16}/>Поиск</span></div>
-            <div class="sc-lms__grid">
-              <div class="ui-continue">
-                <p class="ui-cap">Продолжить · Курс для педагогов</p>
-                <p class="ui-h ui-h--s">Шаблоны заданий в разделе «Тесты»</p>
-                <div class="ui-bar"><span class="ui-bar__fill sc-fill"></span></div>
-                <span class="ui-btn">Продолжить<Iconsax name="arrow-right-linear" size={18}/></span>
-              </div>
-              <div class="ui-ring">
-                <svg viewBox="0 0 104 104" aria-hidden="true"><circle cx="52" cy="52" r="44" class="ui-ring__bg"/><circle cx="52" cy="52" r="44" class="ui-ring__fg" pathLength="100"/></svg>
-                <div><p class="ui-h ui-h--s">7 из 18</p><p class="ui-cap">уроков пройдено</p></div>
-              </div>
-              <div class="ui-modules">
-                <div class="ui-module ui-module--done"><span class="ui-mnum"><Iconsax name="tick-circle-bold" size={18}/></span><span><b>Знакомство с платформой</b><small>4 урока · пройдено 4</small></span><Iconsax name="arrow-down2-linear" size={18}/></div>
-                <div class="ui-module ui-module--open"><span class="ui-mnum">2</span><span><b>Тесты и шаблоны заданий</b><small>5 уроков · пройдено 1</small></span><Iconsax name="arrow-down2-linear" size={18}/>
-                  <div class="ui-module__lessons">
-                    <div class="ui-row ui-row--done"><span class="ui-row__ic"><Iconsax name="tick-circle-bold" size={18}/></span><span>Типы заданий<small>Пройден</small></span><em>8 мин</em></div>
-                    <div class="ui-row ui-row--now"><span class="ui-row__ic"><Iconsax name="play-circle-bold" size={18}/></span><span>Шаблоны заданий<small>Вы остановились здесь</small></span><em>10 мин</em></div>
-                    <div class="ui-row"><span class="ui-row__ic"></span><span>Создание и назначение теста<small>Не начат</small></span><em>8 мин</em></div>
+          <p class="sc-lead">Главный экран LMS «Моё обучение». Главное действие одно: продолжить с того места, где остановился.</p>
+          <div class="sc-lms ui" data-anim="once">
+            <div class="lms-bar">
+              <span class="ui-nda">NDA</span>
+              <nav class="lms-nav" aria-hidden="true"><span class="on">Моё обучение</span><span>Курсы</span><span>База знаний</span><span>Вебинары</span><span>Поддержка</span></nav>
+              <span class="lms-search"><Iconsax name="search-normal1-linear" size={18}/>Поиск</span>
+              <span class="lms-ava">АС</span>
+            </div>
+            <div class="lms-body">
+              <div class="lms-main">
+                <div class="lms-hello">
+                  <div class="lms-hello__text">
+                    <p class="lms-h1">Вы прошли 1 из 18 уроков курса для педагогов</p>
+                    <p class="lms-sub">Продолжайте с того места, где остановились</p>
+                    <div class="lms-continue">
+                      <p class="ui-cap">Продолжить · Курс для педагогов</p>
+                      <p class="lms-h3">С чего начать работу в Цифровой платформе</p>
+                      <div class="lms-progress"><span class="ui-cap">Осталось 7 мин</span><b>30%</b></div>
+                      <div class="lms-track"><span class="lms-fill" style="--v:.3"></span></div>
+                      <span class="ui-btn">Продолжить<Iconsax name="arrow-right-linear" size={18}/></span>
+                    </div>
                   </div>
+                  <img src={img('lesson-hero.png')} alt="" width="1466" height="1308" loading="lazy" decoding="async"/>
                 </div>
-                <div class="ui-module"><span class="ui-mnum">3</span><span><b>Электронный журнал</b><small>4 урока</small></span><Iconsax name="arrow-down2-linear" size={18}/></div>
+                <div class="lms-stats">
+                  {[['1 из 18', 'уроков пройдено'], ['15 мин', 'время обучения'], ['1', 'сертификат получен']].map(([v, l], i) => <div class="lms-card lms-pop" style={`--i:${i}`}><p class="lms-stat">{v}</p><p class="ui-cap">{l}</p></div>)}
+                </div>
+                <div class="lms-row-head"><p class="lms-h2">Мои курсы</p><span class="lms-link">Все курсы</span></div>
+                <div class="lms-courses">
+                  <div class="lms-card lms-course"><span class="ui-badge">Обязательный</span><p class="lms-h3">Цифровая платформа для школ: курс для педагогов</p><p class="ui-cap">18 уроков · 4 модуля</p><div class="lms-progress"><span class="ui-cap">1 из 18 уроков</span><b>6%</b></div><div class="lms-track"><span class="lms-fill" style="--v:.06"></span></div></div>
+                  <div class="lms-card lms-course"><span class="ui-badge ui-badge--ok">Пройден</span><p class="lms-h3">Основы цифровой образовательной среды</p><p class="ui-cap">6 уроков · 1 модуль</p><div class="lms-progress"><span class="ui-cap">6 из 6 уроков</span><b>100%</b></div><div class="lms-track"><span class="lms-fill lms-fill--ok" style="--v:1"></span></div></div>
+                </div>
+                <p class="lms-h2">Следующие уроки</p>
+                <ol class="lms-lessons">
+                  {lessons.map((l, i) => <li class={`lms-card lms-lesson lms-pop${i === 0 ? ' lms-lesson--now' : ''}`} style={`--i:${i + 3}`}><span class="lms-num">{i + 1}</span><span class="lms-lesson__t"><b>{l.title}</b><small>{l.course}</small></span><span class="lms-format"><Iconsax name={l.icon} size={16}/>{l.format}</span><span class="lms-time">{l.time}</span><Iconsax name="arrow-right-linear" size={18}/></li>)}
+                </ol>
               </div>
-              <div class="ui-webinars">
-                <p class="ui-h ui-h--xs">Ближайшие вебинары</p>
-                <div class="ui-web"><span class="ui-date"><b>14</b>окт</span><span>Назначение материалов из библиотеки контента<small>16:00 · онлайн</small></span></div>
-                <div class="ui-web"><span class="ui-date"><b>21</b>окт</span><span>Тесты и тренажёры: разбор вопросов<small>15:00 · онлайн</small></span></div>
+              <div class="lms-side">
+                <div class="lms-card">
+                  <p class="lms-h3">Ближайшие вебинары</p>
+                  <div class="lms-web"><span class="ui-date"><b>14</b>окт</span><span>Назначение материалов из библиотеки контента<small>16:00 · онлайн</small></span></div>
+                  <div class="lms-web"><span class="ui-date"><b>21</b>окт</span><span>Тесты и тренажёры: разбор вопросов<small>15:00 · онлайн</small></span></div>
+                  <span class="lms-ghost">Все вебинары</span>
+                </div>
+                <div class="lms-card">
+                  <p class="lms-h3">База знаний</p>
+                  {['Инструкции для педагогов', 'Шаблоны документов', 'Кейсы использования'].map((k) => <span class="lms-kb"><Iconsax name="document-text-bold" size={22}/>{k}</span>)}
+                </div>
+                <div class="lms-card lms-help">
+                  <p class="lms-h3">Нужна помощь?</p>
+                  <p>Ответы на частые вопросы и форма обратной связи.</p>
+                  <span class="ui-btn">Написать в поддержку</span>
+                </div>
               </div>
             </div>
           </div>
           <ul class="sc-notes">
-            <li><b>Карточка «Продолжить»</b> возвращает в урок одним нажатием.</li>
-            <li><b>Строка урока</b> в трёх состояниях: пройден, текущий, не начат.</li>
-            <li><b>Прогресс по модулям</b> виден до того, как модуль раскрыт.</li>
+            <li><b>Карточка «Продолжить»</b> возвращает в урок одним нажатием и показывает, сколько осталось.</li>
+            <li><b>Следующие уроки</b> идут списком с форматом и временем, текущий выделен.</li>
+            <li><b>Вебинары и помощь</b> всегда сбоку, чтобы не искать их по разделам.</li>
           </ul>
         </div>
       </section>
 
       <section class="sc-sec" aria-labelledby="h-adapt">
-        <div class="sc-head"><span class="sc-num">10</span><h2 id="h-adapt">Адаптация</h2></div>
+        <div class="sc-head"><h2 id="h-adapt">Отзывчивая вёрстка</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Вёрстка отзывчивая: уроки и LMS подстраиваются под любую ширину, от большого монитора до телефона. На узком экране меняется поведение, а не масштаб.</p>
-          <ul class="sc-adapt">
-            <li>
-              <div class="sc-adapt__pair ui" aria-hidden="true">
-                <div class="ad-desk"><div class="ad-side"><i class="on"></i><i class="on"></i><i></i><i></i></div><div class="ad-content"><i></i><i></i><i></i></div></div>
-                <Iconsax name="arrow-right-linear" size={20}/>
-                <div class="ad-phone"><div class="ad-top"><span></span></div><div class="ad-content"><i></i><i></i></div></div>
+          <p class="sc-lead">Блоки урока подстраиваются под любую ширину экрана. Вот блок «Профили пользователей» из урока, когда окно сужается до телефона.</p>
+          <figure class="sc-resp" data-anim>
+            <div class="sc-resp__stage">
+              <div class="sc-resp__frame ui" aria-hidden="true">
+                <div class="rs-bar"><i></i><i></i><i></i></div>
+                <div class="rs-page">
+                  <p class="rs-h">Профили пользователей</p>
+                  <p class="rs-p">Максимальный перечень профилей, который может быть доступен пользователю.</p>
+                  <div class="rs-grid">
+                    {profiles.map((pr) => <div class="rs-card"><span class="rs-ava" set:html={pr.svg}></span><span><b>{pr.texts[0]}</b>{pr.texts.slice(1).join(' ')}</span></div>)}
+                  </div>
+                  <div class="rs-tip"><Iconsax name="info-circle-bold" size={22}/><p><b>Дальше в уроке</b> работа в подсистеме «Тесты» из профиля педагогического работника.</p></div>
+                </div>
               </div>
-              <p><b>Боковое содержание</b> становится полосой прогресса сверху</p>
-            </li>
-            <li>
-              <div class="sc-adapt__pair ui" aria-hidden="true">
-                <div class="ad-desk"><div class="ad-table"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-                <Iconsax name="arrow-right-linear" size={20}/>
-                <div class="ad-phone"><div class="ad-list"><i></i><i></i><i></i></div></div>
-              </div>
-              <p><b>Таблица</b> становится списками</p>
-            </li>
-            <li>
-              <div class="sc-adapt__pair ui" aria-hidden="true">
-                <div class="ad-desk"><div class="ad-wide"><i></i><i></i><i></i><i></i></div></div>
-                <Iconsax name="arrow-right-linear" size={20}/>
-                <div class="ad-phone"><div class="ad-scroll"><div class="ad-wide a-hscroll"><i></i><i></i><i></i><i></i></div></div></div>
-              </div>
-              <p><b>Широкая таблица</b> прокручивается вбок внутри своего блока</p>
-            </li>
-          </ul>
+            </div>
+            <figcaption class="sc-resp__legend"><span>Широкий экран</span><span>Планшет</span><span>Телефон</span></figcaption>
+          </figure>
         </div>
       </section>
 
       <section class="sc-sec" aria-labelledby="h-ill">
-        <div class="sc-head"><span class="sc-num">11</span><h2 id="h-ill">Иллюстрации</h2></div>
+        <div class="sc-head"><h2 id="h-ill">Иллюстрации</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Иллюстрации живут в шапках уроков и на пустых состояниях. Мы задали им общий стиль, чтобы они продолжали интерфейс, а не спорили с ним.</p>
           <div class="sc-ill">
@@ -382,7 +405,7 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       </section>
 
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-ds">
-        <div class="sc-head"><span class="sc-num">12</span><h2 id="h-ds">Дизайн-система</h2></div>
+        <div class="sc-head"><h2 id="h-ds">Дизайн-система</h2></div>
         <div class="sc-main">
           <p class="sc-lead">UI-kit и шаблон урока, по которым команда выпускает уроки потоком. Новый лонгрид собирается из готовых блоков.</p>
           <div class="sc-ds">
@@ -412,7 +435,7 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
                 <span class="a-stack" style="animation-delay:.25s">Содержание</span>
                 <span class="a-stack" style="animation-delay:.5s">Карточка с иллюстрацией</span>
                 <span class="a-stack sc-stack--tip" style="animation-delay:.75s">Подсказка</span>
-                <span class="a-stack" style="animation-delay:1s">Видео с конспектом · Тренажёр</span>
+                <span class="a-stack" style="animation-delay:1s">Видео · Конспект · Тренажёр</span>
               </div>
             </div>
           </div>
@@ -424,21 +447,8 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
         </div>
       </section>
 
-      <section class="sc-sec" aria-labelledby="h-a11y">
-        <div class="sc-head"><span class="sc-num">13</span><h2 id="h-a11y">Доступность</h2></div>
-        <div class="sc-main">
-          <p class="sc-lead">Среди педагогов много людей старшего возраста. Уроки соответствуют WCAG 2.1 AA.</p>
-          <ul class="sc-a11y">
-            <li><Iconsax name="eye-bold" size={28}/><b>Контраст от 4,5:1</b><span>Серые подписи затемнены до #727272</span></li>
-            <li><Iconsax name="keyboard-bold" size={28}/><b>Видимый фокус</b><span>Урок проходится с клавиатуры</span></li>
-            <li><Iconsax name="maximize4-bold" size={28}/><b>Цели от 44 px</b><span>Удобно с планшета и интерактивной доски</span></li>
-            <li><Iconsax name="code-bold" size={28}/><b>Семантика</b><span>Настоящие кнопки, таблицы и заголовки по порядку</span></li>
-          </ul>
-        </div>
-      </section>
-
       <section class="sc-sec sc-results" aria-labelledby="h-results">
-        <div class="sc-head"><span class="sc-num">14</span><h2 id="h-results">Результаты</h2></div>
+        <div class="sc-head"><h2 id="h-results">Результаты</h2></div>
         <div class="sc-main" data-anim>
           <ul class="sc-stats sc-stats--big">
             <li><strong data-count="37" data-prefix="−" data-suffix="%">−37%</strong><span>обращений в поддержку</span></li>
@@ -455,12 +465,11 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       </section>
 
       <section class="sc-sec" aria-labelledby="h-learn">
-        <div class="sc-head"><span class="sc-num">15</span><h2 id="h-learn">Что я вынес</h2></div>
+        <div class="sc-head"><h2 id="h-learn">Что я вынес</h2></div>
         <div class="sc-main">
           <ol class="sc-learn">
             <li><h3>Обучающий контент тоже интерфейс</h3><p>Навигация, прогресс и обратная связь нужны лонгриду так же, как любому продукту.</p></li>
             <li><h3>Система окупается на масштабе</h3><p>Время на UI-kit и шаблон вернулось на 45 лонгридах и позволило подключать дизайнеров без потери качества.</p></li>
-            <li><h3>Доступность закладывается в начале</h3><p>Контраст, фокус и семантику дешевле заложить в компоненты, чем исправлять в каждом уроке.</p></li>
           </ol>
         </div>
       </section>
