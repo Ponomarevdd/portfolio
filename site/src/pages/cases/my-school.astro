@@ -21,22 +21,13 @@ const r = ru.step * .32;
 const dotPath = ru.pts.map(([x, y]) => `M${x - r} ${y}a${r} ${r} 0 1 0 ${r * 2} 0a${r} ${r} 0 1 0 ${-r * 2} 0`).join('');
 const cities = Object.values(ru.cities) as [number, number][];
 
-// Карта пути педагога: эмоция 0–100, кривая строится сплайном через центры колонок.
-const journey = [
-  { stage: 'Регистрация', act: 'Получает доступ от администратора школы', v: 62, pain: 'Письмо с доступом теряется в почте', idea: 'Сразу своя роль' },
-  { stage: 'Первый вход', act: 'Видит двадцать разделов на главной', v: 30, pain: 'Непонятно, с чего начать', idea: 'Курс «С чего начать»', quote: 'Открыла, а там двадцать разделов. Куда нажимать?', who: 'учитель начальных классов' },
-  { stage: 'Поиск ответа', act: 'Ищет, как создать задание', v: 12, pain: 'Инструкция на сорок страниц', idea: 'Содержание и вкладки', quote: 'Нужное нашла на тридцатой странице', who: 'учитель математики' },
-  { stage: 'Шаблон', act: 'Повторяет шаги из урока', v: 52, pain: 'Страшно ошибиться при классе', idea: 'Тренажёр' },
-  { stage: 'Отправка', act: 'Назначает задание классу', v: 26, pain: 'Нет обратной связи', idea: 'Статусы шаблона', quote: 'Не уверена, что ученики его увидели', who: 'учитель биологии' },
-  { stage: 'Результат', act: 'Видит первые ответы учеников', v: 90, pain: '', idea: 'Сертификат и следующий урок' },
+// Боли из интервью и то, чем мы на них ответили.
+const pains = [
+  { quote: 'Открыла, а там двадцать разделов. Куда нажимать?', who: 'Учитель начальных классов', idea: 'Курс «С чего начать»', note: 'Первые шаги в платформе за 10 минут' },
+  { quote: 'Нужное нашла только на тридцатой странице', who: 'Учитель математики', idea: 'Короткие уроки', note: 'Содержание и вкладки вместо одной длинной инструкции' },
+  { quote: 'Боюсь ошибиться прямо при классе', who: 'Учитель истории', idea: 'Тренажёр', note: 'Сценарий отрабатывается без риска для реального класса' },
+  { quote: 'Не уверена, что ученики увидели задание', who: 'Учитель биологии', idea: 'Статусы задания', note: 'Видно, кто открыл и кто выполнил' },
 ];
-const JW = 600, JH = 200;
-const jp = journey.map((p, i) => [(i + .5) / journey.length * JW, (1 - p.v / 100) * (JH - 24) + 12]);
-const curve = jp.reduce((d, [x, y], i) => {
-  if (!i) return `M0 ${y} L${x} ${y}`;
-  const [x0, y0] = jp[i - 1], [xp, yp] = jp[i - 2] ?? jp[i - 1], [xn, yn] = jp[i + 1] ?? [x, y];
-  return `${d} C${x0 + (x - xp) / 6} ${y0 + (y - yp) / 6} ${x - (xn - x0) / 6} ${y - (yn - y0) / 6} ${x} ${y}`;
-}, '') + ` L${JW} ${jp.at(-1)![1]}`;
 const queue = [
   { text: 'Где создать шаблон задания?', from: 'Школа № 12 · 08:14', same: true },
   { text: 'Как назначить тест классу?', from: 'Лицей № 3 · 08:16' },
@@ -50,7 +41,6 @@ const lessons = [
   { title: 'Самопроверка', course: 'Модуль 1 · Знакомство с системой', format: 'Тест', icon: 'tick-square-bold', time: '5 мин' },
   { title: 'Знакомство с подсистемами', course: 'Модуль 2 · Подсистемы', format: 'Лонгрид', icon: 'document-text-bold', time: '12 мин' },
 ];
-const face = (v: number) => v >= 60 ? 'emoji-happy-bold' : v >= 35 ? 'emoji-normal-bold' : 'emoji-sad-bold';
 ---
 <Page title="Цифровая платформа для школ">
   <article class="sc">
@@ -142,32 +132,16 @@ const face = (v: number) => v >= 60 ? 'emoji-happy-bold' : v >= 35 ? 'emoji-norm
       <section class="sc-sec" aria-labelledby="h-research">
         <div class="sc-head"><h2 id="h-research">Исследование</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">12 интервью с педагогами и администраторами из пяти регионов. Прошли с ними путь от доступа до первого задания.</p>
-          <figure class="sc-cjm" data-anim="once">
-            <div class="cjm" style={`--n:${journey.length}`}>
-              <span class="cjm__label">Этап</span>
-              {journey.map((p, i) => <span class="cjm__stage"><i>{i + 1}</i>{p.stage}</span>)}
-              <span class="cjm__label">Действие</span>
-              {journey.map((p) => <span class="cjm__act">{p.act}</span>)}
-              <span class="cjm__label cjm__label--emo">Эмоции<small><Iconsax name="emoji-happy-bold" size={16}/>спокойно</small><small><Iconsax name="emoji-sad-bold" size={16}/>тревожно</small></span>
-              <div class="cjm__chart">
-                <svg viewBox={`0 0 ${JW} ${JH}`} preserveAspectRatio="none" aria-hidden="true">
-                  <defs>
-                    <linearGradient id="cjm-stroke" x1="0" y1="0" x2="0" y2={JH} gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#006ee5"/><stop offset=".55" stop-color="#7aa7e0"/><stop offset="1" stop-color="#ff5242"/></linearGradient>
-                    <linearGradient id="cjm-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#006ee5" stop-opacity=".14"/><stop offset="1" stop-color="#006ee5" stop-opacity="0"/></linearGradient>
-                  </defs>
-                  <line x1="0" x2={JW} y1={JH / 2} y2={JH / 2} class="cjm__mid"/>
-                  <path class="cjm__area" d={`${curve} L${JW} ${JH} L0 ${JH} Z`}/>
-                  <path class="cjm__line" d={curve} pathLength="1"/>
-                </svg>
-                {journey.map((p, i) => <span class={`cjm__pt cjm__pt--${face(p.v).split('-')[1]}`} style={`left:${jp[i][0] / JW * 100}%;top:${jp[i][1] / JH * 100}%;--i:${i}`}><Iconsax name={face(p.v)} size={22}/></span>)}
-                {journey.map((p, i) => p.quote && <span class="cjm__bubble" style={`left:${jp[i][0] / JW * 100}%;top:${jp[i][1] / JH * 100}%;--i:${i}`}>«{p.quote}»<small>{p.who}</small></span>)}
-              </div>
-              <span class="cjm__label">Боль</span>
-              {journey.map((p) => p.pain ? <span class="cjm__pain"><Iconsax name="danger-bold" size={16}/>{p.pain}</span> : <span></span>)}
-              <span class="cjm__label">Решение</span>
-              {journey.map((p, i) => <span class="cjm__idea" style={`--i:${i}`}><Iconsax name="lamp-on-bold" size={16}/>{p.idea}</span>)}
-            </div>
+          <p class="sc-lead">12 интервью с педагогами и администраторами из пяти регионов. Вот что мешало им начать работать.</p>
+          <figure class="sc-pains" data-anim="once">
+            <div class="sc-pains__head" aria-hidden="true"><span>Боль</span><span></span><span>Решение</span></div>
+            <ul>
+              {pains.map((p, i) => <li style={`--i:${i}`}>
+                <blockquote class="sc-pain"><Iconsax name="quote-up-bold" size={20}/><p>{p.quote}</p><cite>{p.who}</cite></blockquote>
+                <span class="sc-pains__arrow" aria-hidden="true"><Iconsax name="arrow-right-linear" size={24}/></span>
+                <div class="sc-fix"><Iconsax name="lamp-on-bold" size={20}/><strong>{p.idea}</strong><small>{p.note}</small></div>
+              </li>)}
+            </ul>
           </figure>
         </div>
       </section>
