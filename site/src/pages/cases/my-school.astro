@@ -21,14 +21,22 @@ const r = ru.step * .32;
 const dotPath = ru.pts.map(([x, y]) => `M${x - r} ${y}a${r} ${r} 0 1 0 ${r * 2} 0a${r} ${r} 0 1 0 ${-r * 2} 0`).join('');
 const cities = Object.values(ru.cities) as [number, number][];
 
+// Карта пути педагога: эмоция 0–100, кривая строится сплайном через центры колонок.
 const journey = [
-  { stage: 'Регистрация', y: 46 },
-  { stage: 'Первый вход', y: 70, quote: '«Открыла, а там двадцать разделов. Куда нажимать?»', who: 'учитель начальных классов' },
-  { stage: 'Поиск инструкции', y: 88, quote: '«Инструкция на сорок страниц, нужное нашла на тридцатой»', who: 'учитель математики' },
-  { stage: 'Создание шаблона', y: 60 },
-  { stage: 'Отправка задания', y: 80, quote: '«Не уверена, что ученики вообще его увидели»', who: 'учитель биологии' },
-  { stage: 'Первое задание', y: 26 },
+  { stage: 'Регистрация', act: 'Получает доступ от администратора школы', v: 62, pain: 'Письмо с доступом теряется в почте', idea: 'Сразу своя роль' },
+  { stage: 'Первый вход', act: 'Видит двадцать разделов на главной', v: 30, pain: 'Непонятно, с чего начать', idea: 'Курс «С чего начать»', quote: 'Открыла, а там двадцать разделов. Куда нажимать?', who: 'учитель начальных классов' },
+  { stage: 'Поиск ответа', act: 'Ищет, как создать задание', v: 12, pain: 'Инструкция на сорок страниц', idea: 'Содержание и вкладки', quote: 'Нужное нашла на тридцатой странице', who: 'учитель математики' },
+  { stage: 'Шаблон', act: 'Повторяет шаги из урока', v: 52, pain: 'Страшно ошибиться при классе', idea: 'Тренажёр' },
+  { stage: 'Отправка', act: 'Назначает задание классу', v: 26, pain: 'Нет обратной связи', idea: 'Статусы шаблона', quote: 'Не уверена, что ученики его увидели', who: 'учитель биологии' },
+  { stage: 'Результат', act: 'Видит первые ответы учеников', v: 90, pain: '', idea: 'Сертификат и следующий урок' },
 ];
+const JW = 600, JH = 200;
+const jp = journey.map((p, i) => [(i + .5) / journey.length * JW, (1 - p.v / 100) * (JH - 24) + 12]);
+const curve = jp.reduce((d, [x, y], i) => {
+  if (!i) return `M0 ${y} L${x} ${y}`;
+  const [x0, y0] = jp[i - 1], [xp, yp] = jp[i - 2] ?? jp[i - 1], [xn, yn] = jp[i + 1] ?? [x, y];
+  return `${d} C${x0 + (x - xp) / 6} ${y0 + (y - yp) / 6} ${x - (xn - x0) / 6} ${y - (yn - y0) / 6} ${x} ${y}`;
+}, '') + ` L${JW} ${jp.at(-1)![1]}`;
 const queue = [
   { text: 'Где создать шаблон задания?', from: 'Школа № 12 · 08:14', same: true },
   { text: 'Как назначить тест классу?', from: 'Лицей № 3 · 08:16' },
@@ -42,7 +50,7 @@ const lessons = [
   { title: 'Самопроверка', course: 'Модуль 1 · Знакомство с системой', format: 'Тест', icon: 'tick-square-bold', time: '5 мин' },
   { title: 'Знакомство с подсистемами', course: 'Модуль 2 · Подсистемы', format: 'Лонгрид', icon: 'document-text-bold', time: '12 мин' },
 ];
-const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}`).join(' ');
+const face = (v: number) => v >= 60 ? 'emoji-happy-bold' : v >= 35 ? 'emoji-normal-bold' : 'emoji-sad-bold';
 ---
 <Page title="Цифровая платформа для школ">
   <article class="sc">
@@ -87,13 +95,8 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       <section class="sc-sec" aria-labelledby="h-context">
         <div class="sc-head"><h2 id="h-context">Контекст</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Цифровая платформа для школ объединяет электронный журнал, библиотеку контента, тесты и работу с файлами. Её внедряли по всей стране одновременно, и каждому педагогу нужно было перейти на неё в течение учебного года.</p>
+          <p class="sc-lead">Цифровая платформа для школ объединяет журнал, библиотеку контента, тесты и файлы. Её нужно было запустить сразу по всей России, и каждый педагог должен был перейти на неё за один учебный год.</p>
           <div class="sc-context" data-anim>
-            <ul class="sc-counters">
-              <li><strong><span data-count="80">80</span>+</strong><span>регионов подключили платформу</span></li>
-              <li><strong class="sc-word">десятки тысяч</strong><span>школ</span></li>
-              <li><strong class="sc-word">сотни тысяч</strong><span>педагогов</span></li>
-            </ul>
             <div class="sc-map" aria-hidden="true">
               <svg viewBox={`0 0 ${ru.w} ${ru.h}`}><path class="sc-map__base" d={dotPath}/></svg>
               <div class="sc-map__reveal"><div><svg viewBox={`0 0 ${ru.w} ${ru.h}`}><path class="sc-map__lit" d={dotPath}/></svg></div></div>
@@ -111,7 +114,6 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
             <ul class="ui" aria-hidden="true">
               {queue.map((q, i) => <li class={`ui-ticket a-ticket${q.same ? ' ui-ticket--same' : ''}`} style={`--i:${i}`}><Iconsax name="message-bold" size={18}/><span>{q.text}<small>{q.from}</small></span>{q.same && <em>повтор</em>}</li>)}
             </ul>
-            <figcaption>Очередь поддержки: один и тот же вопрос приходит из разных школ.</figcaption>
           </figure>
           <p>Задача: сделать обучение, после которого педагог сам проходит ключевые сценарии в платформе, а поддержка перестаёт отвечать на одни и те же вопросы.</p>
         </div>
@@ -140,20 +142,32 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       <section class="sc-sec" aria-labelledby="h-research">
         <div class="sc-head"><h2 id="h-research">Исследование</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">12 интервью с педагогами и администраторами в 5 регионах. Мы прошли с ними путь от регистрации до первого задания и отметили, где падает уверенность.</p>
-          <figure class="sc-journey" data-anim="once">
-            <div class="sc-journey__scroll">
-              <svg viewBox="0 0 1000 260" role="img" aria-labelledby="journey-title">
-                <title id="journey-title">Кривая эмоций педагога: провалы на первом входе, поиске инструкции и отправке задания, подъём после первого задания</title>
-                <line x1="20" y1="120" x2="980" y2="120" class="sc-journey__mid"/>
-                <path d={path} class="sc-journey__line" pathLength="1"/>
-                {journey.map((p, i) => <circle cx={40 + i * 184} cy={p.y * 2.4} r="7" class={p.quote ? 'dip' : ''} style={`--i:${i}`}/>)}
-              </svg>
-              <ol class="sc-journey__stages">{journey.map((p) => <li>{p.stage}</li>)}</ol>
+          <p class="sc-lead">12 интервью с педагогами и администраторами из пяти регионов. Прошли с ними путь от доступа до первого задания.</p>
+          <figure class="sc-cjm" data-anim="once">
+            <div class="cjm" style={`--n:${journey.length}`}>
+              <span class="cjm__label">Этап</span>
+              {journey.map((p, i) => <span class="cjm__stage"><i>{i + 1}</i>{p.stage}</span>)}
+              <span class="cjm__label">Действие</span>
+              {journey.map((p) => <span class="cjm__act">{p.act}</span>)}
+              <span class="cjm__label cjm__label--emo">Эмоции<small><Iconsax name="emoji-happy-bold" size={16}/>спокойно</small><small><Iconsax name="emoji-sad-bold" size={16}/>тревожно</small></span>
+              <div class="cjm__chart">
+                <svg viewBox={`0 0 ${JW} ${JH}`} preserveAspectRatio="none" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="cjm-stroke" x1="0" y1="0" x2="0" y2={JH} gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#006ee5"/><stop offset=".55" stop-color="#7aa7e0"/><stop offset="1" stop-color="#ff5242"/></linearGradient>
+                    <linearGradient id="cjm-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#006ee5" stop-opacity=".14"/><stop offset="1" stop-color="#006ee5" stop-opacity="0"/></linearGradient>
+                  </defs>
+                  <line x1="0" x2={JW} y1={JH / 2} y2={JH / 2} class="cjm__mid"/>
+                  <path class="cjm__area" d={`${curve} L${JW} ${JH} L0 ${JH} Z`}/>
+                  <path class="cjm__line" d={curve} pathLength="1"/>
+                </svg>
+                {journey.map((p, i) => <span class={`cjm__pt cjm__pt--${face(p.v).split('-')[1]}`} style={`left:${jp[i][0] / JW * 100}%;top:${jp[i][1] / JH * 100}%;--i:${i}`}><Iconsax name={face(p.v)} size={22}/></span>)}
+                {journey.map((p, i) => p.quote && <span class="cjm__bubble" style={`left:${jp[i][0] / JW * 100}%;top:${jp[i][1] / JH * 100}%;--i:${i}`}>«{p.quote}»<small>{p.who}</small></span>)}
+              </div>
+              <span class="cjm__label">Боль</span>
+              {journey.map((p) => p.pain ? <span class="cjm__pain"><Iconsax name="danger-bold" size={16}/>{p.pain}</span> : <span></span>)}
+              <span class="cjm__label">Решение</span>
+              {journey.map((p, i) => <span class="cjm__idea" style={`--i:${i}`}><Iconsax name="lamp-on-bold" size={16}/>{p.idea}</span>)}
             </div>
-            <ul class="sc-quotes">
-              {journey.filter((p) => p.quote).map((p) => <li><Iconsax name="quote-up-bold" size={20}/><p>{p.quote}</p><span>{p.who}</span></li>)}
-            </ul>
           </figure>
         </div>
       </section>
@@ -301,7 +315,7 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-lms">
         <div class="sc-head"><h2 id="h-lms">LMS</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Главный экран LMS «Моё обучение». Главное действие одно: продолжить с того места, где остановился.</p>
+          <p class="sc-lead">Главный экран LMS. Одно главное действие: продолжить с того места, где остановился.</p>
           <div class="sc-lms ui" data-anim="once">
             <div class="lms-bar">
               <span class="ui-nda">NDA</span>
@@ -313,35 +327,35 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
               <div class="lms-main">
                 <div class="lms-hello">
                   <div class="lms-hello__text">
-                    <p class="lms-h1">Вы прошли 1 из 18 уроков курса для педагогов</p>
+                    <p class="lms-h1" data-d="hello">Вы прошли 1 из 18 уроков курса для педагогов</p>
                     <p class="lms-sub">Продолжайте с того места, где остановились</p>
                     <div class="lms-continue">
                       <p class="ui-cap">Продолжить · Курс для педагогов</p>
                       <p class="lms-h3">С чего начать работу в Цифровой платформе</p>
-                      <div class="lms-progress"><span class="ui-cap">Осталось 7 мин</span><b>30%</b></div>
-                      <div class="lms-track"><span class="lms-fill" style="--v:.3"></span></div>
-                      <span class="ui-btn">Продолжить<Iconsax name="arrow-right-linear" size={18}/></span>
+                      <div class="lms-progress"><span class="ui-cap" data-d="left">Осталось 7 мин</span><b data-d="pct">30%</b></div>
+                      <div class="lms-track"><span class="lms-fill" data-d="fill" style="--v:.3"></span></div>
+                      <span class="ui-btn" data-d="continue">Продолжить<Iconsax name="arrow-right-linear" size={18}/></span>
                     </div>
                   </div>
                   <img src={img('lesson-hero.png')} alt="" width="1466" height="1308" loading="lazy" decoding="async"/>
                 </div>
                 <div class="lms-stats">
-                  {[['1 из 18', 'уроков пройдено'], ['15 мин', 'время обучения'], ['1', 'сертификат получен']].map(([v, l], i) => <div class="lms-card lms-pop" style={`--i:${i}`}><p class="lms-stat">{v}</p><p class="ui-cap">{l}</p></div>)}
+                  {[['1 из 18', 'уроков пройдено'], ['15 мин', 'время обучения'], ['1', 'сертификат получен']].map(([v, l], i) => <div class="lms-card lms-pop" style={`--i:${i}`}><p class="lms-stat" data-d={i === 0 ? 'stat' : undefined}>{v}</p><p class="ui-cap">{l}</p></div>)}
                 </div>
                 <div class="lms-row-head"><p class="lms-h2">Мои курсы</p><span class="lms-link">Все курсы</span></div>
                 <div class="lms-courses">
-                  <div class="lms-card lms-course"><span class="ui-badge">Обязательный</span><p class="lms-h3">Цифровая платформа для школ: курс для педагогов</p><p class="ui-cap">18 уроков · 4 модуля</p><div class="lms-progress"><span class="ui-cap">1 из 18 уроков</span><b>6%</b></div><div class="lms-track"><span class="lms-fill" style="--v:.06"></span></div></div>
+                  <div class="lms-card lms-course" data-d="course"><span class="ui-badge">Обязательный</span><p class="lms-h3">Цифровая платформа для школ: курс для педагогов</p><p class="ui-cap">18 уроков · 4 модуля</p><div class="lms-progress"><span class="ui-cap" data-d="course-done">1 из 18 уроков</span><b data-d="course-pct">6%</b></div><div class="lms-track"><span class="lms-fill" data-d="course-fill" style="--v:.06"></span></div></div>
                   <div class="lms-card lms-course"><span class="ui-badge ui-badge--ok">Пройден</span><p class="lms-h3">Основы цифровой образовательной среды</p><p class="ui-cap">6 уроков · 1 модуль</p><div class="lms-progress"><span class="ui-cap">6 из 6 уроков</span><b>100%</b></div><div class="lms-track"><span class="lms-fill lms-fill--ok" style="--v:1"></span></div></div>
                 </div>
                 <p class="lms-h2">Следующие уроки</p>
                 <ol class="lms-lessons">
-                  {lessons.map((l, i) => <li class={`lms-card lms-lesson lms-pop${i === 0 ? ' lms-lesson--now' : ''}`} style={`--i:${i + 3}`}><span class="lms-num">{i + 1}</span><span class="lms-lesson__t"><b>{l.title}</b><small>{l.course}</small></span><span class="lms-format"><Iconsax name={l.icon} size={16}/>{l.format}</span><span class="lms-time">{l.time}</span><Iconsax name="arrow-right-linear" size={18}/></li>)}
+                  {lessons.map((l, i) => <li data-d="lesson" class={`lms-card lms-lesson lms-pop${i === 0 ? ' lms-lesson--now' : ''}`} style={`--i:${i + 3}`}><span class="lms-num"><b>{i + 1}</b><Iconsax name="tick-circle-bold" size={24}/></span><span class="lms-lesson__t"><b>{l.title}</b><small>{l.course}</small></span><span class="lms-format"><Iconsax name={l.icon} size={16}/>{l.format}</span><span class="lms-time">{l.time}</span><Iconsax name="arrow-right-linear" size={18}/></li>)}
                 </ol>
               </div>
               <div class="lms-side">
                 <div class="lms-card">
                   <p class="lms-h3">Ближайшие вебинары</p>
-                  <div class="lms-web"><span class="ui-date"><b>14</b>окт</span><span>Назначение материалов из библиотеки контента<small>16:00 · онлайн</small></span></div>
+                  <div class="lms-web" data-d="web"><span class="ui-date"><b>14</b>окт<Iconsax name="tick-circle-bold" size={22}/></span><span>Назначение материалов из библиотеки контента<small>16:00 · онлайн</small></span></div>
                   <div class="lms-web"><span class="ui-date"><b>21</b>окт</span><span>Тесты и тренажёры: разбор вопросов<small>15:00 · онлайн</small></span></div>
                   <span class="lms-ghost">Все вебинары</span>
                 </div>
@@ -349,26 +363,23 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
                   <p class="lms-h3">База знаний</p>
                   {['Инструкции для педагогов', 'Шаблоны документов', 'Кейсы использования'].map((k) => <span class="lms-kb"><Iconsax name="document-text-bold" size={22}/>{k}</span>)}
                 </div>
-                <div class="lms-card lms-help">
+                <div class="lms-card lms-help" data-d="help">
                   <p class="lms-h3">Нужна помощь?</p>
                   <p>Ответы на частые вопросы и форма обратной связи.</p>
                   <span class="ui-btn">Написать в поддержку</span>
                 </div>
               </div>
             </div>
+            <span class="lms-toast" data-d="toast" aria-hidden="true"><Iconsax name="tick-circle-bold" size={20}/>Вы записаны на вебинар 14 октября</span>
+            <span class="lms-cursor" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M5 3.2v15.4c0 .5.6.8 1 .4l3.6-3.4 2.4 5.5c.2.4.6.5 1 .4l2-.9c.4-.2.5-.6.4-1l-2.4-5.4 4.9-.3c.5 0 .8-.6.4-1L6 2.8c-.4-.3-1-.1-1 .4Z" fill="#1c1c1c" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
           </div>
-          <ul class="sc-notes">
-            <li><b>Карточка «Продолжить»</b> возвращает в урок одним нажатием и показывает, сколько осталось.</li>
-            <li><b>Следующие уроки</b> идут списком с форматом и временем, текущий выделен.</li>
-            <li><b>Вебинары и помощь</b> всегда сбоку, чтобы не искать их по разделам.</li>
-          </ul>
         </div>
       </section>
 
       <section class="sc-sec" aria-labelledby="h-adapt">
         <div class="sc-head"><h2 id="h-adapt">Отзывчивая вёрстка</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Блоки урока подстраиваются под любую ширину экрана. Вот блок «Профили пользователей» из урока, когда окно сужается до телефона.</p>
+          <p class="sc-lead">Блоки урока подстраиваются под любую ширину экрана.</p>
           <figure class="sc-resp" data-anim>
             <div class="sc-resp__stage">
               <div class="sc-resp__frame ui" aria-hidden="true">
@@ -411,7 +422,6 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
           <div class="sc-ds">
             <div class="sc-ds__card">
               <h3>Один шрифт, три начертания</h3>
-              <p>LMS и уроки набраны Geologica. Роли текста разведены по начертаниям, а не по разным шрифтам.</p>
               <p class="sc-font" aria-hidden="true">Geologica</p>
               <ul class="sc-weights">
                 <li style="font-weight:300"><b>300</b>Основной текст урока</li>
