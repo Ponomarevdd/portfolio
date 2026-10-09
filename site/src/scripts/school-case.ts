@@ -35,7 +35,3 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll<HTMLElement>('.sc [data-anim], .sc [data-count]').forEach((el) => observer.observe(el));
 
-document.querySelectorAll<HTMLElement>('.sc [data-ba]').forEach((figure) => {
-  const range = figure.querySelector<HTMLInputElement>('input[type="range"]');
-  range?.addEventListener('input', () => figure.style.setProperty('--pos', `${range.value}%`));
-});

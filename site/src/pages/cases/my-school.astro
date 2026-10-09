@@ -4,8 +4,6 @@ import BackLink from '../../components/BackLink.astro';
 import Page from '../../layouts/Page.astro';
 import ActionButton from '../../components/ActionButton.astro';
 import Iconsax from '../../components/Iconsax.astro';
-import '@fontsource/golos-text/cyrillic-400.css';
-import '@fontsource/golos-text/latin-400.css';
 import '@fontsource/geologica/latin-300.css';
 import '@fontsource/geologica/cyrillic-300.css';
 import '@fontsource/geologica/latin-500.css';
@@ -30,6 +28,13 @@ const journey = [
   { stage: 'Создание шаблона', y: 60 },
   { stage: 'Отправка задания', y: 80, quote: '«Не уверена, что ученики вообще его увидели»', who: 'учитель биологии' },
   { stage: 'Первое задание', y: 26 },
+];
+const queue = [
+  { text: 'Где создать шаблон задания?', from: 'Школа № 12 · 08:14', same: true },
+  { text: 'Как назначить тест классу?', from: 'Лицей № 3 · 08:16' },
+  { text: 'Где создать шаблон задания?', from: 'Школа № 41 · 08:19', same: true },
+  { text: 'Не вижу раздел «Тесты»', from: 'Гимназия № 7 · 08:21' },
+  { text: 'Где создать шаблон задания?', from: 'Школа № 105 · 08:22', same: true },
 ];
 const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}`).join(' ');
 ---
@@ -91,33 +96,12 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       <section class="sc-sec" aria-labelledby="h-problem">
         <div class="sc-head"><span class="sc-num">02</span><h2 id="h-problem">Задача и проблема</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Платформу внедряли быстрее, чем люди успевали её освоить. Инструкции были длинными и написанными на языке разработчиков, а поддержка тонула в одинаковых вопросах из разных регионов.</p>
-          <ul class="sc-stats">
-            <li><strong data-count="41" data-suffix="%">41%</strong><span>дочитывали инструкцию до конца</span></li>
-            <li><strong data-count="68" data-suffix="%">68%</strong><span>бросали материал на середине</span></li>
-            <li><strong>×3</strong><span>возвращались к одной и той же инструкции</span></li>
-          </ul>
-          <figure class="sc-ba" data-ba style="--pos:50%">
-            <div class="sc-ba__pane sc-ba__before" aria-hidden="true">
-              <p class="sc-ba__label">Было</p>
-              <div class="sc-wall">
-                <p><b>4.2.1.</b> Для осуществления создания шаблона задания пользователю с ролью «Педагогический работник» необходимо выполнить переход в подсистему оценки знаний посредством выбора соответствующего пункта главного меню, после чего в открывшемся интерфейсе осуществить выбор раздела, предназначенного для работы с шаблонами, и инициировать создание нового объекта.</p>
-                <p><b>4.2.2.</b> При заполнении атрибутов шаблона следует учитывать, что поля, отмеченные как обязательные, подлежат обязательному заполнению, а выбор типа задания определяет состав последующих атрибутов и порядок проверки ответов обучающихся экспертом либо в автоматическом режиме.</p>
-                <p><b>4.2.3.</b> После сохранения шаблон приобретает статус черновика и может быть опубликован, возвращён в черновики либо перемещён в архив в соответствии с матрицей допустимых переходов, приведённой в приложении 7.</p>
-              </div>
-            </div>
-            <div class="sc-ba__pane sc-ba__after" aria-hidden="true">
-              <p class="sc-ba__label">Стало</p>
-              <div class="ui sc-cards">
-                <div class="ui-card"><span class="ui-step">1</span><div><p class="ui-h ui-h--xs">Откройте раздел «Шаблоны»</p><p class="ui-cap">Кнопка «Новый шаблон» справа вверху</p></div></div>
-                <div class="ui-card"><span class="ui-step">2</span><div><p class="ui-h ui-h--xs">Выберите тип задания</p><p class="ui-cap">От типа зависит, кто проверит ответ</p></div></div>
-                <div class="ui-card ui-card--tip"><Iconsax name="info-circle-bold" size={20}/><p class="ui-cap">Шаблон без публикации сохранится как черновик</p></div>
-              </div>
-            </div>
-            <span class="sc-ba__handle" aria-hidden="true"></span>
-            <label class="sc-visually-hidden" for="ba-range">Сравнить инструкцию до и после</label>
-            <input id="ba-range" class="sc-ba__range" type="range" min="0" max="100" value="50"/>
-            <figcaption>Одна и та же инструкция: техническое описание и урок из карточек.<span class="sc-ba__hint"> Двигайте разделитель.</span></figcaption>
+          <p class="sc-lead">Платформу внедряли быстрее, чем люди успевали её освоить. Обучающих материалов для педагогов не было, и поддержка тонула в одинаковых вопросах из разных регионов.</p>
+          <figure class="sc-queue" data-anim>
+            <ul class="ui" aria-hidden="true">
+              {queue.map((q, i) => <li class={`ui-ticket a-ticket${q.same ? ' ui-ticket--same' : ''}`} style={`--i:${i}`}><Iconsax name="message-bold" size={18}/><span>{q.text}<small>{q.from}</small></span>{q.same && <em>повтор</em>}</li>)}
+            </ul>
+            <figcaption>Очередь поддержки: один и тот же вопрос приходит из разных школ.</figcaption>
           </figure>
           <p>Задача: сделать обучение, после которого педагог сам проходит ключевые сценарии в платформе, а поддержка перестаёт отвечать на одни и те же вопросы.</p>
         </div>
@@ -261,46 +245,45 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
           <p class="sc-lead">Каждый блок урока закрывает конкретную боль из исследования.</p>
           <div class="sc-anatomy">
             <div class="sc-part" data-anim>
-              <div class="sc-part__stage ui">
-                <div class="ui-lesson-head"><span class="ui-badge">Модуль 1 · Урок 1</span><p class="ui-h ui-h--s">С чего начать работу в Цифровой платформе</p><div class="ui-tags"><span><Iconsax name="document-text-bold" size={14}/>Лонгрид</span><span><Iconsax name="clock-bold" size={14}/>10 мин</span></div><img class="a-float" src={img('lesson-hero.png')} alt="" width="1466" height="1308"/></div>
+              <div class="sc-part__stage sc-part__stage--head ui">
+                <span class="ui-badge">Модуль 1 · Урок 1</span><p class="ui-h ui-h--s">С чего начать работу в Цифровой платформе</p><div class="ui-tags"><span><Iconsax name="document-text-bold" size={14}/>Лонгрид</span><span><Iconsax name="clock-bold" size={14}/>10 мин</span></div><img class="a-float" src={img('lesson-hero.png')} alt="" width="1466" height="1308" loading="lazy" decoding="async"/>
               </div>
               <h3>Шапка урока</h3><p class="sc-pain"><span>Закрывает боль</span>«Непонятно, с чего начать и сколько это займёт»</p>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
-                <div class="ui-toc"><p class="ui-h ui-h--xs">Содержание</p><p class="ui-cap">Изучено 3 из 5 разделов</p>
-                  <div class="ui-toc__list"><span class="ui-toc__rail"><span class="a-rail"></span></span>
-                    {['О платформе', 'Задачи', 'Разделы', 'Создание шаблона', 'Самопроверка'].map((t, i) => <span class="ui-toc__item"><i class="a-dot" style={`animation-delay:${i * .9}s`}></i>{t}</span>)}
-                  </div></div>
+                <p class="ui-h ui-h--xs">Содержание</p><p class="ui-cap">Изучено 3 из 5 разделов</p>
+                <div class="ui-toc__list"><span class="ui-toc__rail"><span class="a-rail"></span></span>
+                  {['О платформе', 'Задачи', 'Разделы', 'Создание шаблона', 'Видео и конспект'].map((t, i) => <span class="ui-toc__item"><i class="a-dot" style={`animation-delay:${i * .9}s`}></i>{t}</span>)}
+                </div>
               </div>
               <h3>Содержание с прогрессом</h3><p class="sc-pain"><span>Закрывает боль</span>«Слишком много текста, не найти нужное»</p>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
-                <div class="ui-tabs"><div class="ui-tabs__bar"><span class="ui-tabs__thumb a-tab"></span><span>Журнал</span><span>Тесты</span><span>Файлы</span></div>
-                  <div class="ui-tabs__body"><span class="ui-line"></span><span class="ui-line ui-line--m"></span><span class="ui-line ui-line--s"></span></div></div>
+                <div class="ui-tabs__bar"><span class="ui-tabs__thumb a-tab"></span><span>Журнал</span><span>Тесты</span><span>Файлы</span></div>
+                <div class="ui-tabs__body"><span class="ui-line"></span><span class="ui-line ui-line--m"></span><span class="ui-line ui-line--s"></span></div>
               </div>
               <h3>Вкладки</h3><p class="sc-pain"><span>Закрывает боль</span>«Бросаю длинный материал на середине»</p>
             </div>
             <div class="sc-part" data-anim>
-              <div class="sc-part__stage ui">
-                <div class="ui-check"><p class="ui-h ui-h--xs">Чек-лист: создание шаблона</p>
-                  {['Выбрать тип задания', 'Написать вопрос', 'Настроить ответы', 'Сохранить шаблон'].map((t, i) => <span class="ui-check__row a-row" style={`--dl:${i}s`}><span class="ui-check__box"><Iconsax name="tick-square-bold" size={22} class="a-check"/></span>{t}</span>)}
+              <div class="sc-part__stage sc-part__stage--row ui">
+                <div class="ui-video"><Iconsax name="play-circle-bold" size={40}/><span class="ui-video__bar"><span class="a-play"></span></span></div>
+                <div class="ui-notes">
+                  <p class="ui-h ui-h--xs">Конспект видео</p>
+                  {[['0:40', 'Где найти раздел «Тесты»'], ['2:15', 'Типы заданий'], ['4:30', 'Как сохранить шаблон']].map(([t, l], i) => <span class="ui-note a-note" style={`--i:${i}`}><b>{t}</b>{l}</span>)}
                 </div>
               </div>
-              <h3>Чек-лист</h3><p class="sc-pain"><span>Закрывает боль</span>«Нет уверенности, что всё сделал правильно»</p>
+              <h3>Видео с конспектом</h3><p class="sc-pain"><span>Закрывает боль</span>«Нет времени смотреть видео целиком»</p>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
-                <div class="ui-quiz"><p class="ui-h ui-h--xs">Какой тип заданий проверяет эксперт?</p><span class="ui-opt">Выбрать ответ</span><span class="ui-opt a-right">Диктант</span><span class="ui-opt">Перетаскивание</span><p class="ui-fb a-fb">Верно: диктант проверяет эксперт.</p></div>
+                <div class="ui-trainer__top"><span class="ui-badge">Тренажёр</span><span class="ui-cap">Шаг 2 из 3</span></div>
+                <p class="ui-h ui-h--xs">Какой тип заданий проверяет эксперт?</p>
+                <div class="ui-trainer__opts"><span class="ui-opt">Выбрать ответ</span><span class="ui-opt a-right">Диктант<Iconsax name="tick-circle-bold" size={16}/></span><span class="ui-opt">Перетаскивание</span></div>
+                <p class="ui-fb a-fb">Верно: диктант проверяет эксперт. Дальше создадим шаблон.</p>
               </div>
-              <h3>Самопроверка</h3><p class="sc-pain"><span>Закрывает боль</span>«Прочитал и сразу забыл»</p>
-            </div>
-            <div class="sc-part" data-anim>
-              <div class="sc-part__stage ui">
-                <div class="ui-trainer"><img class="a-float" src={img('trainer.png')} alt="" width="1530" height="1193"/><span class="ui-btn a-pulse">Открыть тренажёр</span></div>
-              </div>
-              <h3>Тренажёр</h3><p class="sc-pain"><span>Закрывает боль</span>«Боюсь ошибиться в настоящей системе»</p>
+              <h3>Тренажёр с самопроверкой</h3><p class="sc-pain"><span>Закрывает боль</span>«Боюсь ошибиться в настоящей системе»</p>
             </div>
           </div>
         </div>
@@ -352,7 +335,7 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       <section class="sc-sec" aria-labelledby="h-adapt">
         <div class="sc-head"><span class="sc-num">10</span><h2 id="h-adapt">Адаптация</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">1200 → 390. На телефоне меняется поведение, а не масштаб.</p>
+          <p class="sc-lead">1200 → 320. На телефоне меняется поведение, а не масштаб.</p>
           <ul class="sc-adapt">
             <li>
               <div class="sc-adapt__pair ui" aria-hidden="true">
@@ -385,19 +368,15 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
       <section class="sc-sec" aria-labelledby="h-ill">
         <div class="sc-head"><span class="sc-num">11</span><h2 id="h-ill">Иллюстрации</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Больше 60 иллюстраций в одном стиле: тонкий контур и две краски платформы. Они помогают запомнить, о чём был раздел.</p>
+          <p class="sc-lead">Иллюстрации живут в шапках уроков и на пустых состояниях. Мы задали им общий стиль, чтобы они продолжали интерфейс, а не спорили с ним.</p>
           <div class="sc-ill">
-            <div class="sc-ill__palette"><span style="--c:#006EE5"><b>#006EE5</b></span><span style="--c:#D1E7FF"><b>#D1E7FF</b></span><span style="--c:#1C1C1C"><b>#1C1C1C</b></span></div>
-            <ol class="sc-ill__steps">
-              <li><div class="sc-ill__frame sc-ill__frame--sketch"><img src={img('lesson-hero.png')} alt="" width="1466" height="1308" loading="lazy"/></div><span>Скетч</span></li>
-              <li><div class="sc-ill__frame"><img src={img('lesson-hero.png')} alt="" width="1466" height="1308" loading="lazy"/></div><span>Вектор</span></li>
-              <li><div class="sc-ill__frame sc-ill__frame--lesson ui"><span class="ui-badge">Урок 1</span><p class="ui-h ui-h--xs">С чего начать работу</p><img src={img('lesson-hero.png')} alt="" width="1466" height="1308" loading="lazy"/></div><span>В уроке</span></li>
-            </ol>
-            <div class="sc-ill__set">
-              <img src={img('trainer.png')} alt="Иллюстрация к тренажёру: окна интерфейса и поиск" width="1530" height="1193" loading="lazy"/>
-              <img src={img('course.svg')} alt="Иллюстрация к уроку: педагог помогает разобраться за ноутбуком" width="165" height="173"/>
-              <img src={img('cup.svg')} alt="Иллюстрация к завершению урока: кубок" width="181" height="188"/>
-            </div>
+            <div class="sc-ill__palette"><span style="--c:#006EE5"><b>#006EE5</b>Акцент</span><span style="--c:#D1E7FF"><b>#D1E7FF</b>Заливка</span><span style="--c:#1C1C1C"><b>#1C1C1C</b>Контур</span></div>
+            <ul class="sc-ill__rules">
+              <li><h3>Контур и плоская заливка</h3><p>Тонкая тёмная линия одной толщины и светлые плашки без градиентов и теней.</p></li>
+              <li><h3>Две краски платформы</h3><p>Только основной синий и его светлый оттенок, поэтому иллюстрация не перетягивает внимание с текста.</p></li>
+              <li><h3>Предметы интерфейса</h3><p>Окна, документы, карточки и поиск. Педагог узнаёт в картинке то, с чем будет работать.</p></li>
+              <li><h3>Скругления как у компонентов</h3><p>Углы повторяют радиусы дизайн-системы, и картинка выглядит частью урока.</p></li>
+            </ul>
           </div>
         </div>
       </section>
@@ -408,11 +387,9 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
           <p class="sc-lead">UI-kit и шаблон урока, по которым команда выпускает уроки потоком. Новый лонгрид собирается из готовых блоков.</p>
           <div class="sc-ds">
             <div class="sc-ds__card">
-              <h3>Один шрифт вместо двух</h3>
-              <p>LMS жила на Golos Text, лонгриды на Geologica. На стыке продуктов это читалось как два разных сервиса. Мы свели всё к Geologica и разнесли роли по начертаниям.</p>
-              <div class="sc-font" aria-hidden="true">
-                <span class="sc-font__old">Golos Text</span><Iconsax name="arrow-right-linear" size={20}/><span class="sc-font__new">Geologica</span>
-              </div>
+              <h3>Один шрифт, три начертания</h3>
+              <p>LMS и уроки набраны Geologica. Роли текста разведены по начертаниям, а не по разным шрифтам.</p>
+              <p class="sc-font" aria-hidden="true">Geologica</p>
               <ul class="sc-weights">
                 <li style="font-weight:300"><b>300</b>Основной текст урока</li>
                 <li style="font-weight:500"><b>500</b>Акценты и кнопки</li>
@@ -435,7 +412,7 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
                 <span class="a-stack" style="animation-delay:.25s">Содержание</span>
                 <span class="a-stack" style="animation-delay:.5s">Карточка с иллюстрацией</span>
                 <span class="a-stack sc-stack--tip" style="animation-delay:.75s">Подсказка</span>
-                <span class="a-stack" style="animation-delay:1s">Шаги · Чек-лист · Самопроверка</span>
+                <span class="a-stack" style="animation-delay:1s">Видео с конспектом · Тренажёр</span>
               </div>
             </div>
           </div>
@@ -465,9 +442,9 @@ const path = journey.map((p, i) => `${i ? 'L' : 'M'}${40 + i * 184} ${p.y * 2.4}
         <div class="sc-main" data-anim>
           <ul class="sc-stats sc-stats--big">
             <li><strong data-count="37" data-prefix="−" data-suffix="%">−37%</strong><span>обращений в поддержку</span></li>
-            <li><strong data-count="74" data-suffix="%">74%</strong><span>дочитывают урок, было 41%</span></li>
+            <li><strong data-count="74" data-suffix="%">74%</strong><span>дочитывают урок до конца</span></li>
             <li><strong data-count="4.7" data-decimals="1">4,7</strong><span>из 5, оценка полезности урока</span></li>
-            <li><strong><span data-count="8">8</span> мин</strong><span>до первого шаблона, было 25</span></li>
+            <li><strong><span data-count="8">8</span> мин</strong><span>до первого созданного шаблона</span></li>
           </ul>
           <blockquote class="sc-quote">
             <Iconsax name="quote-up-bold" size={32}/>
