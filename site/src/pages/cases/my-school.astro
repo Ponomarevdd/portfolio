@@ -150,9 +150,36 @@ const lessons = [
         <div class="sc-head"><h2 id="h-principles">Принципы</h2></div>
         <div class="sc-main">
           <ol class="sc-principles">
-            <li><h3>Одна мысль на экран</h3><p>Карточка отвечает на один вопрос. Длинные перечни уходят во вкладки.</p></li>
-            <li><h3>Прогресс всегда виден</h3><p>Человек знает, где он, сколько прошёл и сколько осталось.</p></li>
-            <li><h3>Проверь себя, прежде чем идти в систему</h3><p>Самопроверка и тренажёр до работы с настоящим классом.</p></li>
+            <li class="sc-pr" data-anim>
+              <div class="sc-pr__text"><h3>Одна мысль на экран</h3><p>Карточка отвечает на один вопрос. Длинные перечни уходят во вкладки.</p></div>
+              <div class="sc-pr__stage ui" aria-hidden="true">
+                <p class="ui-h ui-h--xs">Подсистемы платформы</p>
+                <div class="pr-sys">
+                  <span class="pr-sys__main"><span class="ui-badge">В этом уроке</span><b>Тесты</b><small>Оценка знаний</small></span>
+                  {[['Базовая платформа', 'Обозреватель'], ['Библиотека', 'Проверенный контент'], ['Файлы', 'Онлайн-офис'], ['Аналитика', 'Сбор показателей']].map(([t, c], i) => <span class="pr-sys__item" style={`--i:${i}`}><b>{t}</b><small>{c}</small></span>)}
+                </div>
+              </div>
+            </li>
+            <li class="sc-pr" data-anim>
+              <div class="sc-pr__text"><h3>Прогресс всегда виден</h3><p>Человек знает, где он, сколько прошёл и сколько осталось.</p></div>
+              <div class="sc-pr__stage ui" aria-hidden="true">
+                <p class="ui-h ui-h--xs">Создание шаблона</p>
+                <ol class="pr-steps">
+                  {[['Нажмите «+ Новый шаблон»', 'Кнопка справа вверху, над списком шаблонов'], ['Выберите тип и напишите вопрос', 'К вопросу можно добавить картинку или файл'], ['Настройте ответы', 'Отметьте, какой вариант верный']].map(([t, c], i) => <li style={`--i:${i}`}><i>{i + 1}</i><span><b>{t}</b><small>{c}</small></span></li>)}
+                </ol>
+              </div>
+            </li>
+            <li class="sc-pr" data-anim>
+              <div class="sc-pr__text"><h3>Проверь себя, прежде чем идти в систему</h3><p>Самопроверка и тренажёр до работы с настоящим классом.</p></div>
+              <div class="sc-pr__stage ui" aria-hidden="true">
+                <div class="pr-tpl__top"><p class="ui-h ui-h--xs">Шаблон 1</p><span class="ui-badge">Выбрать ответ</span></div>
+                <p class="ui-cap">Название шаблона</p><p class="pr-tpl__name">Биология 1</p>
+                <p class="ui-cap">Ответы</p>
+                <div class="pr-tpl__opts">
+                  {['Ракообразные', 'Кораллы', 'Морские звёзды', 'Кальмары'].map((o, i) => <span class={`pr-tpl__opt${i === 1 ? ' pr-tpl__opt--ok' : ''}`}>{o}{i === 1 && <em>верный</em>}</span>)}
+                </div>
+              </div>
+            </li>
           </ol>
         </div>
       </section>
