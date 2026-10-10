@@ -23,6 +23,20 @@ const dotPath = ru.pts.map(([x, y]) => `M${x - r} ${y}a${r} ${r} 0 1 0 ${r * 2} 
 const cities = Object.values(ru.cities) as [number, number][];
 
 // Боли из интервью и то, чем мы на них ответили.
+const subsystems = [
+  ['Базовая платформа', 'Обозреватель'],
+  ['Библиотека', 'Верифицированный контент'],
+  ['Файлы', 'Расширенный онлайн-офис'],
+  ['ЕТД', 'Администрирование системы'],
+  ['Аналитика', 'Сбор информации по показателям ФП «Цифровая образовательная среда»'],
+  ['Помощник ученика', 'Подготовка к ГИА и ВПР'],
+  ['Смарт ТВ', 'Вывод контента на экран'],
+];
+const tasks = [
+  ['Выбрать ответ', 'Классический тест: ученик выбирает один или несколько вариантов ответа.'],
+  ['Выбрать из списка', 'Ученик выбирает вариант из выпадающего списка прямо в тексте задания.'],
+  ['Ввести ответ', 'Ученик вводит ответ с клавиатуры, система сверяет его с эталоном.'],
+];
 const pains = [
   { quote: 'Открыла, а там двадцать разделов. Куда нажимать?', who: 'Учитель начальных классов', idea: 'Курс «С чего начать»', note: 'Первые шаги в платформе за 10 минут' },
   { quote: 'Нужное нашла только на тридцатой странице', who: 'Учитель математики', idea: 'Короткие уроки', note: 'Содержание и вкладки вместо одной длинной инструкции' },
@@ -155,35 +169,56 @@ const lessons = [
         <div class="sc-head"><h2 id="h-principles">Принципы</h2></div>
         <div class="sc-main">
           <ol class="sc-principles">
-            <li class="sc-pr" data-anim>
-              <div class="sc-pr__text"><h3>Одна мысль на экран</h3><p>Карточка отвечает на один вопрос. Длинные перечни уходят во вкладки.</p></div>
-              <div class="sc-pr__stage ui" aria-hidden="true">
-                <p class="ui-h ui-h--xs">Подсистемы платформы</p>
-                <div class="pr-sys">
-                  <span class="pr-sys__main"><span class="ui-badge">В этом уроке</span><b>Тесты</b><small>Оценка знаний</small></span>
-                  {[['Базовая платформа', 'Обозреватель'], ['Библиотека', 'Проверенный контент'], ['Файлы', 'Онлайн-офис'], ['Аналитика', 'Сбор показателей']].map(([t, c], i) => <span class="pr-sys__item" style={`--i:${i}`}><b>{t}</b><small>{c}</small></span>)}
+            <li class="sc-pr">
+              <div class="sc-pr__text"><h3>Одна мысль на экран</h3><p>Каждый блок урока отвечает на один вопрос.</p></div>
+              <div class="sc-pr__stage pr-sys ui" data-anim aria-hidden="true">
+                <div class="pr-sys__head"><p class="pr-sys__h">Подсистемы Цифровой платформы для школ</p><p class="pr-sys__p">Подсистемы — это инструменты внутри Цифровой платформы для школ, которые помогают организовать образовательный процесс в рамках одной платформы.</p></div>
+                <ul class="pr-sys__grid">
+                  <li class="pr-sys__main"><span class="pr-sys__badge">В этом уроке</span><span><b>Тесты</b><small>Оценка знаний</small></span></li>
+                  {subsystems.map(([t, c], i) => <li class="pr-sys__item" style={`--i:${i}`}><b>{t}</b><small>{c}</small></li>)}
+                </ul>
+              </div>
+            </li>
+            <li class="sc-pr">
+              <div class="sc-pr__text"><h3>Визуальный сторителлинг</h3><p>Типы заданий показываем схемой, а не описанием.</p></div>
+              <div class="sc-pr__stage pr-sl" data-anim data-slider aria-roledescription="слайдер" aria-label="Примеры типов заданий" role="region">
+                <div class="pr-sl__view">
+                  <div class="pr-sl__track" data-sl-track>
+                    {tasks.map(([t, d], i) => (
+                      <div class="pr-sl__slide" role="group" aria-roledescription="слайд" aria-label={`${i + 1} из ${tasks.length}`}>
+                        <div class="pr-sl__text"><p class="pr-sl__h">{t}</p><p>{d}</p></div>
+                        <div class="pr-sl__frame"><img src={img(`task-${i + 1}.svg`)} alt="" width="1100" height="620" loading="lazy" decoding="async" /></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div class="pr-sl__bar">
+                  <span class="pr-sl__count" aria-live="polite" data-sl-count>1 / 10</span>
+                  <div class="pr-sl__btns">
+                    <button type="button" class="pr-sl__btn" aria-label="Предыдущий тип задания" data-sl-prev><Iconsax name="arrow-left2-linear" size={22}/></button>
+                    <button type="button" class="pr-sl__btn" aria-label="Следующий тип задания" data-sl-next><Iconsax name="arrow-right2-linear" size={22}/></button>
+                  </div>
                 </div>
               </div>
             </li>
-            <li class="sc-pr" data-anim>
-              <div class="sc-pr__text"><h3>Прогресс всегда виден</h3><p>Человек знает, где он, сколько прошёл и сколько осталось.</p></div>
-              <div class="sc-pr__stage ui" aria-hidden="true">
-                <p class="ui-h ui-h--xs">Создание шаблона</p>
-                <ol class="pr-steps">
-                  {[['Нажмите «+ Новый шаблон»', 'Кнопка справа вверху, над списком шаблонов'], ['Выберите тип и напишите вопрос', 'К вопросу можно добавить картинку или файл'], ['Настройте ответы', 'Отметьте, какой вариант верный']].map(([t, c], i) => <li style={`--i:${i}`}><i>{i + 1}</i><span><b>{t}</b><small>{c}</small></span></li>)}
-                </ol>
-              </div>
-            </li>
-            <li class="sc-pr" data-anim>
-              <div class="sc-pr__text"><h3>Проверь себя, прежде чем идти в систему</h3><p>Самопроверка и тренажёр до работы с настоящим классом.</p></div>
-              <div class="sc-pr__stage ui" aria-hidden="true">
-                <div class="pr-tpl__top"><p class="ui-h ui-h--xs">Шаблон 1</p><span class="ui-badge">Выбрать ответ</span></div>
-                <p class="ui-cap">Название шаблона</p><p class="pr-tpl__name">Биология 1</p>
-                <p class="ui-cap">Ответы</p>
-                <div class="pr-tpl__opts">
-                  {['Ракообразные', 'Кораллы', 'Морские звёзды', 'Кальмары'].map((o, i) => <span class={`pr-tpl__opt${i === 1 ? ' pr-tpl__opt--ok' : ''}`}>{o}{i === 1 && <em>верный</em>}</span>)}
+            <li class="sc-pr">
+              <div class="sc-pr__text"><h3>Аккуратная вёрстка</h3><p>Блоки урока подстраиваются под любую ширину экрана.</p></div>
+              <figure class="sc-resp sc-pr__stage" data-anim>
+                <div class="sc-resp__stage">
+                  <div class="sc-resp__frame ui" aria-hidden="true">
+                    <div class="rs-bar"><i></i><i></i><i></i></div>
+                    <div class="rs-page">
+                      <p class="rs-h">Профили пользователей</p>
+                      <p class="rs-p">Максимальный перечень профилей, который может быть доступен пользователю.</p>
+                      <div class="rs-grid">
+                        {profiles.map((pr) => <div class="rs-card"><span class="rs-ava" set:html={pr.svg}></span><span><b>{pr.texts[0]}</b>{pr.texts.slice(1).join(' ')}</span></div>)}
+                      </div>
+                      <div class="rs-tip"><Iconsax name="info-circle-bold" size={22}/><p><b>Дальше в уроке</b> работа в подсистеме «Тесты» из профиля педагогического работника.</p></div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+                <figcaption class="sc-resp__legend"><span>Широкий экран</span><span>Планшет</span><span>Телефон</span></figcaption>
+              </figure>
             </li>
           </ol>
         </div>
@@ -397,29 +432,6 @@ const lessons = [
             </div>
             <span class="lms-cursor" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M5 3.2v15.4c0 .5.6.8 1 .4l3.6-3.4 2.4 5.5c.2.4.6.5 1 .4l2-.9c.4-.2.5-.6.4-1l-2.4-5.4 4.9-.3c.5 0 .8-.6.4-1L6 2.8c-.4-.3-1-.1-1 .4Z" fill="#1c1c1c" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
           </div>
-        </div>
-      </section>
-
-      <section class="sc-sec" aria-labelledby="h-adapt">
-        <div class="sc-head"><h2 id="h-adapt">Отзывчивая вёрстка</h2></div>
-        <div class="sc-main">
-          <p class="sc-lead">Блоки урока подстраиваются под любую ширину экрана.</p>
-          <figure class="sc-resp" data-anim>
-            <div class="sc-resp__stage">
-              <div class="sc-resp__frame ui" aria-hidden="true">
-                <div class="rs-bar"><i></i><i></i><i></i></div>
-                <div class="rs-page">
-                  <p class="rs-h">Профили пользователей</p>
-                  <p class="rs-p">Максимальный перечень профилей, который может быть доступен пользователю.</p>
-                  <div class="rs-grid">
-                    {profiles.map((pr) => <div class="rs-card"><span class="rs-ava" set:html={pr.svg}></span><span><b>{pr.texts[0]}</b>{pr.texts.slice(1).join(' ')}</span></div>)}
-                  </div>
-                  <div class="rs-tip"><Iconsax name="info-circle-bold" size={22}/><p><b>Дальше в уроке</b> работа в подсистеме «Тесты» из профиля педагогического работника.</p></div>
-                </div>
-              </div>
-            </div>
-            <figcaption class="sc-resp__legend"><span>Широкий экран</span><span>Планшет</span><span>Телефон</span></figcaption>
-          </figure>
         </div>
       </section>
 

@@ -36,6 +36,30 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll<HTMLElement>('.sc [data-anim], .sc [data-count]').forEach((el) => observer.observe(el));
 
 
+// Слайдер типов заданий: листается сам, пока виден; стрелки работают всегда.
+document.querySelectorAll<HTMLElement>('.sc [data-slider]').forEach((root) => {
+  const track = root.querySelector<HTMLElement>('[data-sl-track]');
+  const count = root.querySelector<HTMLElement>('[data-sl-count]');
+  if (!track || !count) return;
+  const slides = Array.from(track.children) as HTMLElement[];
+  let i = 0;
+  let timer = 0;
+  const go = (n: number) => {
+    i = (n + slides.length) % slides.length;
+    track.style.transform = `translateX(${-i * 100}%)`;
+    slides.forEach((s, k) => s.setAttribute('aria-hidden', String(k !== i)));
+    count.textContent = `${i + 1} / 10`;
+  };
+  const stop = () => { clearInterval(timer); timer = 0; };
+  const play = () => { stop(); if (!reduced) timer = window.setInterval(() => go(i + 1), 3600); };
+  root.querySelector('[data-sl-prev]')?.addEventListener('click', () => { go(i - 1); play(); });
+  root.querySelector('[data-sl-next]')?.addEventListener('click', () => { go(i + 1); play(); });
+  root.addEventListener('pointerenter', stop);
+  root.addEventListener('pointerleave', () => { if (root.classList.contains('is-in')) play(); });
+  new IntersectionObserver(([e]) => (e.isIntersecting ? play() : stop()), { threshold: .4 }).observe(root);
+  go(0);
+});
+
 // LMS: курсор открывает урок, «читает» лонгрид, возвращается на главную и видит обновлённый прогресс.
 const lms = document.querySelector<HTMLElement>('.sc-lms');
 if (lms && !reduced) {
