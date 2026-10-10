@@ -48,7 +48,7 @@ document.querySelectorAll<HTMLElement>('.sc [data-slider]').forEach((root) => {
     i = (n + slides.length) % slides.length;
     track.style.transform = `translateX(${-i * 100}%)`;
     slides.forEach((s, k) => s.setAttribute('aria-hidden', String(k !== i)));
-    count.textContent = `${i + 1} / 10`;
+    count.textContent = `${i + 1} / ${slides.length}`;
   };
   const stop = () => { clearInterval(timer); timer = 0; };
   const play = () => { stop(); if (!reduced) timer = window.setInterval(() => go(i + 1), 3600); };
