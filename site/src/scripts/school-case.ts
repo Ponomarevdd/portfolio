@@ -36,12 +36,16 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll<HTMLElement>('.sc [data-anim], .sc [data-count]').forEach((el) => observer.observe(el));
 
 
-// LMS: курсор проходит сценарий «продолжить урок → записаться на вебинар», пока блок на экране.
+// LMS: курсор открывает урок, «читает» лонгрид, возвращается на главную и видит обновлённый прогресс.
 const lms = document.querySelector<HTMLElement>('.sc-lms');
 if (lms && !reduced) {
   const $ = (k: string) => lms.querySelector<HTMLElement>(`[data-d="${k}"]`)!;
   const $$ = (k: string) => [...lms.querySelectorAll<HTMLElement>(`[data-d="${k}"]`)];
   const cursor = lms.querySelector<HTMLElement>('.lms-cursor')!;
+  const read = $('read'), scroll = $('scroll'), tocBox = read.querySelector<HTMLElement>('.lr-toc')!;
+  const toc = [...read.querySelectorAll<HTMLElement>('[data-d="toc"]')];
+  const secs = [...read.querySelectorAll<HTMLElement>('[data-d="sec"]')];
+  const tocCount = read.querySelector<HTMLElement>('[data-d="toc-count"] .t')!;
   let visible = false;
   let wake: (() => void) | null = null;
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) wake?.(); }, { rootMargin: '-15% 0px -15% 0px' }).observe(lms);
@@ -62,13 +66,25 @@ if (lms && !reduced) {
     el.classList.add('is-press'); await sleep(160); el.classList.remove('is-press');
   };
   const set = (k: string, v: string) => { $(k).textContent = v; };
+  const instant = (els: HTMLElement[], fn: () => void) => {
+    els.forEach((e) => { e.style.transition = 'none'; });
+    fn(); void lms.offsetWidth;
+    els.forEach((e) => { e.style.transition = ''; });
+  };
+  const reading = (k: number) => {
+    toc.forEach((t, i) => { t.classList.toggle('is-done', i < k); t.classList.toggle('is-now', i === k); });
+    tocCount.textContent = `Изучено ${Math.min(k, toc.length)} из ${toc.length}`;
+  };
   const reset = () => {
     lms.querySelectorAll('.is-hover').forEach((e) => e.classList.remove('is-hover'));
+    read.classList.remove('is-open');
+    instant([scroll, tocBox, $('read-fill')], () => { scroll.style.transform = ''; tocBox.style.transform = ''; $('read-fill').style.setProperty('--v', '.3'); });
+    set('read-pct', '30%'); reading(0);
     $('fill').style.setProperty('--v', '.3'); set('pct', '30%'); set('left', 'Осталось 7 мин');
+    set('btn', 'Продолжить'); set('cont-cap', 'Продолжить · Курс для педагогов'); set('cont-title', 'С чего начать работу в Цифровой платформе');
     $('course-fill').style.setProperty('--v', '.06'); set('course-pct', '6%'); set('course-done', '1 из 18 уроков');
     set('stat', '1 из 18'); set('hello', 'Вы прошли 1 из 18 уроков курса для педагогов');
     const rows = $$('lesson'); rows.forEach((r, i) => r.classList.toggle('lms-lesson--now', i === 0)); rows[0].classList.remove('lms-lesson--done');
-    $('web').classList.remove('is-done'); $('toast').classList.remove('is-on');
   };
   const run = async () => {
     for (;;) {
@@ -79,21 +95,43 @@ if (lms && !reduced) {
       cursor.style.transition = 'none'; cursor.style.transform = `translate(${start[0]}px, ${start[1]}px)`;
       void cursor.offsetWidth; cursor.style.transition = ''; cursor.style.opacity = '1';
       await sleep(600);
+      // Открываем урок
       await moveTo($('continue'), .35, .55); await click($('continue'));
-      $('fill').style.setProperty('--v', '1'); set('pct', '100%'); set('left', 'Урок пройден');
-      await sleep(1300);
       $('continue').classList.remove('is-hover');
+      read.classList.add('is-open');
+      await sleep(700);
+      const view = scroll.parentElement!;
+      await moveTo(view, .62, .55);
+      // Листаем лонгрид по разделам
+      const base = scroll.getBoundingClientRect().top;
+      const max = Math.max(0, scroll.scrollHeight - view.clientHeight + 48);
+      const tocTop = tocBox.getBoundingClientRect().top - base;
+      for (let k = 0; k < secs.length; k++) {
+        const y = k === 0 ? 0 : Math.min(max, secs[k].getBoundingClientRect().top - base - 16);
+        scroll.style.transform = `translateY(${-y}px)`;
+        tocBox.style.transform = `translateY(${Math.max(0, y - tocTop + 8)}px)`;
+        reading(k);
+        const v = .3 + .7 * (k + 1) / secs.length;
+        $('read-fill').style.setProperty('--v', String(v)); set('read-pct', `${Math.round(v * 100)}%`);
+        await sleep(k === 0 ? 900 : 1500);
+      }
+      reading(secs.length);
+      await sleep(900);
+      // Возвращаемся на главную
+      await moveTo($('back'), .5, .55); await click($('back'));
+      read.classList.remove('is-open'); $('back').classList.remove('is-hover');
+      await sleep(600);
+      $('fill').style.setProperty('--v', '1'); set('pct', '100%'); set('left', 'Урок пройден');
+      await sleep(1100);
       const rows = $$('lesson');
       rows[0].classList.remove('lms-lesson--now'); rows[0].classList.add('lms-lesson--done'); rows[1].classList.add('lms-lesson--now');
       set('stat', '2 из 18'); set('hello', 'Вы прошли 2 из 18 уроков курса для педагогов');
-      await moveTo($('course'), .6, .45);
       $('course-fill').style.setProperty('--v', '.11'); set('course-pct', '11%'); set('course-done', '2 из 18 уроков');
-      await sleep(1300); $('course').classList.remove('is-hover');
-      await moveTo($('web'), .4, .5); await click($('web'));
-      $('web').classList.add('is-done'); $('toast').classList.add('is-on');
-      await sleep(2400);
-      $('toast').classList.remove('is-on'); cursor.style.opacity = '0';
-      await sleep(2200);
+      set('btn', 'Следующий урок');
+      await moveTo($('continue'), .4, .55);
+      await sleep(2600);
+      $('continue').classList.remove('is-hover'); cursor.style.opacity = '0';
+      await sleep(1800);
     }
   };
   run();

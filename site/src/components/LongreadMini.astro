@@ -1,0 +1,62 @@
+---
+// Фрагмент лонгрида «С чего начать работу»: шапка, содержание и первые блоки.
+// mode: wire — структура, grey — серый макет, ui — готовый интерфейс. full добавляет остальные разделы урока.
+import Iconsax from './Iconsax.astro';
+
+interface Props { mode?: 'wire' | 'grey' | 'ui'; full?: boolean; hero: string }
+const { mode = 'ui', full = false, hero } = Astro.props;
+const toc = ['О системе', 'Задачи системы', 'Подсистемы', 'Шаблоны заданий', 'Итог урока'];
+const learn = ['Какие задачи решает система', 'Какие профили бывают у пользователей', 'Какие типы заданий есть в «Тестах»', 'Как создать и скачать шаблон'];
+---
+<div class={`lr lr--${mode}`}>
+  <div class="lr-head">
+    <div class="lr-head__text">
+      <span class="lr-badge"><span class="t">Курс для педагогов · Урок 1</span></span>
+      <p class="lr-h1"><span class="t">С чего начать работу в Цифровой платформе</span></p>
+      <p class="lr-sub"><span class="t">Разберёмся, зачем нужна система и из чего она состоит, а затем создадим первый шаблон задания</span></p>
+      <div class="lr-tags"><span><Iconsax name="document-text-bold" size={14}/>Лонгрид</span><span><Iconsax name="clock-bold" size={14}/>10 минут</span></div>
+    </div>
+    <span class="lr-img">{mode === 'ui' && <img src={hero} alt="" width="1466" height="1308" loading="lazy" decoding="async"/>}</span>
+  </div>
+  <div class="lr-body">
+    <aside class="lr-toc" data-d="toc-box">
+      <b><span class="t">Содержание</span></b>
+      <small data-d="toc-count"><span class="t">Изучено 0 из 5</span></small>
+      <ul>{toc.map((t, i) => <li data-d="toc" class={i === 0 ? 'is-now' : undefined}><i></i><span class="t">{t}</span></li>)}</ul>
+    </aside>
+    <div class="lr-main">
+      <section data-d="sec">
+        <p class="lr-h2"><span class="t">О системе</span></p>
+        <div class="lr-card">
+          <span class="lr-ill"><Iconsax name="monitor-bold" size={36}/></span>
+          <p><span class="t">Цифровая платформа для школ помогает педагогам и администраторам вести электронные журналы и дневники, проводить онлайн-занятия и тестирование, обмениваться документами.</span></p>
+        </div>
+        <div class="lr-learn">
+          <b><span class="t">Что вы узнаете</span></b>
+          <ul>{learn.map((l) => <li><Iconsax name="tick-circle-bold" size={18}/><span class="t">{l}</span></li>)}</ul>
+        </div>
+      </section>
+      {full && <>
+        <section data-d="sec">
+          <p class="lr-h2">Задачи системы</p>
+          <p class="lr-p">Задачи платформы делятся на три направления.</p>
+          <ul class="lr-list"><li>Управление образовательным процессом</li><li>Условия для цифровой трансформации образования</li><li>Поддержка педагогов, учеников и родителей</li></ul>
+        </section>
+        <section data-d="sec">
+          <p class="lr-h2">Подсистемы</p>
+          <div class="lr-sys">
+            <span class="lr-sys__main"><em>В этом уроке</em><b>Тесты</b>Оценка знаний</span>
+            {[['Базовая платформа', 'Обозреватель'], ['Библиотека', 'Проверенный контент'], ['Файлы', 'Онлайн-офис'], ['Аналитика', 'Сбор показателей']].map(([t, c]) => <span><b>{t}</b>{c}</span>)}
+          </div>
+        </section>
+        <section data-d="sec">
+          <p class="lr-h2">Шаблоны заданий</p>
+          <div class="lr-table"><b>Автоматическая проверка</b><b>Проверка экспертом</b><span>Выбрать ответ</span><span>Свободный ответ</span><span>Ввести ответ</span><span>Диктант</span><span>Перетаскивание</span><span>Рисование</span></div>
+        </section>
+        <section data-d="sec">
+          <div class="lr-done"><span class="lr-done__ic"><Iconsax name="award-bold" size={36}/></span><span><p class="lr-h2">Урок пройден</p><p class="lr-p">Вы знаете, из чего состоит платформа, и умеете создавать шаблоны заданий.</p></span></div>
+        </section>
+      </>}
+    </div>
+  </div>
+</div>

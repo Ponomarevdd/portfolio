@@ -4,6 +4,7 @@ import BackLink from '../../components/BackLink.astro';
 import Page from '../../layouts/Page.astro';
 import ActionButton from '../../components/ActionButton.astro';
 import Iconsax from '../../components/Iconsax.astro';
+import LongreadMini from '../../components/LongreadMini.astro';
 import ru from '../../data/russia-dots.json';
 import profiles from '../../data/school-profiles.json';
 import '@fontsource/geologica/latin-300.css';
@@ -137,7 +138,7 @@ const lessons = [
             <div class="sc-pains__head" aria-hidden="true"><span>Боль</span><span></span><span>Решение</span></div>
             <ul>
               {pains.map((p, i) => <li style={`--i:${i}`}>
-                <blockquote class="sc-pain"><Iconsax name="quote-up-bold" size={20}/><p>{p.quote}</p><cite>{p.who}</cite></blockquote>
+                <blockquote class="sc-pq"><Iconsax name="quote-up-bold" size={20}/><p>{p.quote}</p><cite>{p.who}</cite></blockquote>
                 <span class="sc-pains__arrow" aria-hidden="true"><Iconsax name="arrow-right-linear" size={24}/></span>
                 <div class="sc-fix"><Iconsax name="lamp-on-bold" size={20}/><strong>{p.idea}</strong><small>{p.note}</small></div>
               </li>)}
@@ -216,45 +217,14 @@ const lessons = [
       <section class="sc-sec" aria-labelledby="h-wire">
         <div class="sc-head"><h2 id="h-wire">От вайрфрейма к интерфейсу</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Шапка урока прошла три состояния: структура, серый макет и готовый блок на токенах дизайн-системы.</p>
-          <div class="sc-states" data-anim aria-label="Шапка урока в трёх состояниях" role="img">
-            <div class="sc-state sc-state--wire">
-              <span class="w w--badge"></span><span class="w w--h"></span><span class="w w--h w--short"></span><span class="w w--tags"></span><span class="w w--img"></span>
-            </div>
-            <div class="sc-state sc-state--grey ui">
-              <span class="g-badge">Модуль 1</span><p class="ui-h">С чего начать работу</p><div class="g-tags"><span>Лонгрид</span><span>10 мин</span></div><span class="g-img"></span>
-            </div>
-            <div class="sc-state sc-state--ui ui">
-              <span class="ui-badge">Модуль 1 · Урок 1</span><p class="ui-h">С чего начать работу в Цифровой платформе</p><div class="ui-tags"><span><Iconsax name="document-text-bold" size={14}/>Лонгрид</span><span><Iconsax name="clock-bold" size={14}/>10 мин</span></div><img src={img('lesson-hero.png')} alt="" width="1466" height="1308"/>
+          <p class="sc-lead">Лонгрид прошёл три состояния: структура, серый макет и готовый интерфейс на токенах дизайн-системы.</p>
+          <div class="sc-states" data-anim aria-label="Начало лонгрида в трёх состояниях" role="img">
+            <div class="sc-states__stack">
+              <div class="sc-state sc-state--wire"><LongreadMini mode="wire" hero={img('lesson-hero.png')}/></div>
+              <div class="sc-state sc-state--grey"><LongreadMini mode="grey" hero={img('lesson-hero.png')}/></div>
+              <div class="sc-state sc-state--ui"><LongreadMini mode="ui" hero={img('lesson-hero.png')}/></div>
             </div>
             <ol class="sc-states__legend"><li>Структура</li><li>Серый макет</li><li>Интерфейс</li></ol>
-          </div>
-          <h3 class="sc-sub">Что пробовали и почему отказались</h3>
-          <div class="sc-variants">
-            <div class="sc-variant">
-              <p class="sc-variant__topic">Задачи платформы</p>
-              <div class="sc-variant__pair">
-                <div class="sc-mini sc-mini--no"><span class="sc-mini__tag">Схема с центром</span><div class="mini-scheme"><i></i><i></i><i></i><i class="c"></i><i></i><i></i></div></div>
-                <div class="sc-mini sc-mini--yes"><span class="sc-mini__tag">Аккордеон</span><div class="mini-acc"><i class="o"></i><i></i><i></i></div></div>
-              </div>
-              <p>Схема красиво смотрелась, но три направления по четыре длинных пункта превращали её в мелкий текст в рамках. Аккордеон держит одну мысль открытой.</p>
-            </div>
-            <div class="sc-variant">
-              <p class="sc-variant__topic">Разделы платформы</p>
-              <div class="sc-variant__pair">
-                <div class="sc-mini sc-mini--no"><span class="sc-mini__tag">Вкладки</span><div class="mini-tabs"><i class="o"></i><i></i><i></i></div></div>
-                <div class="sc-mini sc-mini--yes"><span class="sc-mini__tag">«Тесты» крупно</span><div class="mini-big"><i class="b"></i><i></i><i></i><i></i><i></i></div></div>
-              </div>
-              <p>Во вкладках все разделы выглядели равными. Урок про тесты, поэтому этот раздел стал крупной карточкой, а остальные остались рядом для контекста.</p>
-            </div>
-            <div class="sc-variant">
-              <p class="sc-variant__topic">Типы заданий</p>
-              <div class="sc-variant__pair">
-                <div class="sc-mini sc-mini--no"><span class="sc-mini__tag">Список карточек</span><div class="mini-list"><i></i><i></i><i></i><i></i></div></div>
-                <div class="sc-mini sc-mini--yes"><span class="sc-mini__tag">Таблица</span><div class="mini-table"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-              </div>
-              <p>Главный вопрос педагога «кто проверит ответ». Таблица из двух колонок отвечает на него сразу, без чтения десяти карточек.</p>
-            </div>
           </div>
         </div>
       </section>
@@ -331,11 +301,11 @@ const lessons = [
                     <p class="lms-h1" data-d="hello">Вы прошли 1 из 18 уроков курса для педагогов</p>
                     <p class="lms-sub">Продолжайте с того места, где остановились</p>
                     <div class="lms-continue">
-                      <p class="ui-cap">Продолжить · Курс для педагогов</p>
-                      <p class="lms-h3">С чего начать работу в Цифровой платформе</p>
+                      <p class="ui-cap" data-d="cont-cap">Продолжить · Курс для педагогов</p>
+                      <p class="lms-h3" data-d="cont-title">С чего начать работу в Цифровой платформе</p>
                       <div class="lms-progress"><span class="ui-cap" data-d="left">Осталось 7 мин</span><b data-d="pct">30%</b></div>
                       <div class="lms-track"><span class="lms-fill" data-d="fill" style="--v:.3"></span></div>
-                      <span class="ui-btn" data-d="continue">Продолжить<Iconsax name="arrow-right-linear" size={18}/></span>
+                      <span class="ui-btn" data-d="continue"><span data-d="btn">Продолжить</span><Iconsax name="arrow-right-linear" size={18}/></span>
                     </div>
                   </div>
                   <img src={img('lesson-hero.png')} alt="" width="1466" height="1308" loading="lazy" decoding="async"/>
@@ -371,7 +341,10 @@ const lessons = [
                 </div>
               </div>
             </div>
-            <span class="lms-toast" data-d="toast" aria-hidden="true"><Iconsax name="tick-circle-bold" size={20}/>Вы записаны на вебинар 14 октября</span>
+            <div class="lms-read" data-d="read" aria-hidden="true">
+              <div class="lms-read__bar"><span class="lms-back" data-d="back"><Iconsax name="arrow-left-linear" size={18}/>Моё обучение</span><span class="lms-read__track"><span data-d="read-fill"></span></span><span class="ui-cap" data-d="read-pct">30%</span></div>
+              <div class="lms-read__view"><div class="lms-read__scroll" data-d="scroll"><LongreadMini mode="ui" full hero={img('lesson-hero.png')}/></div></div>
+            </div>
             <span class="lms-cursor" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M5 3.2v15.4c0 .5.6.8 1 .4l3.6-3.4 2.4 5.5c.2.4.6.5 1 .4l2-.9c.4-.2.5-.6.4-1l-2.4-5.4 4.9-.3c.5 0 .8-.6.4-1L6 2.8c-.4-.3-1-.1-1 .4Z" fill="#1c1c1c" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
           </div>
         </div>
@@ -430,13 +403,10 @@ const lessons = [
                 <li style="font-weight:600"><b>600</b>Заголовки</li>
               </ul>
             </div>
-            <div class="sc-ds__card">
-              <h3>Токены</h3>
-              <div class="sc-swatches">
-                <span style="--c:#006EE5">Primary</span><span style="--c:#D1E7FF">Primary Light</span><span style="--c:#1C1C1C">Текст</span><span style="--c:#727272">Подписи</span><span style="--c:#F6F6F6">Фон</span><span style="--c:#7AD9A8">Success</span><span style="--c:#FF5242">Error</span>
-              </div>
-              <div class="sc-radii" aria-label="Скругления">
-                {[[30, 'шапка'], [24, 'карточка'], [18, 'строка'], [12, 'кнопка'], [7, 'бейдж']].map(([r, l]) => <span style={`--r:${r}px`}><i></i>{r} · {l}</span>)}
+            <div class="sc-ds__card" data-anim>
+              <h3>Цвета</h3>
+              <div class="sc-tokens" aria-hidden="true">
+                {[['Основной', '#006EE5', 1], ['Светлый', '#D1E7FF'], ['Текст', '#1C1C1C', 1], ['Подписи', '#727272', 1], ['Фон', '#F6F6F6'], ['Успех', '#7AD9A8'], ['Ошибка', '#FF5242', 1]].map(([n, c, dark], i) => <span class={dark ? 'is-dark' : undefined} style={`--c:${c};--i:${i}`}>{n}<small>{c}</small></span>)}
               </div>
             </div>
             <div class="sc-ds__card sc-ds__card--stack" data-anim>
