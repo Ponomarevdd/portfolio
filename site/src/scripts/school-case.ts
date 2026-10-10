@@ -45,7 +45,8 @@ if (lms && !reduced) {
   const read = $('read'), scroll = $('scroll'), tocBox = read.querySelector<HTMLElement>('.lr-toc')!;
   const toc = [...read.querySelectorAll<HTMLElement>('[data-d="toc"]')];
   const secs = [...read.querySelectorAll<HTMLElement>('[data-d="sec"]')];
-  const tocCount = read.querySelector<HTMLElement>('[data-d="toc-count"] .t')!;
+  const tocCount = read.querySelector<HTMLElement>('[data-d="toc-count"]')!;
+  const tocRail = read.querySelector<HTMLElement>('[data-d="toc-rail"]')!;
   let visible = false;
   let wake: (() => void) | null = null;
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) wake?.(); }, { rootMargin: '-15% 0px -15% 0px' }).observe(lms);
@@ -73,7 +74,8 @@ if (lms && !reduced) {
   };
   const reading = (k: number) => {
     toc.forEach((t, i) => { t.classList.toggle('is-done', i < k); t.classList.toggle('is-now', i === k); });
-    tocCount.textContent = `Изучено ${Math.min(k, toc.length)} из ${toc.length}`;
+    tocCount.textContent = `Изучено ${k + 1} из ${toc.length} разделов`;
+    tocRail.style.setProperty('--rail', `${Math.round(k / (toc.length - 1) * 100)}%`);
   };
   const reset = () => {
     lms.querySelectorAll('.is-hover').forEach((e) => e.classList.remove('is-hover'));
@@ -102,24 +104,35 @@ if (lms && !reduced) {
       await sleep(700);
       const view = scroll.parentElement!;
       await moveTo(view, .62, .55);
-      // Листаем лонгрид по разделам
+      // Одна плавная прокрутка до конца урока, содержание отмечает разделы по ходу
       const base = scroll.getBoundingClientRect().top;
-      const max = Math.max(0, scroll.scrollHeight - view.clientHeight + 48);
+      const at = (el: HTMLElement) => el.getBoundingClientRect().top - base;
+      // Финальный блок урока доезжает до верха окна, чтобы его было видно и на невысоком экране
+      const end = Math.max(0, at(secs[secs.length - 1]) - 24);
       const tocTop = tocBox.getBoundingClientRect().top - base;
-      for (let k = 0; k < secs.length; k++) {
-        const y = k === 0 ? 0 : Math.min(max, secs[k].getBoundingClientRect().top - base - 16);
-        scroll.style.transform = `translateY(${-y}px)`;
-        tocBox.style.transform = `translateY(${Math.max(0, y - tocTop + 8)}px)`;
-        reading(k);
-        const v = .3 + .7 * (k + 1) / secs.length;
-        $('read-fill').style.setProperty('--v', String(v)); set('read-pct', `${Math.round(v * 100)}%`);
-        await sleep(k === 0 ? 900 : 1500);
+      const dur = 5200;
+      [scroll, tocBox].forEach((e) => { e.style.transition = `transform ${dur}ms cubic-bezier(.45,0,.35,1)`; });
+      scroll.style.transform = `translateY(${-end}px)`;
+      tocBox.style.transform = `translateY(${Math.max(0, end - tocTop + 8)}px)`;
+      $('read-fill').style.transition = `transform ${dur}ms cubic-bezier(.45,0,.35,1)`;
+      $('read-fill').style.setProperty('--v', '1');
+      const marks = secs.map((sec) => Math.min(1, Math.max(0, (at(sec) - view.clientHeight * .5) / Math.max(1, end))));
+      const t0 = performance.now();
+      let shown = -1;
+      while (performance.now() - t0 < dur) {
+        const p = (performance.now() - t0) / dur;
+        const k = marks.filter((m) => p >= m).length - 1;
+        const idx = k === secs.length - 1 ? toc.length - 1 : Math.max(0, k);
+        if (idx !== shown) { shown = idx; reading(idx); }
+        set('read-pct', `${Math.round((.3 + .7 * p) * 100)}%`);
+        await sleep(120);
       }
-      reading(secs.length);
-      await sleep(900);
-      // Возвращаемся на главную
-      await moveTo($('back'), .5, .55); await click($('back'));
-      read.classList.remove('is-open'); $('back').classList.remove('is-hover');
+      reading(toc.length - 1); set('read-pct', '100%');
+      [scroll, tocBox, $('read-fill')].forEach((e) => { e.style.transition = ''; });
+      await sleep(500);
+      // Завершаем урок и возвращаемся на главную
+      await moveTo($('finish'), .4, .55); await click($('finish'));
+      read.classList.remove('is-open'); $('finish').classList.remove('is-hover');
       await sleep(600);
       $('fill').style.setProperty('--v', '1'); set('pct', '100%'); set('left', 'Урок пройден');
       await sleep(1100);

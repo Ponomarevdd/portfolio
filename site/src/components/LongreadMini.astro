@@ -1,62 +1,64 @@
 ---
-// Фрагмент лонгрида «С чего начать работу»: шапка, содержание и первые блоки.
-// mode: wire — структура, grey — серый макет, ui — готовый интерфейс. full добавляет остальные разделы урока.
+// Начало лонгрида «С чего начать работу» по макету из артефакта: шапка, содержание, «О системе», «Задачи системы».
+// mode: wire — структура, grey — серый макет, ui — готовый интерфейс. finish добавляет финальный блок урока.
 import Iconsax from './Iconsax.astro';
 
-interface Props { mode?: 'wire' | 'grey' | 'ui'; full?: boolean; hero: string }
-const { mode = 'ui', full = false, hero } = Astro.props;
-const toc = ['О системе', 'Задачи системы', 'Подсистемы', 'Шаблоны заданий', 'Итог урока'];
-const learn = ['Какие задачи решает система', 'Какие профили бывают у пользователей', 'Какие типы заданий есть в «Тестах»', 'Как создать и скачать шаблон'];
+interface Props { mode?: 'wire' | 'grey' | 'ui'; finish?: boolean; base: string }
+const { mode = 'ui', finish = false, base } = Astro.props;
+const ui = mode === 'ui';
+const toc = ['О системе', 'Задачи системы', 'Подсистемы', 'Профили пользователей', 'Типы заданий', 'Создание шаблона', 'Практика', 'Скачивание и статусы', 'Самопроверка и итоги'];
+const learn = [['Какие задачи решает система', 'и из каких подсистем она состоит'], ['Какие профили бывают', 'у пользователей'], ['Какие типы заданий есть', 'в подсистеме «Тесты»'], ['Как создать, скачать шаблон', 'и управлять его статусами']];
+const tasks = ['Управление образовательным процессом', 'Формирование условий для цифровой трансформации системы образования', 'Поддержка системы образования'];
 ---
 <div class={`lr lr--${mode}`}>
   <div class="lr-head">
     <div class="lr-head__text">
-      <span class="lr-badge"><span class="t">Курс для педагогов · Урок 1</span></span>
-      <p class="lr-h1"><span class="t">С чего начать работу в Цифровой платформе</span></p>
-      <p class="lr-sub"><span class="t">Разберёмся, зачем нужна система и из чего она состоит, а затем создадим первый шаблон задания</span></p>
-      <div class="lr-tags"><span><Iconsax name="document-text-bold" size={14}/>Лонгрид</span><span><Iconsax name="clock-bold" size={14}/>10 минут</span></div>
+      <p class="lr-badge"><span class="t">Курс для педагогов «Цифровая платформа для школ» · Урок 1</span></p>
+      <div class="lr-head__mid">
+        <p class="lr-h1"><span class="t">С чего начать работу<br/>в Цифровой платформе</span></p>
+        <p class="lr-sub"><span class="t">Разберёмся, зачем нужна система и из чего она состоит, а затем на практике создадим первый шаблон задания в подсистеме «Тесты»</span></p>
+      </div>
+      <div class="lr-tags"><span><Iconsax name="document-text-bold" size={16}/>Лонгрид</span><span><Iconsax name="clock-bold" size={16}/>10 минут</span></div>
     </div>
-    <span class="lr-img">{mode === 'ui' && <img src={hero} alt="" width="1466" height="1308" loading="lazy" decoding="async"/>}</span>
+    <span class="lr-img">{ui && <img src={`${base}lesson-hero.png`} alt="" width="1466" height="1308" loading="lazy" decoding="async"/>}</span>
   </div>
   <div class="lr-body">
-    <aside class="lr-toc" data-d="toc-box">
-      <b><span class="t">Содержание</span></b>
-      <small data-d="toc-count"><span class="t">Изучено 0 из 5</span></small>
-      <ul>{toc.map((t, i) => <li data-d="toc" class={i === 0 ? 'is-now' : undefined}><i></i><span class="t">{t}</span></li>)}</ul>
-    </aside>
+    <nav class="lr-toc" aria-hidden="true">
+      <div class="lr-toc__top"><b><span class="t">Содержание</span></b><small><span class="t" data-d="toc-count">Изучено 1 из 9 разделов</span></small></div>
+      <div class="lr-toc__list">
+        <span class="lr-toc__rail"><span data-d="toc-rail"></span></span>
+        <ol>{toc.map((t, i) => <li data-d="toc" class={i === 0 ? 'is-now' : undefined}><i></i><span class="t">{t}</span></li>)}</ol>
+      </div>
+    </nav>
     <div class="lr-main">
       <section data-d="sec">
         <p class="lr-h2"><span class="t">О системе</span></p>
-        <div class="lr-card">
-          <span class="lr-ill"><Iconsax name="monitor-bold" size={36}/></span>
-          <p><span class="t">Цифровая платформа для школ помогает педагогам и администраторам вести электронные журналы и дневники, проводить онлайн-занятия и тестирование, обмениваться документами.</span></p>
+        <div class="lr-about">
+          <span class="lr-about__img">{ui && <img src={`${base}about-system.svg`} alt="" width="165" height="173" loading="lazy"/>}</span>
+          <div class="lr-about__text">
+            <p><span class="t">Цифровая платформа для школ помогает педагогам и администраторам школ организовывать электронный обмен документами, вести электронные журналы и дневники, проводить онлайн-занятия и тестирования, взаимодействовать с региональными органами управления образованием и многое другое.</span></p>
+            <p><span class="t">Система позволяет упростить и стандартизировать процессы управления образованием на федеральном, региональном и муниципальном уровнях, повысить качество образования и сделать его доступнее для всех категорий обучающихся.</span></p>
+          </div>
         </div>
         <div class="lr-learn">
-          <b><span class="t">Что вы узнаете</span></b>
-          <ul>{learn.map((l) => <li><Iconsax name="tick-circle-bold" size={18}/><span class="t">{l}</span></li>)}</ul>
+          <p class="lr-h3"><span class="t">Что вы узнаете</span></p>
+          <ul>{learn.map(([a, b]) => <li><Iconsax name="tick-circle-bulk" size={26}/><span class="t">{a}<br/>{b}</span></li>)}</ul>
         </div>
       </section>
-      {full && <>
-        <section data-d="sec">
-          <p class="lr-h2">Задачи системы</p>
-          <p class="lr-p">Задачи платформы делятся на три направления.</p>
-          <ul class="lr-list"><li>Управление образовательным процессом</li><li>Условия для цифровой трансформации образования</li><li>Поддержка педагогов, учеников и родителей</li></ul>
-        </section>
-        <section data-d="sec">
-          <p class="lr-h2">Подсистемы</p>
-          <div class="lr-sys">
-            <span class="lr-sys__main"><em>В этом уроке</em><b>Тесты</b>Оценка знаний</span>
-            {[['Базовая платформа', 'Обозреватель'], ['Библиотека', 'Проверенный контент'], ['Файлы', 'Онлайн-офис'], ['Аналитика', 'Сбор показателей']].map(([t, c]) => <span><b>{t}</b>{c}</span>)}
+      <section data-d="sec">
+        <div class="lr-sec-head"><p class="lr-h2"><span class="t">Задачи системы</span></p><p><span class="t">Задачи Цифровой платформы для школ делятся на три направления.</span></p></div>
+        <div class="lr-acc">{tasks.map((t) => <div class="lr-acc__item"><span class="t">{t}</span><span class="lr-acc__btn"><Iconsax name="add-linear" size={18}/></span></div>)}</div>
+      </section>
+      {finish && <section data-d="sec">
+        <div class="lr-done">
+          <span class="lr-done__art"><img src={`${base}done-a.svg`} alt="" style="left:0;top:-1px;width:40px"/><img src={`${base}done-b.svg`} alt="" style="left:196px;top:12px;width:24px"/><img src={`${base}done-c.svg`} alt="" style="left:180px;top:36px;width:16px"/><img src={`${base}done-main.svg`} alt="" style="left:24px;top:30px;width:174px"/></span>
+          <div class="lr-done__text">
+            <p class="lr-h2">Урок пройден</p>
+            <p>Теперь вы знаете, какое место Цифровая платформа для школ занимает в цифровой образовательной среде, какие у неё задачи и подсистемы.</p>
+            <span class="lr-done__btn" data-d="finish"><Iconsax name="tick-circle-linear" size={22}/>Завершить урок</span>
           </div>
-        </section>
-        <section data-d="sec">
-          <p class="lr-h2">Шаблоны заданий</p>
-          <div class="lr-table"><b>Автоматическая проверка</b><b>Проверка экспертом</b><span>Выбрать ответ</span><span>Свободный ответ</span><span>Ввести ответ</span><span>Диктант</span><span>Перетаскивание</span><span>Рисование</span></div>
-        </section>
-        <section data-d="sec">
-          <div class="lr-done"><span class="lr-done__ic"><Iconsax name="award-bold" size={36}/></span><span><p class="lr-h2">Урок пройден</p><p class="lr-p">Вы знаете, из чего состоит платформа, и умеете создавать шаблоны заданий.</p></span></div>
-        </section>
-      </>}
+        </div>
+      </section>}
     </div>
   </div>
 </div>

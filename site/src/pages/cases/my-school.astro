@@ -100,13 +100,17 @@ const lessons = [
       <section class="sc-sec" aria-labelledby="h-problem">
         <div class="sc-head"><h2 id="h-problem">Задача и проблема</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Платформу внедряли быстрее, чем люди успевали её освоить. Обучающих материалов для педагогов не было, и поддержка тонула в одинаковых вопросах из разных регионов.</p>
-          <figure class="sc-queue" data-anim>
+          <div class="sc-problem">
+            <div class="sc-problem__text">
+              <p class="sc-lead">Платформу внедряли быстрее, чем люди успевали её освоить. Обучающих материалов для педагогов не было, и поддержка тонула в одинаковых вопросах из разных регионов.</p>
+              <p>Задача: сделать обучение, после которого педагог сам проходит ключевые сценарии в платформе, а поддержка перестаёт отвечать на одни и те же вопросы.</p>
+            </div>
+            <figure class="sc-queue" data-anim>
             <ul class="ui" aria-hidden="true">
               {queue.map((q, i) => <li class={`ui-ticket a-ticket${q.same ? ' ui-ticket--same' : ''}`} style={`--i:${i}`}><Iconsax name="message-bold" size={18}/><span>{q.text}<small>{q.from}</small></span>{q.same && <em>повтор</em>}</li>)}
             </ul>
           </figure>
-          <p>Задача: сделать обучение, после которого педагог сам проходит ключевые сценарии в платформе, а поддержка перестаёт отвечать на одни и те же вопросы.</p>
+          </div>
         </div>
       </section>
 
@@ -220,9 +224,9 @@ const lessons = [
           <p class="sc-lead">Лонгрид прошёл три состояния: структура, серый макет и готовый интерфейс на токенах дизайн-системы.</p>
           <div class="sc-states" data-anim aria-label="Начало лонгрида в трёх состояниях" role="img">
             <div class="sc-states__stack">
-              <div class="sc-state sc-state--wire"><LongreadMini mode="wire" hero={img('lesson-hero.png')}/></div>
-              <div class="sc-state sc-state--grey"><LongreadMini mode="grey" hero={img('lesson-hero.png')}/></div>
-              <div class="sc-state sc-state--ui"><LongreadMini mode="ui" hero={img('lesson-hero.png')}/></div>
+              <div class="sc-state sc-state--wire"><LongreadMini mode="wire" base={img('') ?? ''}/></div>
+              <div class="sc-state sc-state--grey"><LongreadMini mode="grey" base={img('') ?? ''}/></div>
+              <div class="sc-state sc-state--ui"><LongreadMini mode="ui" base={img('') ?? ''}/></div>
             </div>
             <ol class="sc-states__legend"><li>Структура</li><li>Серый макет</li><li>Интерфейс</li></ol>
           </div>
@@ -232,13 +236,13 @@ const lessons = [
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-anatomy">
         <div class="sc-head"><h2 id="h-anatomy">Анатомия урока</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Каждый блок урока закрывает конкретную боль из исследования.</p>
+          <p class="sc-lead">Кирпичики, из которых собирается любой лонгрид.</p>
           <div class="sc-anatomy">
             <div class="sc-part" data-anim>
               <div class="sc-part__stage sc-part__stage--head ui">
                 <span class="ui-badge">Модуль 1 · Урок 1</span><p class="ui-h ui-h--s">С чего начать работу в Цифровой платформе</p><div class="ui-tags"><span><Iconsax name="document-text-bold" size={14}/>Лонгрид</span><span><Iconsax name="clock-bold" size={14}/>10 мин</span></div><img class="a-float" src={img('lesson-hero.png')} alt="" width="1466" height="1308" loading="lazy" decoding="async"/>
               </div>
-              <h3>Шапка урока</h3><p class="sc-pain"><span>Закрывает боль</span>«Непонятно, с чего начать и сколько это займёт»</p>
+              <h3>Шапка урока</h3>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
@@ -247,28 +251,28 @@ const lessons = [
                   {['О платформе', 'Задачи', 'Разделы', 'Создание шаблона', 'Самопроверка'].map((t, i) => <span class="ui-toc__item"><i class="a-dot" style={`animation-delay:${i * .9}s`}></i>{t}</span>)}
                 </div>
               </div>
-              <h3>Содержание с прогрессом</h3><p class="sc-pain"><span>Закрывает боль</span>«Слишком много текста, не найти нужное»</p>
+              <h3>Содержание с прогрессом</h3>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
                 <div class="ui-tabs__bar"><span class="ui-tabs__thumb a-tab"></span><span>Журнал</span><span>Тесты</span><span>Файлы</span></div>
                 <div class="ui-tabs__body"><span class="ui-line"></span><span class="ui-line ui-line--m"></span><span class="ui-line ui-line--s"></span></div>
               </div>
-              <h3>Вкладки</h3><p class="sc-pain"><span>Закрывает боль</span>«Бросаю длинный материал на середине»</p>
+              <h3>Вкладки</h3>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
                 <div class="ui-video"><Iconsax name="play-circle-bold" size={44}/><span class="ui-video__bar"><span class="a-play"></span></span></div>
                 <div class="ui-video__meta"><span class="ui-badge">Видео</span><span class="ui-cap">Раздел «Шаблоны» · 6 мин</span></div>
               </div>
-              <h3>Видео</h3><p class="sc-pain"><span>Закрывает боль</span>«Проще один раз увидеть, чем читать»</p>
+              <h3>Видео</h3>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
                 <div class="ui-doc"><span class="ui-doc__ic"><Iconsax name="document-download-bold" size={24}/></span><span><b>Конспект урока</b><small>PDF · 2 страницы</small></span></div>
                 {['Где найти раздел «Тесты»', 'Какие бывают типы заданий', 'Как сохранить шаблон'].map((l, i) => <span class="ui-note a-note" style={`--i:${i}`}><Iconsax name="tick-circle-bold" size={16}/>{l}</span>)}
               </div>
-              <h3>Конспект</h3><p class="sc-pain"><span>Закрывает боль</span>«Нужно быстро вспомнить главное перед уроком»</p>
+              <h3>Конспект</h3>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
@@ -277,7 +281,53 @@ const lessons = [
                 <div class="ui-trainer__opts"><span class="ui-opt">Выбрать ответ</span><span class="ui-opt a-right">Диктант<Iconsax name="tick-circle-bold" size={16}/></span><span class="ui-opt">Перетаскивание</span></div>
                 <p class="ui-fb a-fb">Верно: диктант проверяет эксперт. Дальше создадим шаблон.</p>
               </div>
-              <h3>Тренажёр с самопроверкой</h3><p class="sc-pain"><span>Закрывает боль</span>«Боюсь ошибиться в настоящей системе»</p>
+              <h3>Тренажёр с самопроверкой</h3>
+            </div>
+            <div class="sc-part" data-anim>
+              <div class="sc-part__stage ui">
+                <div class="an-acc">
+                  {['Управление образовательным процессом', 'Цифровая трансформация', 'Поддержка системы образования'].map((t, i) => <div class={`an-acc__item${i === 0 ? ' an-acc__item--open' : ''}`}><span class="an-acc__row">{t}<i><Iconsax name="add-linear" size={14}/></i></span>{i === 0 && <span class="an-acc__body"><span class="ui-line"></span><span class="ui-line ui-line--m"></span></span>}</div>)}
+                </div>
+              </div>
+              <h3>Аккордеон</h3>
+            </div>
+            <div class="sc-part" data-anim>
+              <div class="sc-part__stage ui">
+                <div class="an-info an-pop" style="--i:0"><Iconsax name="info-circle-bold" size={20}/><span><b>Дальше в уроке</b> — работа в подсистеме «Тесты»: шаблоны заданий и их статусы.</span></div>
+                <div class="an-prof an-pop" style="--i:1"><span class="an-prof__ic" set:html={profiles[1].svg}></span><span><b>{profiles[1].texts[0]}</b><small>{profiles[1].texts[1]}</small></span></div>
+              </div>
+              <h3>Информационные карточки</h3>
+            </div>
+            <div class="sc-part" data-anim>
+              <div class="sc-part__stage ui">
+                <p class="ui-h ui-h--xs">Статусы шаблона</p>
+                <div class="an-flow">{['Черновик', 'Готовое задание', 'Архив'].map((t, i) => <><span class="an-flow__node" style={`--i:${i}`}>{t}</span>{i < 2 && <span class="an-flow__arrow"><Iconsax name="arrow-right-linear" size={18}/></span>}</>)}</div>
+                <div class="an-bars">{[['Посмотреть', 3], ['Редактировать', 2], ['Скачать', 3], ['Удалить', 1]].map(([t, n], i) => <span style={`--n:${n};--i:${i}`}><small>{t}</small><i></i></span>)}</div>
+              </div>
+              <h3>Схемы и инфографика</h3>
+            </div>
+            <div class="sc-part" data-anim>
+              <div class="sc-part__stage ui">
+                <ol class="an-steps">{['Нажмите «+ Новый шаблон»', 'Выберите тип и напишите вопрос', 'Настройте ответы'].map((t, i) => <li style={`--i:${i}`}><i>{i + 1}</i>{t}</li>)}</ol>
+              </div>
+              <h3>Таймлайн</h3>
+            </div>
+            <div class="sc-part" data-anim>
+              <div class="sc-part__stage ui">
+                <div class="an-icons">{profiles.map((p, i) => <span class="an-pop" style={`--i:${i}`}><i set:html={p.svg}></i><small>{p.texts[0].replace('Профиль ', '')}</small></span>)}</div>
+              </div>
+              <h3>Иконки</h3>
+            </div>
+            <div class="sc-part" data-anim>
+              <div class="sc-part__stage ui">
+                <div class="an-gal">
+                  <div class="an-gal__track">
+                    {[['Задача', 'Математика', 'Готовое задание'], ['Домашнее задание', 'Русский язык', 'Архив'], ['Домашнее задание', 'Биология', 'Готовое задание']].map(([t, s2, st]) => <div class="an-gal__slide"><b>{t}</b><small>{s2}</small><span class={st === 'Архив' ? 'an-tag an-tag--off' : 'an-tag'}>{st}</span></div>)}
+                  </div>
+                  <div class="an-gal__dots"><i></i><i></i><i></i></div>
+                </div>
+              </div>
+              <h3>Галереи</h3>
             </div>
           </div>
         </div>
@@ -343,7 +393,7 @@ const lessons = [
             </div>
             <div class="lms-read" data-d="read" aria-hidden="true">
               <div class="lms-read__bar"><span class="lms-back" data-d="back"><Iconsax name="arrow-left-linear" size={18}/>Моё обучение</span><span class="lms-read__track"><span data-d="read-fill"></span></span><span class="ui-cap" data-d="read-pct">30%</span></div>
-              <div class="lms-read__view"><div class="lms-read__scroll" data-d="scroll"><LongreadMini mode="ui" full hero={img('lesson-hero.png')}/></div></div>
+              <div class="lms-read__view"><div class="lms-read__scroll" data-d="scroll"><LongreadMini mode="ui" finish base={img('') ?? ''}/></div></div>
             </div>
             <span class="lms-cursor" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M5 3.2v15.4c0 .5.6.8 1 .4l3.6-3.4 2.4 5.5c.2.4.6.5 1 .4l2-.9c.4-.2.5-.6.4-1l-2.4-5.4 4.9-.3c.5 0 .8-.6.4-1L6 2.8c-.4-.3-1-.1-1 .4Z" fill="#1c1c1c" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
           </div>
