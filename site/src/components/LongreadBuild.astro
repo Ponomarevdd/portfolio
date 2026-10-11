@@ -1,5 +1,5 @@
 ---
-// Анатомия урока, вариант 2: страница урока собирается из блоков дизайн-системы. Блоки упрощены до схемы, текст заменён плашками.
+// Анатомия урока, вариант 2: слева заголовок и названия блоков, справа страница урока собирается из блоков друг под другом.
 import Iconsax from './Iconsax.astro';
 
 interface Props { base: string }
@@ -7,7 +7,10 @@ const { base } = Astro.props;
 const blocks = ['Шапка', 'Содержание', 'Текст с картинкой', 'Видео', 'Слайдер', 'Схема', 'Аккордеон', 'Конспект', 'Самопроверка'];
 ---
 <div class="lb" data-build>
-  <ol class="lb-legend" aria-hidden="true">{blocks.map((b, i) => <li data-bl={i}>{b}</li>)}</ol>
+  <div class="lb-side">
+    <slot />
+    <ol class="lb-legend" aria-hidden="true">{blocks.map((b, i) => <li data-bl={i}>{b}</li>)}</ol>
+  </div>
   <div class="lb-page" aria-hidden="true">
     <div class="lb-slot lb-head" data-b="0">
       <div class="lb-card lb-head__in">
@@ -26,7 +29,7 @@ const blocks = ['Шапка', 'Содержание', 'Текст с карти�
       </div>
     </div>
     <div class="lb-grid">
-      <div class="lb-slot lb-span2" data-b="2">
+      <div class="lb-slot" data-b="2">
         <div class="lb-card lb-about">
           <img src={`${base}about-system.svg`} alt="" width="165" height="173" loading="lazy"/>
           <div class="lb-lines"><b>О системе</b><i class="lb-bar"></i><i class="lb-bar"></i><i class="lb-bar lb-bar--m"></i></div>
@@ -41,11 +44,15 @@ const blocks = ['Шапка', 'Содержание', 'Текст с карти�
       <div class="lb-slot" data-b="4">
         <div class="lb-card lb-slider">
           <div class="lb-slider__view"><div class="lb-slider__track">{[1, 2, 3].map((n) => <img src={`${base}task-${n}.svg`} alt="" width="1100" height="620" loading="lazy"/>)}</div></div>
-          <div class="lb-slider__bar"><span class="lb-count">1 / 3</span><span class="lb-arrows"><i><Iconsax name="arrow-left2-linear" size={14}/></i><i><Iconsax name="arrow-right2-linear" size={14}/></i></span></div>
+          <div class="lb-slider__side"><div class="lb-lines"><b>Выбрать ответ</b><i class="lb-bar"></i><i class="lb-bar lb-bar--m"></i></div><div class="lb-slider__bar"><span class="lb-count">1 / 3</span><span class="lb-arrows"><i><Iconsax name="arrow-left2-linear" size={14}/></i><i><Iconsax name="arrow-right2-linear" size={14}/></i></span></div></div>
         </div>
       </div>
-      <div class="lb-slot lb-span2" data-b="5">
-        <div class="lb-card lb-flow">{['Черновик', 'Готовое задание', 'Архив'].map((t, i) => <><span class="lb-flow__node">{t}</span>{i < 2 && <span class="lb-flow__arrow"><Iconsax name="arrow-right-linear" size={16}/></span>}</>)}</div>
+      <div class="lb-slot" data-b="5">
+        <div class="lb-card lb-flow">
+          <span class="lb-flow__line"><span></span></span>
+          <span class="lb-flow__doc"><Iconsax name="document-text-bold" size={16}/></span>
+          {[['edit2-bold', 'Черновик'], ['tick-circle-bold', 'Готовое задание'], ['archive-box-bold', 'Архив']].map(([ic, t], i) => <span class="lb-flow__node" style={`--i:${i}`}><i><Iconsax name={ic} size={20}/></i>{t}</span>)}
+        </div>
       </div>
       <div class="lb-slot" data-b="6">
         <div class="lb-acc">{[65, 80, 50].map((v) => <div class="lb-card lb-acc__item"><i class="lb-bar" style={`width:${v}%`}></i><span><Iconsax name="add-linear" size={14}/></span></div>)}</div>

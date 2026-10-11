@@ -369,11 +369,10 @@ const lessons = [
       </section>
 
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-anatomy-2">
-        <div class="sc-head"><h2 id="h-anatomy-2">Анатомия урока</h2></div>
-        <div class="sc-main">
+        <LongreadBuild base={img('') ?? ''}>
+          <h2 id="h-anatomy-2" class="lb-title">Анатомия урока</h2>
           <p class="sc-lead">Кирпичики, из которых собирается любой лонгрид.</p>
-          <LongreadBuild base={img('') ?? ''}/>
-        </div>
+        </LongreadBuild>
       </section>
 
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-lms">
