@@ -1,15 +1,41 @@
 ---
 // Начало лонгрида «С чего начать работу» по макету из артефакта: шапка, содержание, «О системе», «Задачи системы».
-// mode: wire — структура, grey — серый макет, ui — готовый интерфейс. finish добавляет финальный блок урока.
+// mode: wire — упрощённый вайрфрейм той же сетки, ui — готовый интерфейс. finish добавляет финальный блок урока.
 import Iconsax from './Iconsax.astro';
 
-interface Props { mode?: 'wire' | 'grey' | 'ui'; finish?: boolean; base: string }
+interface Props { mode?: 'wire' | 'ui'; finish?: boolean; base: string }
 const { mode = 'ui', finish = false, base } = Astro.props;
 const ui = mode === 'ui';
 const toc = ['О системе', 'Задачи системы', 'Подсистемы', 'Профили пользователей', 'Типы заданий', 'Создание шаблона', 'Практика', 'Скачивание и статусы', 'Самопроверка и итоги'];
 const learn = [['Какие задачи решает система', 'и из каких подсистем она состоит'], ['Какие профили бывают', 'у пользователей'], ['Какие типы заданий есть', 'в подсистеме «Тесты»'], ['Как создать, скачать шаблон', 'и управлять его статусами']];
 const tasks = ['Управление образовательным процессом', 'Формирование условий для цифровой трансформации системы образования', 'Поддержка системы образования'];
 ---
+{mode === 'wire' ? (
+<div class="lr lr--wire">
+  <div class="lr-head">
+    <div class="lr-head__text">
+      <i class="w w--40"></i>
+      <div class="lr-head__mid"><i class="w w--h"></i><i class="w w--h w--60"></i><i class="w w--80"></i></div>
+      <div class="lr-tags"><i class="w w--pill"></i><i class="w w--pill"></i></div>
+    </div>
+    <span class="lr-img w-x"></span>
+  </div>
+  <div class="lr-body">
+    <div class="lr-toc"><i class="w w--t w--60"></i>{[70, 50, 60, 80, 55, 65].map((v) => <i class="w" style={`width:${v}%`}></i>)}</div>
+    <div class="lr-main">
+      <section>
+        <i class="w w--h w--30"></i>
+        <div class="lr-about"><span class="lr-about__img w-x"></span><div class="lr-about__text"><i class="w"></i><i class="w"></i><i class="w w--60"></i></div></div>
+        <div class="lr-learn"><i class="w w--t w--30"></i><ul>{[0, 1, 2, 3].map(() => <li><i class="w-dot"></i><i class="w w--70"></i></li>)}</ul></div>
+      </section>
+      <section>
+        <i class="w w--h w--40"></i>
+        <div class="lr-acc">{[60, 75, 50].map((v) => <div class="lr-acc__item"><i class="w" style={`width:${v}%`}></i><span class="w-dot w-dot--l"></span></div>)}</div>
+      </section>
+    </div>
+  </div>
+</div>
+) : (
 <div class={`lr lr--${mode}`}>
   <div class="lr-head">
     <div class="lr-head__text">
@@ -62,3 +88,4 @@ const tasks = ['Управление образовательным процес
     </div>
   </div>
 </div>
+)}

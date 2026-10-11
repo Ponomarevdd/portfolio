@@ -1,0 +1,77 @@
+---
+// Анатомия урока, вариант 2: лонгрид из макета собирается по блокам — шапка, содержание, блок с картинкой, список с иконками, аккордеон, карточки.
+import Iconsax from './Iconsax.astro';
+import profiles from '../data/school-profiles.json';
+
+interface Props { base: string }
+const { base } = Astro.props;
+const blocks = ['Шапка', 'Содержание', 'Блок с картинкой', 'Список с иконками', 'Аккордеон', 'Карточки'];
+const toc = ['О системе', 'Задачи системы', 'Подсистемы', 'Профили пользователей', 'Типы заданий', 'Создание шаблона', 'Практика', 'Скачивание и статусы', 'Самопроверка и итоги'];
+const learn = [['Какие задачи решает система', 'и из каких подсистем она состоит'], ['Какие профили бывают', 'у пользователей'], ['Какие типы заданий есть', 'в подсистеме «Тесты»'], ['Как создать, скачать шаблон', 'и управлять его статусами']];
+const tasks = ['Управление образовательным процессом', 'Формирование условий для цифровой трансформации системы образования', 'Поддержка системы образования'];
+---
+<div class="lb" data-build>
+  <ol class="lb-legend" aria-hidden="true">{blocks.map((b, i) => <li data-bl={i}>{b}</li>)}</ol>
+  <div class="lb-canvas" aria-hidden="true">
+    <div class="lb-scale">
+      <div class="lr lr--ui">
+        <div class="lb-slot" data-b="0">
+          <div class="lr-head">
+            <div class="lr-head__text">
+              <p class="lr-badge">Курс для педагогов «Цифровая платформа для школ» · Урок 1</p>
+              <div class="lr-head__mid">
+                <p class="lr-h1">С чего начать работу<br/>в Цифровой платформе</p>
+                <p class="lr-sub">Разберёмся, зачем нужна система и из чего она состоит, а затем на практике создадим первый шаблон задания в подсистеме «Тесты»</p>
+              </div>
+              <div class="lr-tags"><span><Iconsax name="document-text-bold" size={16}/>Лонгрид</span><span><Iconsax name="clock-bold" size={16}/>10 минут</span></div>
+            </div>
+            <span class="lr-img"><img src={`${base}lesson-hero.png`} alt="" width="1466" height="1308" loading="lazy" decoding="async"/></span>
+          </div>
+        </div>
+        <div class="lr-body">
+          <div class="lb-slot" data-b="1">
+            <nav class="lr-toc">
+              <div class="lr-toc__top"><b>Содержание</b><small>Изучено 1 из 9 разделов</small></div>
+              <div class="lr-toc__list">
+                <span class="lr-toc__rail"><span></span></span>
+                <ol>{toc.map((t, i) => <li class={i === 0 ? 'is-now' : undefined}><i></i><span>{t}</span></li>)}</ol>
+              </div>
+            </nav>
+          </div>
+          <div class="lr-main">
+            <section>
+              <div class="lb-slot" data-b="2">
+                <p class="lr-h2">О системе</p>
+                <div class="lr-about">
+                  <span class="lr-about__img"><img src={`${base}about-system.svg`} alt="" width="165" height="173" loading="lazy"/></span>
+                  <div class="lr-about__text">
+                    <p>Цифровая платформа для школ помогает педагогам и администраторам школ организовывать электронный обмен документами, вести электронные журналы и дневники, проводить онлайн-занятия и тестирования.</p>
+                    <p>Система позволяет упростить и стандартизировать процессы управления образованием, повысить качество образования и сделать его доступнее.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="lb-slot" data-b="3">
+                <div class="lr-learn">
+                  <p class="lr-h3">Что вы узнаете</p>
+                  <ul>{learn.map(([a, b]) => <li><Iconsax name="tick-circle-bulk" size={26}/><span>{a}<br/>{b}</span></li>)}</ul>
+                </div>
+              </div>
+            </section>
+            <section>
+              <div class="lb-slot" data-b="4">
+                <div class="lr-sec-head"><p class="lr-h2">Задачи системы</p><p>Задачи Цифровой платформы для школ делятся на три направления.</p></div>
+                <div class="lr-acc">{tasks.map((t) => <div class="lr-acc__item"><span>{t}</span><span class="lr-acc__btn"><Iconsax name="add-linear" size={18}/></span></div>)}</div>
+              </div>
+            </section>
+            <section>
+              <div class="lb-slot" data-b="5">
+                <div class="lr-sec-head"><p class="lr-h2">Профили пользователей</p><p>Максимальный перечень профилей, который может быть доступен пользователю.</p></div>
+                <div class="lb-cards">{profiles.map((pr) => <div class="rs-card"><span class="rs-ava" set:html={pr.svg}></span><span><b>{pr.texts[0]}</b>{pr.texts.slice(1).join(' ')}</span></div>)}</div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

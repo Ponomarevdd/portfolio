@@ -60,6 +60,44 @@ document.querySelectorAll<HTMLElement>('.sc [data-slider]').forEach((root) => {
   go(0);
 });
 
+// Анатомия, вариант 2: лонгрид собирается по блокам. На широком экране макет рисуется в ширину 1360 и масштабируется.
+document.querySelectorAll<HTMLElement>('.sc [data-build]').forEach((root) => {
+  const canvas = root.querySelector<HTMLElement>('.lb-canvas');
+  const scale = root.querySelector<HTMLElement>('.lb-scale');
+  if (!canvas || !scale) return;
+  const slots = Array.from(root.querySelectorAll<HTMLElement>('[data-b]'));
+  const pills = Array.from(root.querySelectorAll<HTMLElement>('[data-bl]'));
+  const W = 1360;
+  const fit = () => {
+    const cw = canvas.clientWidth;
+    if (cw >= 700) {
+      const k = cw / W;
+      scale.style.width = `${W}px`;
+      scale.style.transform = `scale(${k})`;
+      canvas.style.height = `${scale.offsetHeight * k}px`;
+    } else {
+      scale.style.width = scale.style.transform = canvas.style.height = '';
+    }
+  };
+  new ResizeObserver(fit).observe(canvas);
+  fit();
+  const set = (n: number) => {
+    slots.forEach((s, i) => { s.classList.toggle('is-on', i < n); s.classList.toggle('is-here', i === n); });
+    pills.forEach((p, i) => p.classList.toggle('is-on', i === n - 1));
+  };
+  if (reduced) { set(slots.length); return; }
+  let timers: number[] = [];
+  const stop = () => { timers.forEach(clearTimeout); timers = []; };
+  const run = () => {
+    stop();
+    set(0);
+    slots.forEach((_, i) => timers.push(window.setTimeout(() => set(i + 1), 700 + i * 1100)));
+    timers.push(window.setTimeout(run, 700 + slots.length * 1100 + 3200));
+  };
+  new IntersectionObserver(([e]) => (e.isIntersecting ? run() : stop()), { threshold: .25 }).observe(root);
+  set(0);
+});
+
 // LMS: курсор открывает урок, «читает» лонгрид, возвращается на главную и видит обновлённый прогресс.
 const lms = document.querySelector<HTMLElement>('.sc-lms');
 if (lms && !reduced) {

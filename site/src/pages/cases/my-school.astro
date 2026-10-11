@@ -5,6 +5,7 @@ import Page from '../../layouts/Page.astro';
 import ActionButton from '../../components/ActionButton.astro';
 import Iconsax from '../../components/Iconsax.astro';
 import LongreadMini from '../../components/LongreadMini.astro';
+import LongreadBuild from '../../components/LongreadBuild.astro';
 import ru from '../../data/russia-dots.json';
 import profiles from '../../data/school-profiles.json';
 import '@fontsource/geologica/latin-300.css';
@@ -256,14 +257,13 @@ const lessons = [
       <section class="sc-sec" aria-labelledby="h-wire">
         <div class="sc-head"><h2 id="h-wire">От вайрфрейма к интерфейсу</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Лонгрид прошёл три состояния: структура, серый макет и готовый интерфейс на токенах дизайн-системы.</p>
-          <div class="sc-states" data-anim aria-label="Начало лонгрида в трёх состояниях" role="img">
+          <p class="sc-lead">Сначала структура урока, потом интерфейс на токенах дизайн-системы.</p>
+          <div class="sc-states" data-anim aria-label="Начало лонгрида: вайрфрейм и интерфейс" role="img">
             <div class="sc-states__stack">
               <div class="sc-state sc-state--wire"><LongreadMini mode="wire" base={img('') ?? ''}/></div>
-              <div class="sc-state sc-state--grey"><LongreadMini mode="grey" base={img('') ?? ''}/></div>
               <div class="sc-state sc-state--ui"><LongreadMini mode="ui" base={img('') ?? ''}/></div>
             </div>
-            <ol class="sc-states__legend"><li>Структура</li><li>Серый макет</li><li>Интерфейс</li></ol>
+            <ol class="sc-states__legend"><li>Структура</li><li>Интерфейс</li></ol>
           </div>
         </div>
       </section>
@@ -365,6 +365,14 @@ const lessons = [
               <h3>Галереи</h3>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="sc-sec sc-sec--wide" aria-labelledby="h-anatomy-2">
+        <div class="sc-head"><h2 id="h-anatomy-2">Анатомия урока</h2></div>
+        <div class="sc-main">
+          <p class="sc-lead">Кирпичики, из которых собирается любой лонгрид.</p>
+          <LongreadBuild base={img('') ?? ''}/>
         </div>
       </section>
 
