@@ -88,9 +88,9 @@ export const moreProjects: Project[] = [
 const school: Project = {
   slug: 'my-school', href: '/cases/my-school/', title: 'Цифровая платформа для школ', year: 2023,
   categories: ['UX/UI', 'Веб-дизайн'],
-  description: 'Система обучения для педагогов и администраторов школ: 45 лонгридов, LMS и дизайн-система, по которой команда выпускает уроки потоком. Проект под NDA.',
+  description: 'Система обучения для педагогов и администраторов школ: 45 лонгридов и дизайн-система, по которой команда выпускает уроки потоком. Проект под NDA.',
   cover: '/images/school-platform/cover.png', width: 2400, height: 1400,
-  alt: 'Фрагменты обучающего урока и LMS Цифровой платформы для школ',
+  alt: 'Фрагменты обучающего урока Цифровой платформы для школ',
   identity: { name: 'Школы', tagline: 'Цифровая платформа для школ', background: '#eef2ff', color: '#4659aa' },
   previews: [
     { src: '/images/my-school/2.png', alt: 'Карточная структура обучающего лонгрида', width: 1160, height: 750 },
