@@ -218,7 +218,7 @@
 @keyframes sc-legend-3 { 0%, 63% { background: #fafafa; color: var(--text-secondary); } 67%, 96% { background: var(--pl); color: var(--p); } 100% { background: #fafafa; color: var(--text-secondary); } }
 
 /* 08 Анатомия урока */
-.sc-anatomy { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 16px; }
+.sc-anatomy { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .sc-part { display: flex; flex-direction: column; gap: 14px; padding: 12px 12px 20px; border-radius: 20px; background: #fff; }
 .sc-part > h3 { padding: 0 12px; }
 .sc-part h3 { font-size: 20px; letter-spacing: -.03em; padding-top: 6px; }
@@ -439,6 +439,7 @@
 .sc-stack span:first-child { background: radial-gradient(80% 120% at 0% 100%, #d1e7ff 0%, #d1e7ff00 70%), #fff; box-shadow: var(--shadow-card); }
 .sc-stack .sc-stack--tip { background: var(--pl); color: var(--p); }
 .sc-stats--ds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.sc-main > .sc-ds + .sc-stats, .sc-results .sc-stats + .sc-quote { margin-top: -16px; }
 
 /* 13 Доступность */
 
