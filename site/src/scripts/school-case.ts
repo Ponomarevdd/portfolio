@@ -131,10 +131,15 @@ if (lms && !reduced) {
       // Одна плавная прокрутка до конца урока, содержание отмечает разделы по ходу
       const base = scroll.getBoundingClientRect().top;
       const at = (el: HTMLElement) => el.getBoundingClientRect().top - base;
-      // Финальный блок урока доезжает до верха окна, чтобы его было видно и на невысоком экране
-      const end = Math.max(0, at(secs[secs.length - 1]) - 24);
+      // Прокрутка заканчивается там, где кончается урок: финальный блок внизу видимой части окна.
+      // Окно LMS бывает выше экрана, поэтому считаем по тому, что реально видно.
+      const last = secs[secs.length - 1];
+      const vr = view.getBoundingClientRect();
+      const seen = Math.max(320, Math.min(vr.height, innerHeight - Math.max(0, vr.top)));
+      const bottom = at(last) + last.offsetHeight + 56;
+      const end = Math.max(0, bottom - seen);
       const tocTop = tocBox.getBoundingClientRect().top - base;
-      const dur = 5200;
+      const dur = 9000;
       [scroll, tocBox].forEach((e) => { e.style.transition = `transform ${dur}ms cubic-bezier(.45,0,.35,1)`; });
       scroll.style.transform = `translateY(${-end}px)`;
       tocBox.style.transform = `translateY(${Math.max(0, end - tocTop + 8)}px)`;
@@ -145,8 +150,8 @@ if (lms && !reduced) {
       let shown = -1;
       while (performance.now() - t0 < dur) {
         const p = (performance.now() - t0) / dur;
-        const k = marks.filter((m) => p >= m).length - 1;
-        const idx = k === secs.length - 1 ? toc.length - 1 : Math.max(0, k);
+        const k = Math.max(0, marks.filter((m) => p >= m).length - 1);
+        const idx = Number(secs[k].dataset.toc ?? k);
         if (idx !== shown) { shown = idx; reading(idx); }
         set('read-pct', `${Math.round((.3 + .7 * p) * 100)}%`);
         await sleep(120);

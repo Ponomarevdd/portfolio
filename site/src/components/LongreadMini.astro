@@ -2,12 +2,16 @@
 // Начало лонгрида «С чего начать работу» по макету из артефакта: шапка, содержание, «О системе», «Задачи системы».
 // mode: wire — упрощённый вайрфрейм той же сетки, ui — готовый интерфейс. finish добавляет финальный блок урока.
 import Iconsax from './Iconsax.astro';
+import profiles from '../data/school-profiles.json';
 
 interface Props { mode?: 'wire' | 'ui'; finish?: boolean; base: string }
 const { mode = 'ui', finish = false, base } = Astro.props;
 const ui = mode === 'ui';
 const toc = ['О системе', 'Задачи системы', 'Подсистемы', 'Профили пользователей', 'Типы заданий', 'Создание шаблона', 'Практика', 'Скачивание и статусы', 'Самопроверка и итоги'];
 const learn = [['Какие задачи решает система', 'и из каких подсистем она состоит'], ['Какие профили бывают', 'у пользователей'], ['Какие типы заданий есть', 'в подсистеме «Тесты»'], ['Как создать, скачать шаблон', 'и управлять его статусами']];
+const subsystems = [['Базовая платформа', 'Обозреватель'], ['Библиотека', 'Верифицированный контент'], ['Файлы', 'Расширенный онлайн-офис'], ['ЕТД', 'Администрирование системы'], ['Аналитика', 'Сбор информации по показателям ФП «Цифровая образовательная среда»'], ['Помощник ученика', 'Подготовка к ГИА и ВПР'], ['Смарт ТВ', 'Вывод контента на экран']];
+const types = [['Выбрать ответ', 'Свободный ответ'], ['Выбрать из списка', 'HTML'], ['Ввести ответ', 'Диктант'], ['Перетаскивание', 'Рисование'], ['Выделить область', ''], ['Таблица', '']];
+const quiz = [['Какой тип заданий проверяет эксперт?', ['Выбрать ответ', 'Диктант', 'Перетаскивание']], ['Какой статус получит шаблон, сохранённый без публикации?', ['Готовое задание', 'Черновик', 'Архив']]] as const;
 const tasks = ['Управление образовательным процессом', 'Формирование условий для цифровой трансформации системы образования', 'Поддержка системы образования'];
 ---
 {mode === 'wire' ? (
@@ -57,7 +61,7 @@ const tasks = ['Управление образовательным процес
       </div>
     </nav>
     <div class="lr-main">
-      <section data-d="sec">
+      <section data-d="sec" data-toc="0">
         <p class="lr-h2"><span class="t">О системе</span></p>
         <div class="lr-about">
           <span class="lr-about__img">{ui && <img src={`${base}about-system.svg`} alt="" width="165" height="173" loading="lazy"/>}</span>
@@ -71,11 +75,49 @@ const tasks = ['Управление образовательным процес
           <ul>{learn.map(([a, b]) => <li><Iconsax name="tick-circle-bulk" size={26}/><span class="t">{a}<br/>{b}</span></li>)}</ul>
         </div>
       </section>
-      <section data-d="sec">
+      <section data-d="sec" data-toc="1">
         <div class="lr-sec-head"><p class="lr-h2"><span class="t">Задачи системы</span></p><p><span class="t">Задачи Цифровой платформы для школ делятся на три направления.</span></p></div>
         <div class="lr-acc">{tasks.map((t) => <div class="lr-acc__item"><span class="t">{t}</span><span class="lr-acc__btn"><Iconsax name="add-linear" size={18}/></span></div>)}</div>
       </section>
-      {finish && <section data-d="sec">
+      {finish && <section data-d="sec" data-toc="2">
+        <div class="lr-sec-head"><p class="lr-h2">Подсистемы Цифровой платформы для школ</p><p>Подсистемы — это инструменты внутри Цифровой платформы для школ, которые помогают организовать образовательный процесс в рамках одной платформы.</p></div>
+        <ul class="lr-sys">
+          <li class="lr-sys__main"><span class="lr-sys__badge">В этом уроке</span><span><b>Тесты</b><small>Оценка знаний</small></span></li>
+          {subsystems.map(([t, c]) => <li><b>{t}</b><small>{c}</small></li>)}
+        </ul>
+      </section>}
+      {finish && <section data-d="sec" data-toc="3">
+        <div class="lr-sec-head"><p class="lr-h2">Профили пользователей</p><p>Максимальный перечень профилей, который может быть доступен пользователю.</p></div>
+        <div class="lr-prof">{profiles.map((pr) => <div class="lr-prof__card"><span class="lr-prof__ava" set:html={pr.svg}></span><span><b>{pr.texts[0]}</b>{pr.texts.slice(1).join(' ')}</span></div>)}</div>
+        <div class="lr-tip"><Iconsax name="info-circle-bold" size={24}/><p><b>Дальше в уроке</b> — работа в подсистеме «Тесты» из профиля педагогического работника: шаблоны заданий, их создание, скачивание и статусы.</p></div>
+      </section>}
+      {finish && <section data-d="sec" data-toc="4">
+        <div class="lr-sec-head"><p class="lr-h2">Шаблоны и типы заданий</p><p>Любой тест — это набор заданий. Их можно создавать во время конструирования теста или подготовить заранее, оформив в шаблоны. Одно и то же задание можно добавлять в разные тесты и не создавать его каждый раз заново. Шаблонами также можно делиться с коллегами.</p></div>
+        <figure class="lr-video">
+          <div class="lr-video__frame">
+            <img src={`${base}templates-video.svg`} alt="" width="1280" height="720" loading="lazy" decoding="async"/>
+            <span class="lr-video__play"><Iconsax name="play-bold" size={36}/></span>
+            <div class="lr-video__ctrl">
+              <span class="lr-video__track"><span></span><i></i></span>
+              <span class="lr-video__row"><Iconsax name="play-bold" size={20}/><Iconsax name="volume-high-linear" size={20}/><span>0:00 / 2:14</span><span class="lr-video__sp"></span><Iconsax name="subtitle-linear" size={20}/><Iconsax name="setting2-linear" size={20}/><Iconsax name="maximize4-linear" size={20}/></span>
+            </div>
+          </div>
+          <figcaption>Видео: интерфейс раздела «Шаблоны», алгоритм создания шаблона и действия с ним</figcaption>
+        </figure>
+        <div class="lr-types">
+          <div class="lr-types__text"><p class="lr-h3">Выбор типа задания</p><p>Типы заданий делятся на две группы: с автоматической проверкой и требующие проверки экспертом. В таблице — какие типы относятся к каждой группе.</p><p>Ниже можно познакомиться с типами подробнее: у каждого есть пример того, как задание увидит ученик.</p></div>
+          <div class="lr-table"><span class="lr-table__th">Автоматическая проверка</span><span class="lr-table__th">Проверка экспертом</span>{types.map(([a, b]) => <><span>{a}</span><span>{b}</span></>)}</div>
+        </div>
+        <div class="lr-types lr-slider">
+          <div class="lr-slider__view"><div class="lr-slider__track">{[['Выбрать ответ', 'Классический тест: ученик выбирает один или несколько вариантов ответа.'], ['Выбрать из списка', 'Ученик выбирает вариант из выпадающего списка прямо в тексте задания.'], ['Ввести ответ', 'Ученик вводит ответ с клавиатуры, система сверяет его с эталоном.']].map(([t, d], i) => <div class="lr-slider__slide"><p class="lr-h3">{t}</p><p>{d}</p><span class="lr-slider__frame"><img src={`${base}task-${i + 1}.svg`} alt="" width="1100" height="620" loading="lazy" decoding="async"/></span></div>)}</div></div>
+          <div class="lr-slider__bar"><span class="lr-slider__count">1 / 3</span><span class="lr-slider__btns"><i><Iconsax name="arrow-left2-linear" size={22}/></i><i><Iconsax name="arrow-right2-linear" size={22}/></i></span></div>
+        </div>
+      </section>}
+      {finish && <section data-d="sec" data-toc="8">
+        <div class="lr-sec-head"><p class="lr-h2">Самопроверка</p><p>Два коротких вопроса, чтобы закрепить материал. Результат никуда не отправляется.</p></div>
+        {quiz.map(([q, opts]) => <div class="lr-quiz"><p class="lr-quiz__q">{q}</p>{opts.map((o) => <span class="lr-quiz__opt">{o}</span>)}</div>)}
+      </section>}
+      {finish && <section data-d="sec" data-toc="8">
         <div class="lr-done">
           <span class="lr-done__art"><img src={`${base}done-a.svg`} alt="" style="left:0;top:-1px;width:40px"/><img src={`${base}done-b.svg`} alt="" style="left:196px;top:12px;width:24px"/><img src={`${base}done-c.svg`} alt="" style="left:180px;top:36px;width:16px"/><img src={`${base}done-main.svg`} alt="" style="left:24px;top:30px;width:174px"/></span>
           <div class="lr-done__text">
