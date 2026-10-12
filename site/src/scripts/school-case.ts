@@ -60,29 +60,6 @@ document.querySelectorAll<HTMLElement>('.sc [data-slider]').forEach((root) => {
   go(0);
 });
 
-// Анатомия, вариант 2: страница урока собирается по блокам, затем видео и слайдер оживают.
-document.querySelectorAll<HTMLElement>('.sc [data-build]').forEach((root) => {
-  const slots = Array.from(root.querySelectorAll<HTMLElement>('[data-b]'));
-  const pills = Array.from(root.querySelectorAll<HTMLElement>('[data-bl]'));
-  const set = (n: number) => {
-    slots.forEach((s, i) => { s.classList.toggle('is-on', i < n); s.classList.toggle('is-here', i === n); });
-    pills.forEach((p, i) => p.classList.toggle('is-on', i === n - 1));
-    root.classList.toggle('is-play', n >= slots.length);
-  };
-  if (reduced) { set(slots.length); return; }
-  let timers: number[] = [];
-  const stop = () => { timers.forEach(clearTimeout); timers = []; };
-  const step = 800;
-  const run = () => {
-    stop();
-    set(0);
-    slots.forEach((_, i) => timers.push(window.setTimeout(() => set(i + 1), 600 + i * step)));
-    timers.push(window.setTimeout(run, 600 + slots.length * step + 6000));
-  };
-  new IntersectionObserver(([e]) => (e.isIntersecting ? run() : stop()), { threshold: .3 }).observe(root);
-  set(0);
-});
-
 // LMS: курсор открывает урок, «читает» лонгрид, возвращается на главную и видит обновлённый прогресс.
 const lms = document.querySelector<HTMLElement>('.sc-lms');
 if (lms && !reduced) {

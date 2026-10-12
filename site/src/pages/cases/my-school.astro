@@ -5,7 +5,6 @@ import Page from '../../layouts/Page.astro';
 import ActionButton from '../../components/ActionButton.astro';
 import Iconsax from '../../components/Iconsax.astro';
 import LongreadMini from '../../components/LongreadMini.astro';
-import LongreadBuild from '../../components/LongreadBuild.astro';
 import ru from '../../data/russia-dots.json';
 import profiles from '../../data/school-profiles.json';
 import '@fontsource/geologica/latin-300.css';
@@ -289,11 +288,19 @@ const lessons = [
               <h3>Содержание с прогрессом</h3>
             </div>
             <div class="sc-part" data-anim>
-              <div class="sc-part__stage ui">
+              <div class="sc-part__stage sc-part__stage--top ui">
                 <div class="ui-tabs__bar"><span class="ui-tabs__thumb a-tab"></span><span>Журнал</span><span>Тесты</span><span>Файлы</span></div>
-                <div class="ui-tabs__body"><span class="ui-line"></span><span class="ui-line ui-line--m"></span><span class="ui-line ui-line--s"></span></div>
+                <div class="an-tabs">
+                  {[0, 1, 2].map((k) => (
+                    <div class={`an-tabs__panel an-tabs__panel--${k}`}>
+                      <span class="ui-line an-tabs__h" style={`width:${[46, 38, 52][k]}%`}></span>
+                      <span class="ui-line"></span><span class="ui-line ui-line--m"></span>
+                      <div class="an-tabs__tiles">{[0, 1, 2].map((t) => <span class={t === k ? 'is-acc' : undefined}><i></i><span class="ui-line ui-line--m"></span></span>)}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <h3>Вкладки</h3>
+              <h3>Табы</h3>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
@@ -303,20 +310,23 @@ const lessons = [
               <h3>Видео</h3>
             </div>
             <div class="sc-part" data-anim>
-              <div class="sc-part__stage ui">
-                <div class="ui-doc"><span class="ui-doc__ic"><Iconsax name="document-download-bold" size={24}/></span><span><b>Конспект урока</b><small>PDF · 2 страницы</small></span></div>
-                {['Где найти раздел «Тесты»', 'Какие бывают типы заданий', 'Как сохранить шаблон'].map((l, i) => <span class="ui-note a-note" style={`--i:${i}`}><Iconsax name="tick-circle-bold" size={16}/>{l}</span>)}
+              <div class="sc-part__stage sc-part__stage--top ui">
+                <div class="an-doc__top"><div class="ui-doc"><span class="ui-doc__ic"><Iconsax name="document-download-bold" size={24}/></span><span><b>Конспект урока</b><small>PDF · 2 страницы</small></span></div><span class="an-doc__btn"><Iconsax name="arrow-down2-linear" size={18}/></span></div>
+                <div class="an-doc__sheet">
+                  <span class="ui-line an-doc__h"></span>
+                  {['Где найти раздел «Тесты»', 'Какие бывают типы заданий', 'Как сохранить шаблон'].map((l, i) => <span class="ui-note a-note" style={`--i:${i}`}><Iconsax name="tick-circle-bold" size={16}/>{l}</span>)}
+                  <span class="ui-line"></span><span class="ui-line ui-line--m"></span>
+                </div>
               </div>
               <h3>Конспект</h3>
             </div>
             <div class="sc-part" data-anim>
-              <div class="sc-part__stage ui">
-                <div class="ui-trainer__top"><span class="ui-badge">Тренажёр</span><span class="ui-cap">Шаг 2 из 3</span></div>
+              <div class="sc-part__stage sc-part__stage--top ui">
                 <p class="ui-h ui-h--xs">Какой тип заданий проверяет эксперт?</p>
                 <div class="ui-trainer__opts"><span class="ui-opt">Выбрать ответ</span><span class="ui-opt a-right">Диктант<Iconsax name="tick-circle-bold" size={16}/></span><span class="ui-opt">Перетаскивание</span></div>
-                <p class="ui-fb a-fb">Верно: диктант проверяет эксперт. Дальше создадим шаблон.</p>
+                <p class="ui-fb a-fb">Верно: диктант проверяет эксперт.</p>
               </div>
-              <h3>Тренажёр с самопроверкой</h3>
+              <h3>Самопроверка</h3>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
@@ -328,51 +338,49 @@ const lessons = [
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
-                <div class="an-info an-pop" style="--i:0"><Iconsax name="info-circle-bold" size={20}/><span><b>Дальше в уроке</b> — работа в подсистеме «Тесты»: шаблоны заданий и их статусы.</span></div>
-                <div class="an-prof an-pop" style="--i:1"><span class="an-prof__ic" set:html={profiles[1].svg}></span><span><b>{profiles[1].texts[0]}</b><small>{profiles[1].texts[1]}</small></span></div>
+                {[['info', 'info-circle-bold', 'Обратите внимание'], ['err', 'danger-bold', 'Важно'], ['warn', 'message-question-bold', 'Вопрос']].map(([k, ic, t], i) => <div class={`an-note an-note--${k} an-pop`} style={`--i:${i}`}><Iconsax name={ic} size={20}/><span><b>{t}</b><span class="ui-line"></span><span class="ui-line ui-line--s"></span></span></div>)}
               </div>
               <h3>Информационные карточки</h3>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
-                <p class="ui-h ui-h--xs">Статусы шаблона</p>
-                <div class="an-flow">{['Черновик', 'Готовое задание', 'Архив'].map((t, i) => <><span class="an-flow__node" style={`--i:${i}`}>{t}</span>{i < 2 && <span class="an-flow__arrow"><Iconsax name="arrow-right-linear" size={18}/></span>}</>)}</div>
-                <div class="an-bars">{[['Посмотреть', 3], ['Редактировать', 2], ['Скачать', 3], ['Удалить', 1]].map(([t, n], i) => <span style={`--n:${n};--i:${i}`}><small>{t}</small><i></i></span>)}</div>
+                <div class="an-map">
+                  <svg class="an-map__lines" viewBox="0 0 300 180" preserveAspectRatio="none" aria-hidden="true">
+                    {['M45 50V57H130V65', 'M150 50V65', 'M255 50V57H170V65', 'M90 90H105', 'M195 90H210', 'M45 130V122H130V115', 'M150 130V115', 'M255 130V122H170V115'].map((d) => <path d={d} pathLength="1"/>)}
+                  </svg>
+                  {[[0, 0], [1, 0], [2, 0], [0, 1], [2, 1], [0, 2], [1, 2], [2, 2]].map(([c, r], i) => <span class={`an-map__box an-pop${c === 2 && r === 1 ? ' is-acc' : ''}`} style={`--c:${c};--r:${r};--i:${i}`}>{c === 2 && r === 1 && <em></em>}<i></i><i></i></span>)}
+                  <span class="an-map__core"><i></i><i></i></span>
+                </div>
               </div>
-              <h3>Схемы и инфографика</h3>
+              <h3>Схемы</h3>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
-                <ol class="an-steps">{['Нажмите «+ Новый шаблон»', 'Выберите тип и напишите вопрос', 'Настройте ответы'].map((t, i) => <li style={`--i:${i}`}><i>{i + 1}</i>{t}</li>)}</ol>
-              </div>
-              <h3>Таймлайн</h3>
-            </div>
-            <div class="sc-part" data-anim>
-              <div class="sc-part__stage ui">
-                <div class="an-icons">{profiles.map((p, i) => <span class="an-pop" style={`--i:${i}`}><i set:html={p.svg}></i><small>{p.texts[0].replace('Профиль ', '')}</small></span>)}</div>
+                <div class="an-icons">{['book1-bold', 'teacher-bold', 'calculator-bold', 'ruler-pen-bold', 'microscope-bold', 'global-bold', 'clipboard-text-bold', 'cup-bold'].map((n, i) => <span class="an-pop" style={`--i:${i}`}><Iconsax name={n} size={26}/></span>)}</div>
               </div>
               <h3>Иконки</h3>
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
-                <div class="an-gal">
-                  <div class="an-gal__track">
-                    {[['Задача', 'Математика', 'Готовое задание'], ['Домашнее задание', 'Русский язык', 'Архив'], ['Домашнее задание', 'Биология', 'Готовое задание']].map(([t, s2, st]) => <div class="an-gal__slide"><b>{t}</b><small>{s2}</small><span class={st === 'Архив' ? 'an-tag an-tag--off' : 'an-tag'}>{st}</span></div>)}
-                  </div>
-                  <div class="an-gal__dots"><i></i><i></i><i></i></div>
+                <div class="an-sl">
+                  <span class="ui-line an-sl__h"></span>
+                  <div class="an-sl__view"><div class="an-sl__track">{[1, 2, 3].map((n) => <img src={img(`task-${n}.svg`)} alt="" width="1100" height="620" loading="lazy" decoding="async"/>)}</div></div>
+                  <div class="an-sl__bar"><span class="an-sl__count"><span class="an-sl__num"><span>1</span><span>2</span><span>3</span></span>&nbsp;/ 3</span><span class="an-sl__arrows"><i><Iconsax name="arrow-left2-linear" size={14}/></i><i><Iconsax name="arrow-right2-linear" size={14}/></i></span></div>
                 </div>
               </div>
-              <h3>Галереи</h3>
+              <h3>Слайдеры</h3>
+            </div>
+            <div class="sc-part" data-anim>
+              <div class="sc-part__stage ui">
+                <div class="an-table">
+                  <div class="an-table__row an-table__head"><span>Автоматическая проверка</span><span>Проверка экспертом</span></div>
+                  {[[62, 58], [70, 30], [48, 50], [66, 54], [56, 0], [40, 0]].map(([a, b], i) => <div class="an-table__row" style={`--i:${i}`}><span><i style={`width:${a}%`}></i></span><span>{b > 0 && <i style={`width:${b}%`}></i>}</span></div>)}
+                </div>
+              </div>
+              <h3>Таблицы</h3>
             </div>
           </div>
         </div>
-      </section>
-
-      <section class="sc-sec sc-sec--wide" aria-labelledby="h-anatomy-2">
-        <LongreadBuild base={img('') ?? ''}>
-          <h2 id="h-anatomy-2" class="lb-title">Анатомия урока</h2>
-          <p class="sc-lead">Кирпичики, из которых собирается любой лонгрид.</p>
-        </LongreadBuild>
       </section>
 
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-lms">
