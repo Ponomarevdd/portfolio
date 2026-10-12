@@ -418,7 +418,7 @@
 
 /* 12 Дизайн-система */
 .sc-ds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.sc-ds__card { padding: 28px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 18px; }
+.sc-ds__card { padding: 28px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 24px; }
 .sc-ds__card h3 { font-size: 22px; letter-spacing: -.03em; }
 .sc-ds__card > p { color: var(--text-secondary); font-size: 15px; line-height: 1.6; }
 .sc-ds__card > .sc-font { font-family: 'Geologica', sans-serif; font-weight: 600; font-size: 40px; line-height: 1; letter-spacing: -.02em; color: var(--p); }
@@ -590,7 +590,7 @@
 .lr ul, .lr ol { margin: 0; padding: 0; list-style: none; }
 .lr-head { display: flex; gap: 32px; min-height: 480px; box-sizing: border-box; padding: 48px; border-radius: 30px; overflow: hidden; background: radial-gradient(70% 90% at 0% 100%, #d1e7fff2 0%, #d1e7ff00 70%), radial-gradient(55% 70% at 100% 100%, #d1e7ffb3 0%, #d1e7ff00 70%), radial-gradient(45% 60% at 0% 0%, #d1e7ff8c 0%, #d1e7ff00 70%), #fff; box-shadow: var(--shadow-head); }
 .lr-head__text { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
-.lr-head__mid { display: flex; flex-direction: column; gap: 18px; }
+.lr-head__mid { display: flex; flex-direction: column; gap: 24px; }
 .lr-badge { font-size: 16px; line-height: 20px; color: var(--cap); }
 .lr-h1 { max-width: 540px; font-size: 40px; line-height: 48px; font-weight: 600; }
 .lr-sub { max-width: 500px; font-size: 20px; line-height: 28px; color: var(--cap); }
@@ -713,7 +713,10 @@
   .an-acc__item--open .an-acc__body { max-height: 60px; padding: 12px; margin-bottom: 8px; }
 }
 .sc-pr .sc-resp__stage { padding: 0; }
-.sc-pr .sc-resp__stage { height: 540px; }
+.sc-pr .sc-resp__stage { height: var(--fh, 540px); }
+.sc-pr .sc-resp__stage::after { opacity: 0; }
+.sc-pr .is-in .sc-resp__stage::after { animation: sc-fade 9s cubic-bezier(.6,0,.3,1) infinite; }
+@keyframes sc-fade { 0%, 26% { opacity: 0; } 34%, 92% { opacity: 1; } 100% { opacity: 0; } }
 @container (max-width: 440px) {
   .pr-sys__grid { grid-template-columns: minmax(0, 1fr); }
   .pr-sys__main { grid-column: auto; }
@@ -897,9 +900,9 @@
 
 /* Персоны */
 .sc-personas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.sc-persona { display: flex; flex-direction: column; gap: 22px; padding: 32px; border-radius: 16px; background: #fff; opacity: 0; transform: translateY(16px); transition: opacity .6s ease var(--d), transform .7s cubic-bezier(.2,.8,.2,1) var(--d); }
+.sc-persona { display: flex; flex-direction: column; gap: 28px; padding: 32px; border-radius: 16px; background: #fff; opacity: 0; transform: translateY(16px); transition: opacity .6s ease var(--d), transform .7s cubic-bezier(.2,.8,.2,1) var(--d); }
 .sc-persona.is-in { opacity: 1; transform: none; }
-.sc-persona__head { display: flex; align-items: center; gap: 18px; }
+.sc-persona__head { display: flex; align-items: center; gap: 24px; }
 .sc-persona__ava { flex-shrink: 0; width: 72px; height: 72px; border-radius: 20px; background: var(--pl); display: grid; place-items: center; }
 .sc-persona__ava svg { width: 36px; height: 48px; }
 .sc-persona h3 { font-size: 24px; letter-spacing: -.03em; line-height: 1.2; }
@@ -907,25 +910,25 @@
 .sc-persona__quote { display: flex; gap: 12px; margin: 0; padding: 18px 20px; border-radius: 14px; background: var(--bg); }
 .sc-persona__quote .iconsax { flex-shrink: 0; color: var(--p); }
 .sc-persona__quote p { font-size: 18px; line-height: 1.45; letter-spacing: -.01em; }
-.sc-persona__cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
-.sc-persona__cap { margin-bottom: 10px; font-size: 13px; color: var(--text-secondary); }
-.sc-persona ul { display: flex; flex-direction: column; gap: 10px; }
-.sc-persona li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 1.4; }
+.sc-persona__cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+.sc-persona .sc-persona__cap { margin-bottom: 14px; font-size: 13px; color: var(--text-secondary); }
+.sc-persona ul { display: flex; flex-direction: column; gap: 14px; }
+.sc-persona li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.4; }
 .sc-persona li .iconsax { flex-shrink: 0; margin-top: 1px; color: #2fb574; }
 .sc-persona ul.is-block li .iconsax { color: var(--err); }
-.sc-persona__foot { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 28px; margin-top: auto; padding-top: 20px; border-top: 1px solid var(--line); }
-.sc-persona__meter { display: flex; gap: 4px; }
-.sc-persona__meter i { width: 22px; height: 8px; border-radius: 4px; background: var(--bg); }
+.sc-persona__foot { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 40px; margin-top: auto; padding-top: 28px; border-top: 1px solid var(--line); }
+.sc-persona__meter { display: flex; gap: 6px; }
+.sc-persona__meter i { width: 28px; height: 10px; border-radius: 4px; background: var(--bg); }
 .sc-persona.is-in .sc-persona__meter i { animation: sc-meter .4s ease forwards; animation-delay: calc(var(--d) + .5s + var(--k) * .12s); }
 @keyframes sc-meter { to { background: var(--fill, var(--bg)); } }
 .sc-persona__meter i:nth-child(1) { --fill: var(--p); }
 .sc-persona__meter[style*="--n:2"] i:nth-child(2), .sc-persona__meter[style*="--n:3"] i:nth-child(-n+3) { --fill: var(--p); }
-.sc-persona__chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.sc-persona__chips span { padding: 4px 10px; border-radius: 8px; background: var(--bg); font-size: 13px; line-height: 18px; }
+.sc-persona__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.sc-persona__chips span { padding: 7px 12px; border-radius: 10px; background: var(--bg); font-size: 14px; line-height: 18px; }
 @media (max-width: 899px) { .sc-personas { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 699px) {
   .sc-persona { padding: 22px; }
-  .sc-persona__cols, .sc-persona__foot { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .sc-persona__cols, .sc-persona__foot { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .sc-persona__quote p { font-size: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {

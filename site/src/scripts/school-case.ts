@@ -210,3 +210,19 @@ if (lms && !reduced) {
   };
   run();
 }
+
+// «Аккуратная вёрстка»: высота сцены = высота десктопного кадра, чтобы отступ снизу был как по краям
+document.querySelectorAll<HTMLElement>('.sc-pr .sc-resp__stage').forEach((stage) => {
+  const frame = stage.querySelector<HTMLElement>('.sc-resp__frame');
+  if (!frame) return;
+  const fit = () => {
+    const clone = frame.cloneNode(true) as HTMLElement;
+    clone.style.cssText = 'position:absolute;visibility:hidden;animation:none;width:100%;left:0;top:0';
+    stage.append(clone);
+    stage.style.setProperty('--fh', `${clone.offsetHeight}px`);
+    clone.remove();
+  };
+  fit();
+  new ResizeObserver(fit).observe(stage.parentElement ?? stage);
+  document.fonts?.ready.then(fit);
+});
