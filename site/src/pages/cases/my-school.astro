@@ -290,6 +290,45 @@ const lessons = [
         </div>
       </section>
 
+      <section class="sc-sec sc-sec--wide" aria-labelledby="h-ds">
+        <div class="sc-head"><h2 id="h-ds">Дизайн-система</h2></div>
+        <div class="sc-main">
+          <p class="sc-lead">UI-kit и шаблон урока, по которым команда выпускает уроки потоком. Новый лонгрид собирается из готовых блоков.</p>
+          <div class="sc-ds">
+            <div class="sc-ds__card">
+              <h3>Один шрифт, три начертания</h3>
+              <p class="sc-font" aria-hidden="true">Geologica</p>
+              <ul class="sc-weights">
+                <li style="font-weight:300"><b>300</b>Основной текст урока</li>
+                <li style="font-weight:500"><b>500</b>Акценты и кнопки</li>
+                <li style="font-weight:600"><b>600</b>Заголовки</li>
+              </ul>
+            </div>
+            <div class="sc-ds__card" data-anim>
+              <h3>Цвета</h3>
+              <div class="sc-tokens" aria-hidden="true">
+                {[['Основной', '#006EE5', 1], ['Светлый', '#D1E7FF'], ['Текст', '#1C1C1C', 1], ['Подписи', '#727272', 1], ['Фон', '#F6F6F6'], ['Успех', '#7AD9A8'], ['Ошибка', '#FF5242', 1]].map(([n, c, dark], i) => <span class={dark ? 'is-dark' : undefined} style={`--c:${c};--i:${i}`}>{n}<small>{c}</small></span>)}
+              </div>
+            </div>
+            <div class="sc-ds__card sc-ds__card--stack" data-anim>
+              <h3>Урок из блоков</h3>
+              <div class="sc-stack" aria-hidden="true">
+                <span class="a-stack" style="animation-delay:0s">Шапка урока</span>
+                <span class="a-stack" style="animation-delay:.25s">Содержание</span>
+                <span class="a-stack" style="animation-delay:.5s">Карточка с иллюстрацией</span>
+                <span class="a-stack sc-stack--tip" style="animation-delay:.75s">Подсказка</span>
+                <span class="a-stack" style="animation-delay:1s">Видео · Конспект · Тренажёр</span>
+              </div>
+            </div>
+          </div>
+          <ul class="sc-stats sc-stats--ds">
+            <li><strong data-count="24">24</strong><span>компонента в UI-kit</span></li>
+            <li><strong>1 день</strong><span>на сборку урока вместо 5</span></li>
+            <li><strong data-count="3">3</strong><span>дизайнера работают в одной системе</span></li>
+          </ul>
+        </div>
+      </section>
+
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-anatomy">
         <div class="sc-head"><h2 id="h-anatomy">Анатомия урока</h2></div>
         <div class="sc-main">
@@ -379,7 +418,7 @@ const lessons = [
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
-                <div class="an-icons">{[...profiles.map((pr) => ({ svg: pr.svg })), { ic: 'book1-linear' }, { ic: 'calculator-linear' }].map((it, i) => <span class="an-pop" style={`--i:${i}`}>{it.svg ? <i set:html={it.svg}></i> : <i class="an-icons__ic"><Iconsax name={it.ic} size={22}/></i>}<b><em></em><em></em></b></span>)}</div>
+                <div class="an-icons">{([...profiles.map((pr) => ({ svg: pr.svg })), { ic: 'book1-linear' }, { ic: 'calculator-linear' }] as { svg?: string; ic?: string }[]).map((it, i) => <span class="an-pop" style={`--i:${i}`}>{it.svg ? <i set:html={it.svg}></i> : <i class="an-icons__ic"><Iconsax name={it.ic!} size={22}/></i>}<b><em></em><em></em></b></span>)}</div>
               </div>
               <h3>Иконки</h3>
             </div>
@@ -409,10 +448,29 @@ const lessons = [
         </div>
       </section>
 
-      <section class="sc-sec sc-sec--wide" aria-labelledby="h-lms">
-        <div class="sc-head"><h2 id="h-lms">LMS</h2></div>
+      <section class="sc-sec" aria-labelledby="h-ill">
+        <div class="sc-head"><h2 id="h-ill">Иллюстрации</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Главный экран LMS. Одно главное действие: продолжить с того места, где остановился.</p>
+          <p class="sc-lead">Иллюстрации живут в шапках уроков и на пустых состояниях. Мы задали им общий стиль, чтобы они продолжали интерфейс, а не спорили с ним.</p>
+          <div class="sc-pile" data-anim="once" aria-hidden="true">
+            {[['lesson-hero.png', 1466, 1308], ['ill-flow.svg', 581, 420], ['ill-login.svg', 489, 395], ['ill-profile.svg', 534, 386], ['ill-files.svg', 828, 716]].map(([f, w, h], i) => <figure class="sc-pile__card" style={`--i:${i}`}><img src={img(f as string)} alt="" width={w} height={h} loading="lazy" decoding="async"/></figure>)}
+          </div>
+          <div class="sc-ill">
+            <div class="sc-ill__palette"><span style="--c:#006EE5"><b>#006EE5</b>Акцент</span><span style="--c:#D1E7FF"><b>#D1E7FF</b>Заливка</span><span style="--c:#1C1C1C"><b>#1C1C1C</b>Контур</span></div>
+            <ul class="sc-ill__rules">
+              <li><h3>Контур и плоская заливка</h3><p>Тонкая тёмная линия одной толщины и светлые плашки без градиентов и теней.</p></li>
+              <li><h3>Две краски платформы</h3><p>Только основной синий и его светлый оттенок, поэтому иллюстрация не перетягивает внимание с текста.</p></li>
+              <li><h3>Предметы интерфейса</h3><p>Окна, документы, карточки и поиск. Педагог узнаёт в картинке то, с чем будет работать.</p></li>
+              <li><h3>Скругления как у компонентов</h3><p>Углы повторяют радиусы дизайн-системы, и картинка выглядит частью урока.</p></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="sc-sec sc-sec--wide" aria-labelledby="h-longread">
+        <div class="sc-head"><h2 id="h-longread">Лонгрид в действии</h2></div>
+        <div class="sc-main">
+          <p class="sc-lead">Урок целиком: от главного экрана до финального блока.</p>
           <div class="sc-lms ui" data-anim="once">
             <div class="lms-bar">
               <span class="ui-nda">NDA</span>
@@ -473,64 +531,6 @@ const lessons = [
             </div>
             <span class="lms-cursor" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M5 3.2v15.4c0 .5.6.8 1 .4l3.6-3.4 2.4 5.5c.2.4.6.5 1 .4l2-.9c.4-.2.5-.6.4-1l-2.4-5.4 4.9-.3c.5 0 .8-.6.4-1L6 2.8c-.4-.3-1-.1-1 .4Z" fill="#1c1c1c" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
           </div>
-        </div>
-      </section>
-
-      <section class="sc-sec" aria-labelledby="h-ill">
-        <div class="sc-head"><h2 id="h-ill">Иллюстрации</h2></div>
-        <div class="sc-main">
-          <p class="sc-lead">Иллюстрации живут в шапках уроков и на пустых состояниях. Мы задали им общий стиль, чтобы они продолжали интерфейс, а не спорили с ним.</p>
-          <div class="sc-pile" data-anim="once" aria-hidden="true">
-            {[['lesson-hero.png', 1466, 1308], ['ill-flow.svg', 581, 420], ['ill-login.svg', 489, 395], ['ill-profile.svg', 534, 386], ['ill-files.svg', 828, 716]].map(([f, w, h], i) => <figure class="sc-pile__card" style={`--i:${i}`}><img src={img(f as string)} alt="" width={w} height={h} loading="lazy" decoding="async"/></figure>)}
-          </div>
-          <div class="sc-ill">
-            <div class="sc-ill__palette"><span style="--c:#006EE5"><b>#006EE5</b>Акцент</span><span style="--c:#D1E7FF"><b>#D1E7FF</b>Заливка</span><span style="--c:#1C1C1C"><b>#1C1C1C</b>Контур</span></div>
-            <ul class="sc-ill__rules">
-              <li><h3>Контур и плоская заливка</h3><p>Тонкая тёмная линия одной толщины и светлые плашки без градиентов и теней.</p></li>
-              <li><h3>Две краски платформы</h3><p>Только основной синий и его светлый оттенок, поэтому иллюстрация не перетягивает внимание с текста.</p></li>
-              <li><h3>Предметы интерфейса</h3><p>Окна, документы, карточки и поиск. Педагог узнаёт в картинке то, с чем будет работать.</p></li>
-              <li><h3>Скругления как у компонентов</h3><p>Углы повторяют радиусы дизайн-системы, и картинка выглядит частью урока.</p></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="sc-sec sc-sec--wide" aria-labelledby="h-ds">
-        <div class="sc-head"><h2 id="h-ds">Дизайн-система</h2></div>
-        <div class="sc-main">
-          <p class="sc-lead">UI-kit и шаблон урока, по которым команда выпускает уроки потоком. Новый лонгрид собирается из готовых блоков.</p>
-          <div class="sc-ds">
-            <div class="sc-ds__card">
-              <h3>Один шрифт, три начертания</h3>
-              <p class="sc-font" aria-hidden="true">Geologica</p>
-              <ul class="sc-weights">
-                <li style="font-weight:300"><b>300</b>Основной текст урока</li>
-                <li style="font-weight:500"><b>500</b>Акценты и кнопки</li>
-                <li style="font-weight:600"><b>600</b>Заголовки</li>
-              </ul>
-            </div>
-            <div class="sc-ds__card" data-anim>
-              <h3>Цвета</h3>
-              <div class="sc-tokens" aria-hidden="true">
-                {[['Основной', '#006EE5', 1], ['Светлый', '#D1E7FF'], ['Текст', '#1C1C1C', 1], ['Подписи', '#727272', 1], ['Фон', '#F6F6F6'], ['Успех', '#7AD9A8'], ['Ошибка', '#FF5242', 1]].map(([n, c, dark], i) => <span class={dark ? 'is-dark' : undefined} style={`--c:${c};--i:${i}`}>{n}<small>{c}</small></span>)}
-              </div>
-            </div>
-            <div class="sc-ds__card sc-ds__card--stack" data-anim>
-              <h3>Урок из блоков</h3>
-              <div class="sc-stack" aria-hidden="true">
-                <span class="a-stack" style="animation-delay:0s">Шапка урока</span>
-                <span class="a-stack" style="animation-delay:.25s">Содержание</span>
-                <span class="a-stack" style="animation-delay:.5s">Карточка с иллюстрацией</span>
-                <span class="a-stack sc-stack--tip" style="animation-delay:.75s">Подсказка</span>
-                <span class="a-stack" style="animation-delay:1s">Видео · Конспект · Тренажёр</span>
-              </div>
-            </div>
-          </div>
-          <ul class="sc-stats sc-stats--ds">
-            <li><strong data-count="24">24</strong><span>компонента в UI-kit</span></li>
-            <li><strong>1 день</strong><span>на сборку урока вместо 5</span></li>
-            <li><strong data-count="3">3</strong><span>дизайнера работают в одной системе</span></li>
-          </ul>
         </div>
       </section>
 
