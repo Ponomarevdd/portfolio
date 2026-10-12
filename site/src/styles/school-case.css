@@ -601,7 +601,7 @@
 .lr-h1 { max-width: 540px; font-size: 40px; line-height: 48px; font-weight: 600; }
 .lr-sub { max-width: 500px; font-size: 20px; line-height: 28px; color: var(--cap); }
 .lr-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.lr-tags span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid var(--p); border-radius: 8px; background: var(--pl); color: var(--p); font-size: 14px; line-height: 18px; }
+.lr-tags > span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid var(--p); border-radius: 8px; background: var(--pl); color: var(--p); font-size: 14px; line-height: 18px; }
 .lr-img { position: relative; flex: 0 0 40%; max-width: 453px; }
 .lr-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .lr-body { margin-top: 48px; display: grid; grid-template-columns: 260px minmax(0, 1fr); column-gap: 48px; align-items: start; }
@@ -871,7 +871,6 @@
 .lr-acc__group { border-radius: 28px; background: var(--bg); }
 .lr-acc__group .lr-acc__item { background: none; }
 .lr-acc__btn .iconsax { transition: transform .3s; }
-.lr-acc__group.is-open .lr-acc__btn .iconsax { transform: rotate(45deg); }
 .lr-acc__body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s cubic-bezier(.4,0,.2,1); }
 .lr-acc__group.is-open .lr-acc__body { grid-template-rows: 1fr; }
 .lr-acc__body ul { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 12px; margin: 0 16px; padding: 0 32px; border-radius: 20px; background: #fff; font-size: 17px; line-height: 26px; transition: padding .5s, margin .5s; }
@@ -889,3 +888,15 @@
 .lr-quiz__fb { display: none; margin-top: 4px !important; padding: 14px 18px; border-radius: 12px; background: var(--ok); font-size: 16px; line-height: 22px; }
 .lr-quiz.is-done .lr-quiz__fb { display: block; animation: sc-fb-in .4s ease; }
 @keyframes sc-fb-in { from { opacity: 0; transform: translateY(6px); } }
+/* Аккордеон как в макете: плюс превращается в минус, кружок синеет и поворачивается */
+.lr-acc__group { transition: background-color .25s; }
+.lr-acc__group .lr-acc__btn { transition: background-color .25s, color .25s, transform .25s; }
+.lr-acc__group .lr-acc__btn path { transition: opacity .2s; }
+.lr-acc__group.is-open { background: var(--pl); }
+.lr-acc__group.is-open .lr-acc__btn { background: var(--p); color: #fff; transform: rotate(180deg); }
+.lr-acc__group.is-open .lr-acc__btn .iconsax { transform: none; }
+.lr-acc__group .lr-acc__btn { position: relative; }
+.lr-acc__minus { position: absolute; opacity: 0; transition: opacity .2s; }
+.lr-acc__plus { transition: opacity .2s; }
+.lr-acc__group.is-open .lr-acc__plus { opacity: 0; }
+.lr-acc__group.is-open .lr-acc__minus { opacity: 1; }

@@ -7,7 +7,7 @@ import profiles from '../data/school-profiles.json';
 interface Props { mode?: 'wire' | 'ui'; finish?: boolean; base: string }
 const { mode = 'ui', finish = false, base } = Astro.props;
 const ui = mode === 'ui';
-const toc = ['О системе', 'Задачи системы', 'Подсистемы', 'Профили пользователей', 'Типы заданий', 'Создание шаблона', 'Практика', 'Скачивание и статусы', 'Самопроверка и итоги'];
+const toc = ['О системе', 'Задачи системы', 'Подсистемы', 'Профили пользователей', 'Шаблоны и типы заданий', 'Самопроверка'];
 const learn = [['Какие задачи решает система', 'и из каких подсистем она состоит'], ['Какие профили бывают', 'у пользователей'], ['Какие типы заданий есть', 'в подсистеме «Тесты»'], ['Как создать, скачать шаблон', 'и управлять его статусами']];
 const subsystems = [['Базовая платформа', 'Обозреватель'], ['Библиотека', 'Верифицированный контент'], ['Файлы', 'Расширенный онлайн-офис'], ['ЕТД', 'Администрирование системы'], ['Аналитика', 'Сбор информации по показателям ФП «Цифровая образовательная среда»'], ['Помощник ученика', 'Подготовка к ГИА и ВПР'], ['Смарт ТВ', 'Вывод контента на экран']];
 const types = [['Выбрать ответ', 'Свободный ответ'], ['Выбрать из списка', 'HTML'], ['Ввести ответ', 'Диктант'], ['Перетаскивание', 'Рисование'], ['Выделить область', ''], ['Таблица', '']];
@@ -55,7 +55,7 @@ const tasks = ['Управление образовательным процес
   </div>
   <div class="lr-body">
     <nav class="lr-toc" aria-hidden="true">
-      <div class="lr-toc__top"><b><span class="t">Содержание</span></b><small><span class="t" data-d="toc-count">Изучено 1 из 9 разделов</span></small></div>
+      <div class="lr-toc__top"><b><span class="t">Содержание</span></b><small><span class="t" data-d="toc-count">Изучено 1 из 6 разделов</span></small></div>
       <div class="lr-toc__list">
         <span class="lr-toc__rail"><span data-d="toc-rail"></span></span>
         <ol>{toc.map((t, i) => <li data-d="toc" class={i === 0 ? 'is-now' : undefined}><i></i><span class="t">{t}</span></li>)}</ol>
@@ -79,7 +79,7 @@ const tasks = ['Управление образовательным процес
       <section data-d="sec" data-toc="1">
         <div class="lr-sec-head"><p class="lr-h2"><span class="t">Задачи системы</span></p><p><span class="t">Задачи Цифровой платформы для школ делятся на три направления.</span></p></div>
         <div class="lr-acc">{tasks.map((t, i) => (finish && i === 0
-          ? <div class="lr-acc__group" data-d="acc"><div class="lr-acc__item"><span class="t">{t}</span><span class="lr-acc__btn" data-d="acc-btn"><Iconsax name="add-linear" size={18}/></span></div><div class="lr-acc__body"><ul>{accItems.map((x) => <li>{x}</li>)}</ul></div></div>
+          ? <div class="lr-acc__group" data-d="acc"><div class="lr-acc__item"><span class="t">{t}</span><span class="lr-acc__btn" data-d="acc-btn"><Iconsax name="add-linear" size={18} class="lr-acc__plus"/><Iconsax name="minus-linear" size={18} class="lr-acc__minus"/></span></div><div class="lr-acc__body"><ul>{accItems.map((x) => <li>{x}</li>)}</ul></div></div>
           : <div class="lr-acc__item"><span class="t">{t}</span><span class="lr-acc__btn"><Iconsax name="add-linear" size={18}/></span></div>))}</div>
       </section>
       {finish && <section data-d="sec" data-toc="2">
@@ -116,11 +116,11 @@ const tasks = ['Управление образовательным процес
           <div class="lr-slider__bar"><span class="lr-slider__count" data-d="sl-count">1 / 3</span><span class="lr-slider__btns"><i><Iconsax name="arrow-left2-linear" size={22}/></i><i data-d="sl-next"><Iconsax name="arrow-right2-linear" size={22}/></i></span></div>
         </div>
       </section>}
-      {finish && <section data-d="sec" data-toc="8">
+      {finish && <section data-d="sec" data-toc="5">
         <div class="lr-sec-head"><p class="lr-h2">Самопроверка</p><p>Два коротких вопроса, чтобы закрепить материал. Результат никуда не отправляется.</p></div>
         {quiz.map(([q, opts, ok], qi) => <div class="lr-quiz" data-d="quiz"><p class="lr-quiz__q">{q}</p>{opts.map((o, oi) => <span class="lr-quiz__opt" data-d={oi === 1 ? `quiz-ok-${qi}` : undefined}>{o}</span>)}<p class="lr-quiz__fb">{ok}</p></div>)}
       </section>}
-      {finish && <section data-d="sec" data-toc="8">
+      {finish && <section data-d="sec" data-toc="5">
         <div class="lr-done">
           <span class="lr-done__art"><img src={`${base}done-a.svg`} alt="" style="left:0;top:-1px;width:40px"/><img src={`${base}done-b.svg`} alt="" style="left:196px;top:12px;width:24px"/><img src={`${base}done-c.svg`} alt="" style="left:180px;top:36px;width:16px"/><img src={`${base}done-main.svg`} alt="" style="left:24px;top:30px;width:174px"/></span>
           <div class="lr-done__text">
