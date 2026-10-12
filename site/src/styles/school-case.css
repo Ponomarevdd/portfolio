@@ -866,3 +866,26 @@
   .lr-prof__card, .lr-types { padding: 20px; border-radius: 22px; }
   .lr-video__row > :not(span:first-of-type):not(.iconsax:first-child) { display: none; }
 }
+.lr-video .iconsax path { fill: currentColor; }
+.lr-video__play .iconsax { margin-left: 4px; }
+.lr-acc__group { border-radius: 28px; background: var(--bg); }
+.lr-acc__group .lr-acc__item { background: none; }
+.lr-acc__btn .iconsax { transition: transform .3s; }
+.lr-acc__group.is-open .lr-acc__btn .iconsax { transform: rotate(45deg); }
+.lr-acc__body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s cubic-bezier(.4,0,.2,1); }
+.lr-acc__group.is-open .lr-acc__body { grid-template-rows: 1fr; }
+.lr-acc__body ul { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 12px; margin: 0 16px; padding: 0 32px; border-radius: 20px; background: #fff; font-size: 17px; line-height: 26px; transition: padding .5s, margin .5s; }
+.lr-acc__group.is-open .lr-acc__body ul { margin-bottom: 16px; padding: 28px 32px; }
+.lr-acc__body li { position: relative; padding-left: 22px; }
+.lr-acc__body li::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 3px; background: var(--p); }
+.lr-slider__track { transition: transform .6s cubic-bezier(.65,0,.35,1); }
+.lr-slider__btns i { transition: border-color .2s, transform .15s; }
+.lr-slider__btns i.is-hover { border-color: var(--p); }
+.lr-slider__btns i.is-press, .lr-acc__btn.is-press, .lr-quiz__opt.is-press { transform: scale(.94); }
+.lr-acc__btn.is-hover { background: var(--pl); }
+.lr-quiz__opt { border: 2px solid #fff; transition: background-color .3s, border-color .3s, transform .15s; }
+.lr-quiz__opt.is-hover { border-color: var(--pl); }
+.lr-quiz__opt.is-ok { background: var(--ok); border-color: var(--ok); }
+.lr-quiz__fb { display: none; margin-top: 4px !important; padding: 14px 18px; border-radius: 12px; background: var(--ok); font-size: 16px; line-height: 22px; }
+.lr-quiz.is-done .lr-quiz__fb { display: block; animation: sc-fb-in .4s ease; }
+@keyframes sc-fb-in { from { opacity: 0; transform: translateY(6px); } }

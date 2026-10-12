@@ -106,6 +106,8 @@ if (lms && !reduced) {
     read.classList.remove('is-open');
     instant([scroll, tocBox, $('read-fill')], () => { scroll.style.transform = ''; tocBox.style.transform = ''; $('read-fill').style.setProperty('--v', '.3'); });
     set('read-pct', '30%'); reading(0);
+    $('acc').classList.remove('is-open'); $('sl-track').style.transform = ''; set('sl-count', '1 / 3');
+    $$('quiz').forEach((q) => q.classList.remove('is-done')); lms.querySelectorAll('.is-ok').forEach((e) => e.classList.remove('is-ok'));
     $('fill').style.setProperty('--v', '.3'); set('pct', '30%'); set('left', 'Осталось 7 мин');
     set('btn', 'Продолжить'); set('cont-cap', 'Продолжить · Курс для педагогов'); set('cont-title', 'С чего начать работу в Цифровой платформе');
     $('course-fill').style.setProperty('--v', '.06'); set('course-pct', '6%'); set('course-done', '1 из 18 уроков');
@@ -128,37 +130,67 @@ if (lms && !reduced) {
       await sleep(700);
       const view = scroll.parentElement!;
       await moveTo(view, .62, .55);
-      // Одна плавная прокрутка до конца урока, содержание отмечает разделы по ходу
-      const base = scroll.getBoundingClientRect().top;
-      const at = (el: HTMLElement) => el.getBoundingClientRect().top - base;
-      // Прокрутка заканчивается там, где кончается урок: финальный блок внизу видимой части окна.
-      // Окно LMS бывает выше экрана, поэтому считаем по тому, что реально видно.
-      const last = secs[secs.length - 1];
+      // Урок читается с остановками: аккордеон, слайдер, самопроверка, финальный блок
+      const rel = (el: HTMLElement) => el.getBoundingClientRect().top - scroll.getBoundingClientRect().top;
       const vr = view.getBoundingClientRect();
-      const seen = Math.max(320, Math.min(vr.height, innerHeight - Math.max(0, vr.top)));
-      const bottom = at(last) + last.offsetHeight + 56;
-      const end = Math.max(0, bottom - seen);
-      const tocTop = tocBox.getBoundingClientRect().top - base;
-      const dur = 9000;
-      [scroll, tocBox].forEach((e) => { e.style.transition = `transform ${dur}ms cubic-bezier(.45,0,.35,1)`; });
-      scroll.style.transform = `translateY(${-end}px)`;
-      tocBox.style.transform = `translateY(${Math.max(0, end - tocTop + 8)}px)`;
-      $('read-fill').style.transition = `transform ${dur}ms cubic-bezier(.45,0,.35,1)`;
-      $('read-fill').style.setProperty('--v', '1');
-      const marks = secs.map((sec) => Math.min(1, Math.max(0, (at(sec) - view.clientHeight * .5) / Math.max(1, end))));
-      const t0 = performance.now();
-      let shown = -1;
-      while (performance.now() - t0 < dur) {
-        const p = (performance.now() - t0) / dur;
-        const k = Math.max(0, marks.filter((m) => p >= m).length - 1);
-        const idx = Number(secs[k].dataset.toc ?? k);
-        if (idx !== shown) { shown = idx; reading(idx); }
-        set('read-pct', `${Math.round((.3 + .7 * p) * 100)}%`);
-        await sleep(120);
+      // Окно LMS бывает выше экрана, поэтому считаем по тому, что реально видно
+      const seen = Math.max(320, Math.min(vr.height, innerHeight - Math.max(0, vr.top)) - 24);
+      const last = secs[secs.length - 1];
+      const endY = () => Math.max(0, rel(last) + last.offsetHeight + 96 - seen);
+      const tocTop = rel(tocBox);
+      const fill = $('read-fill');
+      const glide = async (target: number, dur: number) => {
+        const end = endY();
+        const to = Math.min(Math.max(0, target), end);
+        const ease = `transform ${dur}ms cubic-bezier(.45,0,.35,1)`;
+        [scroll, tocBox, fill].forEach((e) => { e.style.transition = ease; });
+        scroll.style.transform = `translateY(${-to}px)`;
+        tocBox.style.transform = `translateY(${Math.max(0, to - tocTop + 8)}px)`;
+        fill.style.setProperty('--v', String(.3 + .7 * to / Math.max(1, end)));
+        const t0 = performance.now();
+        let shown = -1;
+        for (;;) {
+          const done = performance.now() - t0 >= dur;
+          const cur = done ? to : -new DOMMatrixReadOnly(getComputedStyle(scroll).transform).m42;
+          const k = Math.max(0, secs.filter((sec) => rel(sec) - seen * .55 <= cur).length - 1);
+          const idx = Number(secs[k].dataset.toc ?? k);
+          if (idx !== shown) { shown = idx; reading(idx); }
+          set('read-pct', `${Math.round((.3 + .7 * cur / Math.max(1, end)) * 100)}%`);
+          if (done) break;
+          await sleep(120);
+        }
+        [scroll, tocBox, fill].forEach((e) => { e.style.transition = ''; });
+      };
+      const tap = async (el: HTMLElement, dx = .5, dy = .5) => { await moveTo(el, dx, dy); await click(el); el.classList.remove('is-hover'); };
+      // Аккордеон: открыть и закрыть первый пункт
+      const acc = $('acc');
+      await glide(rel(acc) - 160, 2600);
+      await tap($('acc-btn'));
+      acc.classList.add('is-open');
+      await sleep(1700);
+      await tap($('acc-btn'));
+      acc.classList.remove('is-open');
+      await sleep(700);
+      // Слайдер: следующий тип задания
+      const track = $('sl-track');
+      await glide(rel(track.closest<HTMLElement>('.lr-slider')!) - 40, 3000);
+      await tap($('sl-next'));
+      track.style.transform = 'translateX(-100%)'; set('sl-count', '2 / 3');
+      await sleep(1300);
+      // Самопроверка: верные ответы на оба вопроса
+      const quiz = $$('quiz');
+      await glide(rel(quiz[0]) - 120, 2200);
+      for (let q = 0; q < quiz.length; q++) {
+        const ok = $(`quiz-ok-${q}`);
+        await tap(ok, .3);
+        ok.classList.add('is-ok'); quiz[q].classList.add('is-done');
+        await sleep(700);
       }
+      await sleep(400);
+      // Финальный блок
+      await glide(endY(), 1600);
       reading(toc.length - 1); set('read-pct', '100%');
-      [scroll, tocBox, $('read-fill')].forEach((e) => { e.style.transition = ''; });
-      await sleep(500);
+      await sleep(400);
       // Завершаем урок и возвращаемся на главную
       await moveTo($('finish'), .4, .55); await click($('finish'));
       read.classList.remove('is-open'); $('finish').classList.remove('is-hover');
