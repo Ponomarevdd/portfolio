@@ -265,35 +265,6 @@ const lessons = [
         </div>
       </section>
 
-      <section class="sc-sec" aria-labelledby="h-arch">
-        <div class="sc-head"><h2 id="h-arch">Архитектура и user flow</h2></div>
-        <div class="sc-main">
-          <p class="sc-lead">Курс педагога: 18 уроков в 4 модулях. Каждый урок собран из форматов, и человек выбирает тот, что удобнее прямо сейчас.</p>
-          <div class="sc-tree" aria-label="Структура курса">
-            <div class="sc-tree__node sc-tree__node--root">Курс</div>
-            <div class="sc-tree__node">4 модуля</div>
-            <div class="sc-tree__node">18 уроков</div>
-            <ul class="sc-tree__formats">
-              <li><Iconsax name="document-text-bold" size={18}/>Лонгрид</li>
-              <li><Iconsax name="play-circle-bold" size={18}/>Видео</li>
-              <li><Iconsax name="document-download-bold" size={18}/>Конспект</li>
-              <li><Iconsax name="tick-square-bold" size={18}/>Тест</li>
-            </ul>
-          </div>
-          <div class="sc-flow" data-anim>
-            <h3>Путь в LMS</h3>
-            <ol>
-              <li style="--i:0">«Моё обучение»</li>
-              <li style="--i:1">Курс</li>
-              <li style="--i:2">Урок</li>
-              <li style="--i:3">Самопроверка</li>
-              <li style="--i:4"><Iconsax name="award-bold" size={18}/>Сертификат</li>
-            </ol>
-            <span class="sc-flow__dot" aria-hidden="true"></span>
-          </div>
-        </div>
-      </section>
-
       <section class="sc-sec" aria-labelledby="h-wire">
         <div class="sc-head"><h2 id="h-wire">От вайрфрейма к интерфейсу</h2></div>
         <div class="sc-main">
@@ -397,15 +368,18 @@ const lessons = [
             </div>
             <div class="sc-part" data-anim>
               <div class="sc-part__stage ui">
-                <div class="an-icons">{['book1-bold', 'teacher-bold', 'calculator-bold', 'ruler-pen-bold', 'microscope-bold', 'global-bold', 'clipboard-text-bold', 'cup-bold'].map((n, i) => <span class="an-pop" style={`--i:${i}`}><Iconsax name={n} size={26}/></span>)}</div>
+                <div class="an-icons">{[...profiles.map((pr) => ({ svg: pr.svg })), { ic: 'book1-bold' }, { ic: 'calculator-bold' }].map((it, i) => <span class="an-pop" style={`--i:${i}`}>{it.svg ? <i set:html={it.svg}></i> : <i class="an-icons__ic"><Iconsax name={it.ic} size={22}/></i>}<b><em></em><em></em></b></span>)}</div>
               </div>
               <h3>Иконки</h3>
             </div>
             <div class="sc-part" data-anim>
-              <div class="sc-part__stage ui">
+              <div class="sc-part__stage sc-part__stage--sl ui">
                 <div class="an-sl">
-                  <span class="ui-line an-sl__h"></span>
-                  <div class="an-sl__view"><div class="an-sl__track">{[1, 2, 3].map((n) => <img src={img(`task-${n}.svg`)} alt="" width="1100" height="620" loading="lazy" decoding="async"/>)}</div></div>
+                  <div class="an-sl__view"><div class="an-sl__track">
+                    <div class="an-sl__slide"><span class="ui-line"></span><i class="an-sl__opt is-on"></i><i class="an-sl__opt"></i><i class="an-sl__opt"></i></div>
+                    <div class="an-sl__slide"><span class="ui-line"></span><i class="an-sl__pic"></i></div>
+                    <div class="an-sl__slide"><span class="ui-line"></span><span class="an-sl__grid"><i></i><i class="is-on"></i><i></i><i></i></span></div>
+                  </div></div>
                   <div class="an-sl__bar"><span class="an-sl__count"><span class="an-sl__num"><span>1</span><span>2</span><span>3</span></span>&nbsp;/ 3</span><span class="an-sl__arrows"><i><Iconsax name="arrow-left2-linear" size={14}/></i><i><Iconsax name="arrow-right2-linear" size={14}/></i></span></div>
                 </div>
               </div>
@@ -495,6 +469,9 @@ const lessons = [
         <div class="sc-head"><h2 id="h-ill">Иллюстрации</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Иллюстрации живут в шапках уроков и на пустых состояниях. Мы задали им общий стиль, чтобы они продолжали интерфейс, а не спорили с ним.</p>
+          <div class="sc-pile" data-anim="once" aria-hidden="true">
+            {[['lesson-hero.png', 1466, 1308], ['ill-flow.svg', 581, 420], ['ill-login.svg', 489, 395], ['ill-profile.svg', 534, 386], ['ill-files.svg', 828, 716]].map(([f, w, h], i) => <figure class="sc-pile__card" style={`--i:${i}`}><img src={img(f as string)} alt="" width={w} height={h} loading="lazy" decoding="async"/></figure>)}
+          </div>
           <div class="sc-ill">
             <div class="sc-ill__palette"><span style="--c:#006EE5"><b>#006EE5</b>Акцент</span><span style="--c:#D1E7FF"><b>#D1E7FF</b>Заливка</span><span style="--c:#1C1C1C"><b>#1C1C1C</b>Контур</span></div>
             <ul class="sc-ill__rules">
