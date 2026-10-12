@@ -226,3 +226,23 @@ document.querySelectorAll<HTMLElement>('.sc-pr .sc-resp__stage').forEach((stage)
   new ResizeObserver(fit).observe(stage.parentElement ?? stage);
   document.fonts?.ready.then(fit);
 });
+
+// Обложка: насколько прокручивать урок, зависит от ширины, поэтому шаги считаются по реальным блокам
+document.querySelectorAll<HTMLElement>('.sc-hl').forEach((box) => {
+  const track = box.querySelector<HTMLElement>('.sc-hl__track');
+  const toc = box.querySelector<HTMLElement>('.sc-hl__toc');
+  const quiz = box.querySelector<HTMLElement>('.sc-hl__quiz');
+  const done = box.querySelector<HTMLElement>('.sc-hl__done');
+  if (!track || !toc || !quiz || !done) return;
+  const fit = () => {
+    const pad = parseFloat(getComputedStyle(track).paddingTop) + 24; // запас под затухание снизу
+    const view = box.clientHeight - track.offsetTop;
+    const s1 = Math.max(0, Math.min(toc.offsetTop, quiz.offsetTop) - pad + 24, quiz.offsetTop + quiz.offsetHeight + pad - view);
+    const s2 = Math.max(s1, done.offsetTop + done.offsetHeight + pad - view);
+    box.style.setProperty('--s1', `${s1}px`);
+    box.style.setProperty('--s2', `${s2}px`);
+  };
+  fit();
+  new ResizeObserver(fit).observe(box);
+  document.fonts?.ready.then(fit);
+});

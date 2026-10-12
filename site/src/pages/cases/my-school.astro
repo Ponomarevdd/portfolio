@@ -82,24 +82,36 @@ const lessons = [
           <h1>Цифровая платформа для школ</h1>
           <p class="sc-cover__lead">Система обучения для педагогов и администраторов школ</p>
         </div>
-        <div class="sc-collage" data-anim aria-label="Фрагменты интерфейса: шапка урока, карточка курса, вопрос самопроверки и иллюстрация" role="img">
-          <div class="ui sc-frag sc-frag--header">
-            <span class="ui-badge">Модуль 1 · Урок 1</span>
-            <p class="ui-h">С чего начать работу в Цифровой платформе</p>
-            <div class="ui-tags"><span><Iconsax name="document-text-bold" size={14}/>Лонгрид</span><span><Iconsax name="clock-bold" size={14}/>10 мин</span></div>
+        <div class="ui sc-hl" data-anim aria-label="Урок собирается из блоков: шапка, содержание, заметка, самопроверка и «Урок пройден»" role="img">
+          <div class="sc-hl__bar"><i></i><i></i><i></i><span></span></div>
+          <div class="sc-hl__track">
+            <div class="sc-hl__b sc-hl__head">
+              <span class="ui-badge">Модуль 1 · Урок 1</span>
+              <p class="ui-h">С чего начать работу в Цифровой платформе</p>
+              <div class="ui-tags"><span><Iconsax name="document-text-bold" size={14}/>Лонгрид</span><span><Iconsax name="clock-bold" size={14}/>10 мин</span></div>
+              <img src={img('lesson-hero.png')} alt="" width="1466" height="1308"/>
+            </div>
+            <div class="sc-hl__b sc-hl__toc">
+              <p class="ui-h ui-h--xs">Содержание</p>
+              <ul>{['О платформе', 'Задачи', 'Разделы', 'Самопроверка'].map((t, i) => <li style={`--i:${i}`}><i></i>{t}</li>)}</ul>
+            </div>
+            <div class="sc-hl__b sc-hl__note">
+              <span class="sc-hl__note-h"><Iconsax name="info-circle-bold" size={20}/>Обратите внимание</span>
+              <i></i><i></i><i></i>
+            </div>
+            <div class="sc-hl__b sc-hl__quiz">
+              <p class="ui-h ui-h--xs">Какой тип заданий проверяет эксперт?</p>
+              <span class="ui-opt">Выбрать ответ</span>
+              <span class="ui-opt sc-hl__opt">Диктант<Iconsax name="tick-circle-linear" size={18}/>
+                <span class="sc-hl__cur"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M5 3.2v15.4c0 .5.6.8 1 .4l3.6-3.4 2.4 5.5c.2.4.6.5 1 .4l2-.9c.4-.2.5-.6.4-1l-2.4-5.4 4.9-.3c.5 0 .8-.6.4-1L6 2.8c-.4-.3-1-.1-1 .4Z" fill="#1c1c1c" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
+              </span>
+              <span class="sc-hl__fb">Верно: диктант проверяет эксперт</span>
+            </div>
+            <div class="sc-hl__b sc-hl__done">
+              <span class="sc-hl__cup"><Iconsax name="cup-bold" size={28}/></span>
+              <span><b>Урок пройден</b><small>Следующий: Роль педагога в платформе</small></span>
+            </div>
           </div>
-          <div class="ui sc-frag sc-frag--course">
-            <span class="ui-badge">Обязательный</span>
-            <p class="ui-h ui-h--s">Курс для педагогов</p>
-            <p class="ui-cap">18 уроков · 4 модуля</p>
-            <div class="ui-bar"><span class="ui-bar__fill sc-fill"></span></div>
-          </div>
-          <div class="ui sc-frag sc-frag--quiz">
-            <p class="ui-h ui-h--xs">Какой тип заданий проверяет эксперт?</p>
-            <span class="ui-opt">Выбрать ответ</span>
-            <span class="ui-opt ui-opt--right">Диктант<Iconsax name="tick-circle-bold" size={16}/></span>
-          </div>
-          <div class="sc-frag sc-frag--ill"><img src={img('lesson-hero.png')} alt="" width="1466" height="1308"/></div>
         </div>
       </div>
       <dl class="sc-meta">
