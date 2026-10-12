@@ -405,11 +405,6 @@
   .rs-ava { width: 48px; height: 48px; border-radius: 12px; }
   .rs-ava svg { width: 24px; height: 32px; }
 }
-.sc-resp__legend { display: flex; gap: 8px; font-size: 13px; }
-.sc-resp__legend span { padding: 6px 12px; border-radius: 100px; background: #fafafa; color: var(--text-secondary); }
-.is-in .sc-resp__legend span:nth-child(1) { animation: sc-legend-1 9s infinite; }
-.is-in .sc-resp__legend span:nth-child(2) { animation: sc-legend-2 9s infinite; }
-.is-in .sc-resp__legend span:nth-child(3) { animation: sc-legend-3 9s infinite; }
 .sc-ill { display: flex; flex-direction: column; gap: 16px; }
 .sc-ill__palette { display: flex; gap: 8px; }
 .sc-ill__palette span { flex: 1; min-width: 0; height: 88px; border-radius: 12px; background: var(--c); display: flex; flex-direction: column; justify-content: flex-end; padding: 12px; box-sizing: border-box; font-size: 12px; color: #ffffffcc; }
@@ -557,7 +552,6 @@
   .pr-sl__text p:last-child { font-size: 14px; }
   .sc-resp__stage::after { display: none; }
   .is-in .sc-resp__frame { animation: none; }
-  .sc-resp__legend { display: none; }
   .ui-trainer__opts { grid-template-columns: minmax(0, 1fr); }
   .sc-queue { padding: 16px; }
   .ui-ticket { padding: 10px 12px; gap: 10px; }
@@ -900,3 +894,41 @@
 .lr-acc__plus { transition: opacity .2s; }
 .lr-acc__group.is-open .lr-acc__plus { opacity: 0; }
 .lr-acc__group.is-open .lr-acc__minus { opacity: 1; }
+
+/* Персоны */
+.sc-personas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.sc-persona { display: flex; flex-direction: column; gap: 22px; padding: 32px; border-radius: 16px; background: #fff; opacity: 0; transform: translateY(16px); transition: opacity .6s ease var(--d), transform .7s cubic-bezier(.2,.8,.2,1) var(--d); }
+.sc-persona.is-in { opacity: 1; transform: none; }
+.sc-persona__head { display: flex; align-items: center; gap: 18px; }
+.sc-persona__ava { flex-shrink: 0; width: 72px; height: 72px; border-radius: 20px; background: var(--pl); display: grid; place-items: center; }
+.sc-persona__ava svg { width: 36px; height: 48px; }
+.sc-persona h3 { font-size: 24px; letter-spacing: -.03em; line-height: 1.2; }
+.sc-persona__head small { display: block; margin-top: 4px; font-size: 14px; line-height: 1.4; color: var(--text-secondary); }
+.sc-persona__quote { display: flex; gap: 12px; margin: 0; padding: 18px 20px; border-radius: 14px; background: var(--bg); }
+.sc-persona__quote .iconsax { flex-shrink: 0; color: var(--p); }
+.sc-persona__quote p { font-size: 18px; line-height: 1.45; letter-spacing: -.01em; }
+.sc-persona__cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.sc-persona__cap { margin-bottom: 10px; font-size: 13px; color: var(--text-secondary); }
+.sc-persona ul { display: flex; flex-direction: column; gap: 10px; }
+.sc-persona li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 1.4; }
+.sc-persona li .iconsax { flex-shrink: 0; margin-top: 1px; color: #2fb574; }
+.sc-persona ul.is-block li .iconsax { color: var(--err); }
+.sc-persona__foot { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 28px; margin-top: auto; padding-top: 20px; border-top: 1px solid var(--line); }
+.sc-persona__meter { display: flex; gap: 4px; }
+.sc-persona__meter i { width: 22px; height: 8px; border-radius: 4px; background: var(--bg); }
+.sc-persona.is-in .sc-persona__meter i { animation: sc-meter .4s ease forwards; animation-delay: calc(var(--d) + .5s + var(--k) * .12s); }
+@keyframes sc-meter { to { background: var(--fill, var(--bg)); } }
+.sc-persona__meter i:nth-child(1) { --fill: var(--p); }
+.sc-persona__meter[style*="--n:2"] i:nth-child(2), .sc-persona__meter[style*="--n:3"] i:nth-child(-n+3) { --fill: var(--p); }
+.sc-persona__chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.sc-persona__chips span { padding: 4px 10px; border-radius: 8px; background: var(--bg); font-size: 13px; line-height: 18px; }
+@media (max-width: 899px) { .sc-personas { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 699px) {
+  .sc-persona { padding: 22px; }
+  .sc-persona__cols, .sc-persona__foot { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .sc-persona__quote p { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-persona { opacity: 1; transform: none; transition: none; }
+  .sc-persona__meter i { animation: none; background: var(--fill, var(--bg)); }
+}

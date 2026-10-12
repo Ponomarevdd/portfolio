@@ -37,6 +37,22 @@ const tasks = [
   ['Выбрать из списка', 'Ученик выбирает вариант из выпадающего списка прямо в тексте задания.'],
   ['Ввести ответ', 'Ученик вводит ответ с клавиатуры, система сверяет его с эталоном.'],
 ];
+const personas = [
+  {
+    ava: profiles[1].svg, name: 'Ольга Викторовна', meta: '54 года · учитель начальных классов · стаж 30 лет',
+    quote: 'Мне бы понять, куда нажать, а дальше я сама.',
+    want: ['Вести журнал и давать задания без помощи коллег', 'Не тратить перемену на поиск нужной кнопки'],
+    block: ['Привыкла к бумажному журналу', 'Длинные инструкции не дочитывает', 'Боится ошибиться при классе'],
+    skill: 2, where: ['Компьютер в кабинете', 'Телефон по вечерам'],
+  },
+  {
+    ava: profiles[0].svg, name: 'Сергей Николаевич', meta: '49 лет · заместитель директора · отвечает за внедрение',
+    quote: 'Все вопросы идут ко мне, а ответы я ищу сам.',
+    want: ['Завести педагогов и классы за один раз', 'Видеть, кто уже начал работать'],
+    block: ['Сложные сценарии бывают раз в полгода', 'Нет времени разбираться в деталях', 'Коллеги ждут ответа сразу'],
+    skill: 3, where: ['Компьютер в кабинете', 'Совещания и планёрки'],
+  },
+];
 const pains = [
   { quote: 'Открыла, а там двадцать разделов. Куда нажимать?', who: 'Учитель начальных классов', idea: 'Курс «С чего начать»', note: 'Первые шаги в платформе за 10 минут' },
   { quote: 'Нужное нашла только на тридцатой странице', who: 'Учитель математики', idea: 'Короткие уроки', note: 'Содержание и вкладки вместо одной длинной инструкции' },
@@ -148,6 +164,32 @@ const lessons = [
         </div>
       </section>
 
+      <section class="sc-sec" aria-labelledby="h-personas">
+        <div class="sc-head"><h2 id="h-personas">Персоны</h2></div>
+        <div class="sc-main">
+          <p class="sc-lead">Аудитория среднего и старшего возраста. Многие начинали работать задолго до цифровых сервисов.</p>
+          <div class="sc-personas">
+            {personas.map((p, pi) => (
+              <article class="sc-persona" data-anim="once" style={`--d:${pi * .15}s`}>
+                <header class="sc-persona__head">
+                  <span class="sc-persona__ava" set:html={p.ava}></span>
+                  <span><h3>{p.name}</h3><small>{p.meta}</small></span>
+                </header>
+                <blockquote class="sc-persona__quote"><Iconsax name="quote-up-bold" size={20}/><p>{p.quote}</p></blockquote>
+                <div class="sc-persona__cols">
+                  <div><p class="sc-persona__cap">Хочет</p><ul>{p.want.map((t) => <li><Iconsax name="tick-circle-bold" size={18}/>{t}</li>)}</ul></div>
+                  <div><p class="sc-persona__cap">Мешает</p><ul class="is-block">{p.block.map((t) => <li><Iconsax name="danger-bold" size={18}/>{t}</li>)}</ul></div>
+                </div>
+                <footer class="sc-persona__foot">
+                  <div><p class="sc-persona__cap">Цифровые навыки</p><span class="sc-persona__meter" style={`--n:${p.skill}`}>{[0, 1, 2, 3, 4].map((k) => <i style={`--k:${k}`}></i>)}</span></div>
+                  <div><p class="sc-persona__cap">Где работает</p><span class="sc-persona__chips">{p.where.map((w) => <span>{w}</span>)}</span></div>
+                </footer>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section class="sc-sec" aria-labelledby="h-research">
         <div class="sc-head"><h2 id="h-research">Исследование</h2></div>
         <div class="sc-main">
@@ -217,7 +259,6 @@ const lessons = [
                     </div>
                   </div>
                 </div>
-                <figcaption class="sc-resp__legend"><span>Широкий экран</span><span>Планшет</span><span>Телефон</span></figcaption>
               </figure>
             </li>
           </ol>
