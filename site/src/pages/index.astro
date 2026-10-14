@@ -31,7 +31,7 @@ import { projects } from '../data/projects';
         <h1 id="intro-title">Привет, я Дмитрий — дизайнер сайтов и интерфейсов.<br /> Соединяю выразительный визуал с понятным опытом.</h1>
       </section>
       <section class="work work--home" id="work" aria-label="Мои работы">
-        {projects.map((project) => <ProjectCard project={project} baked />)}
+        {projects.map((project) => <ProjectCard project={project} />)}
       </section>
       <div class="action-row"><ActionButton href={siteUrl('/work/')} label="Посмотреть все работы"/></div>
     </main>
