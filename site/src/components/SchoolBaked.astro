@@ -8,10 +8,10 @@ const link = siteUrl(href);
 const v = (name: string) => siteUrl(`/videos/${name}`);
 ---
 <Tile href={link} class="project__cover sb-tile sb-tile--d" aria-label="Цифровая платформа для школ: урок на компьютере">
-  <video class="sb-video" poster={v('school-d.jpg')} width="1520" height="1080" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src={v('school-d.mp4')} type="video/mp4"><source src={v('school-d.webm')} type="video/webm"></video>
+  <video class="sb-video" poster={v('school-d.jpg')} width="1520" height="1080" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src={v('school-d-60.mp4')} type="video/mp4"><source src={v('school-d-60.webm')} type="video/webm"></video>
 </Tile>
 <Tile href={link} class="project__cover sb-tile sb-tile--m" aria-label="Цифровая платформа для школ: урок на телефоне">
-  <video class="sb-video" poster={v('school-m.jpg')} width="1520" height="1080" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src={v('school-m.mp4')} type="video/mp4"><source src={v('school-m.webm')} type="video/webm"></video>
+  <video class="sb-video" poster={v('school-m.jpg')} width="1520" height="1080" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src={v('school-m-60.mp4')} type="video/mp4"><source src={v('school-m-60.webm')} type="video/webm"></video>
 </Tile>
 <script>
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
