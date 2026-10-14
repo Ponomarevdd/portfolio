@@ -153,6 +153,10 @@
 .sc-duties li { padding: 28px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 10px; }
 .sc-duties h3 { font-size: 20px; letter-spacing: -.02em; }
 .sc-duties p { color: var(--text-secondary); font-size: 15px; line-height: 1.55; }
+.sc-duties li { opacity: 0; transform: translateY(16px); }
+.sc-duties .sc-role__icon { margin-bottom: 4px; opacity: 0; transform: scale(.6); }
+.sc-duties.is-in li { animation: sc-pains-in .6s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(var(--i) * .08s); }
+.sc-duties.is-in .sc-role__icon { animation: pr-pop .5s cubic-bezier(.3,1.4,.5,1) forwards; animation-delay: calc(var(--i) * .08s + .25s); }
 .sc-roles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .sc-role { padding: 32px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 14px; }
 .sc-role__icon { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; background: var(--pl); color: var(--p); }
@@ -535,6 +539,7 @@
   .sc-map__reveal, .sc-map__reveal > div { transform: none; }
   .sc-map__city { opacity: 1; }
   .sc-pains li > * { opacity: 1; transform: none; }
+  .sc-duties li, .sc-duties .sc-role__icon { opacity: 1; transform: none; }
   .sc-tokens span { opacity: 1; transform: none; }
   .pr-sl__track { transition: none; }
   .sc-state--ui { opacity: 1; }

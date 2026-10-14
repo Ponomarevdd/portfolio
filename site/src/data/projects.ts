@@ -87,7 +87,7 @@ export const moreProjects: Project[] = [
   ['sreda', 'Среда — предметы для дома', 5],
 ].map(([slug, title, source]) => ({ ...projects[Number(source)], slug: String(slug), title: String(title), description: 'Демонстрационный проект для проверки каталога. Здесь появится краткое описание задачи и решения.', identity: { ...projects[Number(source)].identity, name: String(title).split(' — ')[0] } }));
 const school: Project = {
-  slug: 'my-school', href: '/cases/my-school/', title: 'Цифровая платформа для школ', year: 2023,
+  slug: 'my-school', href: '/cases/my-school/', title: 'Курс «Цифровая платформа для школ»', year: 2023,
   categories: ['UX/UI', 'Веб-дизайн'],
   description: 'Обучающий курс для новой школьной платформы, которую запускали по всей стране. Педагоги и администраторы шаг за шагом учатся вести журнал, создавать тесты и работать с контентом.',
   cover: '/images/school-platform/cover.png', width: 2400, height: 1400,

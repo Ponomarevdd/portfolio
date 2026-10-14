@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import typograph from './integrations/typograph.mjs';
 
 export default defineConfig({
   site: 'https://ponomarevdd.github.io',
@@ -6,4 +7,5 @@ export default defineConfig({
   // Preserve both backdrop-filter declarations across browsers.
   vite: { build: { cssMinify: false } },
   devToolbar: { enabled: false },
+  integrations: [typograph()],
 });
