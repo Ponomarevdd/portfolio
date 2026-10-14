@@ -15,7 +15,7 @@
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; position: relative; }
+body { margin: 0; min-width: 320px; position: relative; font: inherit; color: inherit; background: inherit; }
 button, a { font: inherit; color: inherit; }
 a { text-decoration: none; }
 button { border: 0; }

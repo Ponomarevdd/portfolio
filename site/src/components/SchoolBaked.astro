@@ -1,0 +1,30 @@
+---
+// Запечённая обложка кейса «Цифровая платформа для школ»: та же анимация, что в SchoolLive, но видео вместо живой вёрстки, без лишних шрифтов.
+import { siteUrl } from '../utils/url';
+interface Props { href?: string }
+const { href } = Astro.props;
+const Tile = href ? 'a' : 'div';
+const link = siteUrl(href);
+const v = (name: string) => siteUrl(`/videos/${name}`);
+---
+<Tile href={link} class="project__cover sb-tile sb-tile--d" aria-label="Цифровая платформа для школ: урок на компьютере">
+  <video class="sb-video" poster={v('school-d.jpg')} width="1520" height="1080" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src={v('school-d.mp4')} type="video/mp4"><source src={v('school-d.webm')} type="video/webm"></video>
+</Tile>
+<Tile href={link} class="project__cover sb-tile sb-tile--m" aria-label="Цифровая платформа для школ: урок на телефоне">
+  <video class="sb-video" poster={v('school-m.jpg')} width="1520" height="1080" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src={v('school-m.mp4')} type="video/mp4"><source src={v('school-m.webm')} type="video/webm"></video>
+</Tile>
+<script>
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll<HTMLVideoElement>('.sb-video').forEach((video) => { video.removeAttribute('autoplay'); video.pause(); });
+  }
+</script>
+<style is:global>
+.sb-tile--d { background: #eceef1; }
+.sb-tile--m { background: #006ee5; }
+.sb-video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: contain; }
+.sb-tile--m .sb-video { object-fit: cover; }
+@media (max-width: 899px) {
+  .sb-tile--d { aspect-ratio: 760 / 540; }
+  .sb-tile--m { aspect-ratio: 4 / 3; }
+}
+</style>

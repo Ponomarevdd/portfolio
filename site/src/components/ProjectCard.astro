@@ -3,13 +3,14 @@ import { siteUrl } from '../utils/url';
 import type { Project } from '../data/projects';
 import CategoryIcon from './CategoryIcon.astro';
 import SchoolLive from './SchoolLive.astro';
-interface Props { project: Project }
-const { project } = Astro.props;
+import SchoolBaked from './SchoolBaked.astro';
+interface Props { project: Project; baked?: boolean }
+const { project, baked = false } = Astro.props;
 const href = project.href ?? (project.slug === 'put' ? '/cases/put/' : undefined);
 const Tile = href ? 'a' : 'div';
 ---
 <article class="project" aria-labelledby={`project-${project.slug}`}>
-  {project.live === 'school' ? <div class="project__gallery project__gallery--live"><SchoolLive href={href}/></div> : <div class="project__gallery">
+  {project.live === 'school' ? <div class="project__gallery project__gallery--live">{baked ? <SchoolBaked href={href}/> : <SchoolLive href={href}/>}</div> : <div class="project__gallery">
     <Tile href={siteUrl(href)} class="project__cover project__cover--main">
       <img src={siteUrl(project.cover)} alt={project.alt} width={project.width} height={project.height} loading={project.slug === 'put' ? 'eager' : 'lazy'} decoding="async" />
     </Tile>
