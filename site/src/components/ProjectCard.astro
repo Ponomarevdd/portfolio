@@ -2,13 +2,14 @@
 import { siteUrl } from '../utils/url';
 import type { Project } from '../data/projects';
 import CategoryIcon from './CategoryIcon.astro';
+import SchoolLive from './SchoolLive.astro';
 interface Props { project: Project }
 const { project } = Astro.props;
 const href = project.href ?? (project.slug === 'put' ? '/cases/put/' : undefined);
 const Tile = href ? 'a' : 'div';
 ---
 <article class="project" aria-labelledby={`project-${project.slug}`}>
-  <div class="project__gallery">
+  {project.live === 'school' ? <div class="project__gallery project__gallery--live"><SchoolLive href={href}/></div> : <div class="project__gallery">
     <Tile href={siteUrl(href)} class="project__cover project__cover--main">
       <img src={siteUrl(project.cover)} alt={project.alt} width={project.width} height={project.height} loading={project.slug === 'put' ? 'eager' : 'lazy'} decoding="async" />
     </Tile>
@@ -27,7 +28,7 @@ const Tile = href ? 'a' : 'div';
     </Tile>
     </>}
 
-  </div>
+  </div>}
   <div class="project__details">
     <h2 id={`project-${project.slug}`}>{href ? <a href={siteUrl(href)}>{project.title}</a> : project.title}</h2>
     <ul class="project__categories" aria-label="Категории проекта">

@@ -10,6 +10,7 @@ export interface Project {
   featured?: boolean;
   href?: string;
   previews?: { src: string; alt: string; width: number; height: number }[];
+  live?: 'school';
   description: string;
   identity: { name: string; tagline: string; background: string; color: string };
 }
@@ -92,10 +93,7 @@ const school: Project = {
   cover: '/images/school-platform/cover.png', width: 2400, height: 1400,
   alt: 'Фрагменты обучающего урока Цифровой платформы для школ',
   identity: { name: 'Школы', tagline: 'Цифровая платформа для школ', background: '#eef2ff', color: '#4659aa' },
-  previews: [
-    { src: '/images/my-school/2.png', alt: 'Карточная структура обучающего лонгрида', width: 1160, height: 750 },
-    { src: '/images/my-school/4.png', alt: 'Тематические иллюстрации для обучающих курсов', width: 1160, height: 480 },
-  ],
+  live: 'school',
 };
 projects.splice(0, 1, school);
 export const allProjects = [...projects, ...moreProjects];

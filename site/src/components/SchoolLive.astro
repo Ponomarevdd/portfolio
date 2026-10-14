@@ -1,0 +1,184 @@
+---
+// Живая обложка кейса «Цифровая платформа для школ»: окно урока и телефон. Анимация на CSS, сцена масштабируется под плитку.
+import Iconsax from './Iconsax.astro';
+import { siteUrl } from '../utils/url';
+interface Props { href?: string }
+const { href } = Astro.props;
+const Tile = href ? 'a' : 'div';
+const link = siteUrl(href);
+const img = siteUrl('/images/school-platform/ill-files.svg');
+---
+<Tile href={link} class="project__cover lv lv-ui lv-tile lv-tile--d" aria-label="Цифровая платформа для школ: урок на компьютере">
+  <div class="lv-stage" data-w="760" data-h="540">
+        <div class="lv-win">
+          <nav class="lv-toc" aria-hidden="true"><b>Содержание</b><span class="lv-cnt"><span><span>Изучено 0 из 6</span><span>Изучено 1 из 6</span><span>Изучено 2 из 6</span><span>Изучено 3 из 6</span><span>Изучено 4 из 6</span><span>Изучено 5 из 6</span><span>Изучено 6 из 6</span></span></span><ol><span class="lv-rail"><i></i></span><li><i style="animation-name:lv-td0"></i><span style="animation-name:lv-tt0">О системе</span></li><li><i style="animation-name:lv-td1"></i><span style="animation-name:lv-tt1">Задачи системы</span></li><li><i style="animation-name:lv-td2"></i><span style="animation-name:lv-tt2">Подсистемы</span></li><li><i style="animation-name:lv-td3"></i><span style="animation-name:lv-tt3">Профили пользователей</span></li><li><i style="animation-name:lv-td4"></i><span style="animation-name:lv-tt4">Шаблоны и типы заданий</span></li><li><i style="animation-name:lv-td5"></i><span style="animation-name:lv-tt5">Самопроверка</span></li></ol></nav>
+          <div class="lv-main">
+            <div class="lv-hd">
+              <p class="lv-badge">Курс для педагогов «Цифровая платформа для школ» · Урок 1</p>
+              <div class="lv-hd-mid"><p class="lv-h1">С чего начать работу<br>в Цифровой платформе</p><p class="lv-lead">Разберёмся, зачем нужна система и из чего она состоит, а затем на практике создадим первый шаблон задания в подсистеме «Тесты»</p></div>
+              <div class="lv-tags"><span><Iconsax name="document-text-bold" size={10}/>Лонгрид</span><span><Iconsax name="clock-bold" size={10}/>10 минут</span></div>
+              <img class="lv-ill" src={img} alt="">
+            </div>
+            <div class="lv-col" style="left:0">
+              <div class="lv-sl-v"><div class="lv-sl-t"><div class="lv-sl-s"><p class="lv-m-h3">Выбрать ответ</p><p class="lv-m-p">Классический тест: ученик выбирает один или несколько вариантов ответа.</p><span class="lv-sl-f"><span class="lv-pic" style="background:#D1E7FF"><i style="position:absolute;left:26px;top:22px;width:46px;height:46px;border-radius:50%;background:#FFC93C" class="lv-sun"></i><i style="position:absolute;left:0;right:0;bottom:0;height:56px;background:#8FC3FF;clip-path:polygon(0 60%,30% 10%,55% 55%,75% 25%,100% 70%,100% 100%,0 100%)"></i></span></span></div><div class="lv-sl-s"><p class="lv-m-h3">Выбрать из списка</p><p class="lv-m-p">Ученик выбирает вариант из выпадающего списка прямо в тексте задания.</p><span class="lv-sl-f"><span class="lv-pic" style="background:#E7F7EF;display:flex;align-items:flex-end;gap:10px;padding:0 34px 22px"><i class="lv-bar1" style="flex:1;height:34px;border-radius:5px;background:#7AD9A8"></i><i class="lv-bar2" style="flex:1;height:58px;border-radius:5px;background:#7AD9A8"></i><i class="lv-bar3" style="flex:1;height:46px;border-radius:5px;background:#7AD9A8"></i><i class="lv-bar4" style="flex:1;height:86px;border-radius:5px;background:#2FB574"></i></span></span></div><div class="lv-sl-s"><p class="lv-m-h3">Ввести ответ</p><p class="lv-m-p">Ученик вводит ответ с клавиатуры, система сверяет его с эталоном.</p><span class="lv-sl-f"><span class="lv-pic" style="background:#FFF1DC;display:grid;place-items:center;color:#FE8C00"><span class="lv-smile" style="display:grid"><svg viewBox="0 0 24 24" width="64" height="64" aria-hidden="true" fill="none"><path d="M16.19 2H7.81C4.17 2 2 4.17 2 7.81v8.37C2 19.83 4.17 22 7.81 22h8.37c3.64 0 5.81-2.17 5.81-5.81V7.81C22 4.17 19.83 2 16.19 2ZM8.5 6.38c1.03 0 1.88.84 1.88 1.88s-.84 1.88-1.88 1.88-1.88-.86-1.88-1.89c0-1.03.85-1.87 1.88-1.87Zm3.5 12.7c-2.69 0-4.88-2.19-4.88-4.88 0-.7.57-1.28 1.27-1.28h7.2c.7 0 1.27.57 1.27 1.28.02 2.69-2.17 4.88-4.86 4.88Zm3.5-8.96c-1.03 0-1.88-.84-1.88-1.88s.84-1.88 1.88-1.88 1.88.84 1.88 1.88-.85 1.88-1.88 1.88Z" fill="currentColor"/></svg></span></span></span></div></div></div>
+              <div class="lv-sl-bar"><span class="lv-sl-c"><span><span>1 / 3</span><span>2 / 3</span><span>3 / 3</span></span></span><span class="lv-sl-btns"><i><Iconsax name="arrow-left2-linear" size={14}/></i><i><Iconsax name="arrow-right2-linear" size={14}/></i></span></div>
+            </div>
+            <div class="lv-col" style="left:284px;width:202px">
+              <div class="lv-qz">
+                <p class="lv-qz-q">Какой тип заданий проверяет эксперт?</p>
+                <span class="lv-qz-o">Выбрать ответ</span>
+                <span class="lv-qz-o lv-qz-ok">Диктант<i class="lv-cf" style="background:#FE8C00;--x:57px;--y:2px;--r:0deg;"></i><i class="lv-cf" style="background:#7AD9A8;--x:57px;--y:27px;--r:67deg;border-radius:50%;"></i><i class="lv-cf" style="background:#006EE5;--x:35px;--y:53px;--r:134deg;"></i><i class="lv-cf" style="background:#FFC93C;--x:-5px;--y:32px;--r:201deg;border-radius:50%;"></i><i class="lv-cf" style="background:#F2667A;--x:-39px;--y:37px;--r:268deg;"></i><i class="lv-cf" style="background:#8FC3FF;--x:-79px;--y:28px;--r:335deg;border-radius:50%;"></i><i class="lv-cf" style="background:#FE8C00;--x:-59px;--y:-4px;--r:42deg;"></i><i class="lv-cf" style="background:#7AD9A8;--x:-75px;--y:-26px;--r:109deg;border-radius:50%;"></i><i class="lv-cf" style="background:#006EE5;--x:-70px;--y:-56px;--r:176deg;"></i><i class="lv-cf" style="background:#FFC93C;--x:-22px;--y:-49px;--r:243deg;border-radius:50%;"></i><i class="lv-cf" style="background:#F2667A;--x:6px;--y:-64px;--r:310deg;"></i><i class="lv-cf" style="background:#8FC3FF;--x:48px;--y:-68px;--r:17deg;border-radius:50%;"></i><i class="lv-cf" style="background:#FE8C00;--x:50px;--y:-34px;--r:84deg;"></i><i class="lv-cf" style="background:#7AD9A8;--x:77px;--y:-18px;--r:151deg;border-radius:50%;"></i></span>
+                <span class="lv-qz-o">Перетаскивание</span>
+                <span class="lv-qz-fb"><span><span>Верно: диктант проверяет эксперт.</span></span></span>
+              </div>
+            </div>
+            <span class="lv-cur"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3.2v15.4c0 .5.6.8 1 .4l3.6-3.4 2.4 5.5c.2.4.6.5 1 .4l2-.9c.4-.2.5-.6.4-1l-2.4-5.4 4.9-.3c.5 0 .8-.6.4-1L6 2.8c-.4-.3-1-.1-1 .4Z" fill="#1c1c1c" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
+          </div>
+        </div>
+  </div>
+</Tile>
+<Tile href={link} class="project__cover lv lv-ui lv-tile lv-tile--m" aria-label="Цифровая платформа для школ: урок на телефоне">
+  <div class="lv-stage" data-w="532" data-h="540">
+        <div class="lv-ph"><div class="lv-scr">
+          <span class="lv-isl"></span>
+          <div class="lv-ntf"><span class="lv-ntf-i"><Iconsax name="cup-bold" size={18}/></span><span>Урок пройден</span></div>
+          <div class="lv-m-top"><Iconsax name="arrow-left-linear" size={14}/>Моё обучение</div>
+          <div class="lv-m-trk"><i></i></div>
+          <div class="lv-m-body">
+            <p class="lv-m-h2">Задачи системы</p>
+            <p class="lv-m-lead">Делятся на три направления.</p>
+            <div class="lv-m-acc">
+              <div class="lv-acc-g"><div class="lv-acc-i">Управление образовательным процессом<span class="lv-acc-btn"><span class="lv-acc-plus"><Iconsax name="add-linear" size={14}/></span><span class="lv-acc-minus"><Iconsax name="minus-linear" size={14}/></span><span class="lv-tap lv-tap1"></span></span></div>
+                <div class="lv-acc-b"><ul><li>Электронные журналы и дневники</li><li>Приём в школу и цифровые портфолио</li><li>Организация питания</li></ul></div></div>
+              <div class="lv-acc-g"><div class="lv-acc-i">Цифровая трансформация<span class="lv-acc-btn"><Iconsax name="add-linear" size={14}/></span></div></div>
+              <div class="lv-acc-g"><div class="lv-acc-i">Поддержка системы образования<span class="lv-acc-btn"><Iconsax name="add-linear" size={14}/></span></div></div>
+            </div>
+          </div>
+        <div class="lv-m-fin"><Iconsax name="tick-circle-linear" size={16}/>Завершить урок<span class="lv-tap lv-tap2"></span></div>
+        </div></div>
+  </div>
+</Tile>
+<script>
+  const fit = (stage: HTMLElement) => {
+    const box = stage.parentElement!;
+    const s = Math.min(box.clientWidth / Number(stage.dataset.w), box.clientHeight / Number(stage.dataset.h));
+    stage.style.setProperty('--s', String(s));
+  };
+  document.querySelectorAll<HTMLElement>('.lv-stage').forEach((stage) => {
+    new ResizeObserver(() => fit(stage)).observe(stage.parentElement!);
+    fit(stage);
+  });
+</script>
+<style is:global>
+.lv-tile--d { background: radial-gradient(80% 90% at 85% 10%, #f7f8fa 0%, #f7f8fa00 65%), #e6e9ed; }
+.lv-tile--m { background: radial-gradient(80% 70% at 70% 15%, #3d95f5 0%, #3d95f500 70%), #006ee5; }
+.lv-stage { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(var(--s, 1)); transform-origin: 50% 50%; }
+.lv-tile--d .lv-stage { width: 760px; height: 540px; }
+.lv-tile--m .lv-stage { width: 532px; height: 540px; }
+.project__cover .lv-ill { width: 140px; height: auto; object-fit: initial; }
+.project__gallery--live .lv-ui { color: #1c1c1c; }
+
+.lv *{box-sizing:border-box}
+.lv p{margin:0}
+.lv-ui{font-family:'Geologica',sans-serif;color:#1C1C1C;font-weight:400}
+.lv-win{position:absolute;left:32px;top:32px;width:696px;height:476px;border-radius:20px;background:#fff;box-shadow:0 1px 2px #1c2b4a14,0 24px 60px #1c2b4a1f}
+.lv-toc{position:absolute;left:14px;top:14px;width:168px;height:448px;padding:16px 14px;border-radius:16px;background:#F6F6F6}
+.lv-toc b{display:block;font-size:14px;line-height:18px;font-weight:600}
+.lv-cnt{display:block;height:14px;overflow:hidden;margin-top:2px;font-size:11px;line-height:14px;color:#727272}
+.lv-cnt>span{display:flex;flex-direction:column;animation:lv-cnt 12s steps(1) infinite}
+.lv-toc ol{position:relative;list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column}
+.lv-toc li{display:flex;align-items:center;gap:10px;min-height:36px;font-size:11.5px;line-height:14px}
+.lv-toc li i{position:relative;z-index:1;flex:none;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #D1E7FF;animation:12s linear infinite}
+.lv-toc li span{animation:12s ease infinite}
+.lv-rail{position:absolute;left:4px;top:17px;bottom:17px;width:2px;border-radius:1px;background:#D1E7FF}
+.lv-rail i{display:block;width:2px;border-radius:1px;background:#006EE5;animation:lv-rail 12s linear infinite}
+@keyframes lv-td0{4%{background:#fff;border-color:#D1E7FF}5%,92%{background:#006EE5;border-color:#006EE5}0%,3.99%,96%,100%{background:#fff;border-color:#D1E7FF}}@keyframes lv-tt0{0%,4%{color:#1C1C1C}5.5%,16%{color:#006EE5}17.5%,100%{color:#1C1C1C}}@keyframes lv-td1{16%{background:#fff;border-color:#D1E7FF}17%,92%{background:#006EE5;border-color:#006EE5}0%,15.99%,96%,100%{background:#fff;border-color:#D1E7FF}}@keyframes lv-tt1{0%,16%{color:#1C1C1C}17.5%,28%{color:#006EE5}29.5%,100%{color:#1C1C1C}}@keyframes lv-td2{28%{background:#fff;border-color:#D1E7FF}29%,92%{background:#006EE5;border-color:#006EE5}0%,27.99%,96%,100%{background:#fff;border-color:#D1E7FF}}@keyframes lv-tt2{0%,28%{color:#1C1C1C}29.5%,40%{color:#006EE5}41.5%,100%{color:#1C1C1C}}@keyframes lv-td3{40%{background:#fff;border-color:#D1E7FF}41%,92%{background:#006EE5;border-color:#006EE5}0%,39.99%,96%,100%{background:#fff;border-color:#D1E7FF}}@keyframes lv-tt3{0%,40%{color:#1C1C1C}41.5%,52%{color:#006EE5}53.5%,100%{color:#1C1C1C}}@keyframes lv-td4{52%{background:#fff;border-color:#D1E7FF}53%,92%{background:#006EE5;border-color:#006EE5}0%,51.99%,96%,100%{background:#fff;border-color:#D1E7FF}}@keyframes lv-tt4{0%,52%{color:#1C1C1C}53.5%,64%{color:#006EE5}65.5%,100%{color:#1C1C1C}}@keyframes lv-td5{64%{background:#fff;border-color:#D1E7FF}65%,92%{background:#006EE5;border-color:#006EE5}0%,63.99%,96%,100%{background:#fff;border-color:#D1E7FF}}@keyframes lv-tt5{0%,64%{color:#1C1C1C}65.5%,92%{color:#006EE5}93.5%,100%{color:#1C1C1C}}
+@keyframes lv-rail{0%,4%{height:0}64%,92%{height:100%}96%,100%{height:0}}
+@keyframes lv-cnt{0%,4%{transform:translateY(0)}4.5%,16%{transform:translateY(-14px)}16.5%,28%{transform:translateY(-28px)}28.5%,40%{transform:translateY(-42px)}40.5%,52%{transform:translateY(-56px)}52.5%,64%{transform:translateY(-70px)}64.5%,92%{transform:translateY(-84px)}96%,100%{transform:translateY(0)}}
+.lv-main{position:absolute;left:196px;top:14px;width:486px;height:448px}
+.lv-hd{position:absolute;left:0;top:0;width:486px;height:176px;padding:18px 20px;display:flex;flex-direction:column;justify-content:space-between;border-radius:16px;overflow:hidden;background:radial-gradient(70% 140% at 0% 100%,#D1E7FF 0%,#D1E7FF00 70%),#F6F6F6}
+.lv-badge{font-size:10px;line-height:13px;color:#727272}
+.lv-h1{margin:0!important;font-size:15px;line-height:19px;font-weight:600;letter-spacing:-.01em}
+.lv-tags{display:flex;gap:5px}
+.lv-hd-mid{display:flex;flex-direction:column;gap:7px;max-width:270px}
+.lv-lead{font-size:10px;line-height:14px;color:#727272}
+.lv-tags>span{display:inline-flex;align-items:center;gap:3px;padding:2px 5px;border:1px solid #006EE5;border-radius:5px;background:#D1E7FF;color:#006EE5;font-size:9px;line-height:12px}
+.lv-ill{position:absolute;right:30px;top:50%;margin-top:-62px;width:140px;height:auto;animation:lv-ill 4s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes lv-ill{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px) rotate(-1.5deg)}}
+.lv-col{position:absolute;top:190px;width:268px;height:258px;overflow:hidden}
+.lv-h3{font-size:13px;line-height:17px;font-weight:600}
+.lv-acc{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.lv-acc-g{border-radius:12px;background:#F6F6F6}
+.lv-acc-i{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 8px 9px 12px;font-size:11.5px;line-height:15px;font-weight:600}
+.lv-acc-btn{position:relative;flex:none;width:24px;height:24px;border-radius:50%;background:#fff;color:#006EE5;display:grid;place-items:center}
+.lv-acc-plus{display:grid;animation:lv-accp 12s steps(1) infinite}
+.lv-acc-minus{position:absolute;inset:0;display:grid;place-items:center;opacity:0;animation:lv-accm 12s steps(1) infinite}
+@keyframes lv-accp{0%,30%{opacity:1}30.5%,46%{opacity:0}46.5%,100%{opacity:1}}
+@keyframes lv-accm{0%,30%{opacity:0}30.5%,46%{opacity:1}46.5%,100%{opacity:0}}
+.lv-acc-b{max-height:0;overflow:hidden;animation:lv-accb 12s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes lv-accb{0%,30%{max-height:0}35%,46%{max-height:140px}51%,100%{max-height:0}}
+.lv-acc-b ul{min-height:0;overflow:hidden;list-style:none;margin:0 6px 6px;padding:8px 10px;border-radius:10px;background:#fff;display:flex;flex-direction:column;gap:5px;font-size:10.5px;line-height:13px}
+
+.lv-acc-b li{position:relative;padding-left:10px}
+.lv-acc-b li::before{content:'';position:absolute;left:0;top:4px;width:4px;height:4px;border-radius:50%;background:#006EE5}
+.lv-qz{padding:12px;border-radius:14px;background:#F6F6F6;display:flex;flex-direction:column;gap:5px}
+.lv-qz-q{margin-bottom:3px!important;font-size:12.5px;line-height:16px;font-weight:600}
+.lv-qz-o{position:relative;padding:6px 10px;border-radius:8px;background:#fff;border:1.5px solid #fff;font-size:11.5px;line-height:15px}
+.lv-qz-ok{animation:lv-qok 12s ease infinite}
+@keyframes lv-qok{0%,53%{background:#fff;border-color:#fff}54%,90%{background:#7AD9A8;border-color:#7AD9A8}95%,100%{background:#fff;border-color:#fff}}
+.lv-qz-fb{display:block;max-height:0;overflow:hidden;animation:lv-qfb 12s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes lv-qfb{0%,54%{max-height:0;opacity:0}59%,90%{max-height:60px;opacity:1}95%,100%{max-height:0;opacity:0}}
+.lv-qz-fb>span{display:block;border-radius:8px;background:#7AD9A8;font-size:11px;line-height:14px}
+.lv-qz-fb>span>span{display:block;padding:7px 10px}
+.lv-cf{position:absolute;left:50%;top:50%;width:6px;height:6px;opacity:0;animation:lv-cf 12s cubic-bezier(.2,.7,.3,1) infinite;pointer-events:none}
+@keyframes lv-cf{0%,54%{opacity:0;transform:translate(0,0) rotate(0) scale(.4)}55%{opacity:1}62%{opacity:1;transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(1)}68%,100%{opacity:0;transform:translate(var(--x),calc(var(--y) + 26px)) rotate(var(--r)) scale(1)}}
+.lv-cur{position:absolute;left:0;top:0;z-index:5;pointer-events:none;animation:lv-cur 12s cubic-bezier(.55,0,.25,1) infinite}
+@keyframes lv-cur{0%,5%{transform:translate(330px,80px)}11%,29%{transform:translate(249px,397px)}38%,44%{transform:translate(150px,190px)}50%,57%{transform:translate(380px,288px)}68%,92%{transform:translate(400px,90px)}100%{transform:translate(330px,80px)}}
+.lv-cur svg{display:block;animation:lv-curi 12s ease infinite;transform-origin:5px 3px;filter:drop-shadow(0 3px 5px #00000040)}
+@keyframes lv-curi{0%,13.5%,15%,26.5%,28%,52.5%,54%,100%{transform:scale(1)}14.2%,27.2%,53.2%{transform:scale(.8)}}
+.lv-ph{position:absolute;left:150px;top:34px;width:232px;height:472px;border-radius:40px;background:#1C1C1C;padding:7px;box-shadow:inset 0 0 0 1.5px #3a3a3a,-18px 26px 44px #00163a59,-4px 6px 12px #00163a33}
+.lv-scr{position:relative;width:100%;height:100%;border-radius:33px;background:#fff;overflow:hidden}
+.lv-isl{position:absolute;left:50%;top:9px;width:68px;height:20px;margin-left:-34px;border-radius:10px;background:#1C1C1C;z-index:3}
+.lv-stb{position:absolute;left:20px;top:11px;font-size:11px;line-height:16px;font-weight:600}
+.lv-m-top{position:absolute;left:14px;right:14px;top:40px;display:flex;align-items:center;gap:6px;font-size:11px;line-height:14px;color:#006EE5}
+.lv-m-trk{position:absolute;left:14px;right:14px;top:62px;height:4px;border-radius:2px;background:#D1E7FF;overflow:hidden}
+.lv-m-trk i{display:block;height:100%;border-radius:2px;background:#006EE5;animation:lv-mtrk 12s ease infinite}
+@keyframes lv-mtrk{0%,4%{width:20%}30%{width:50%}46%{width:85%}62%{width:85%}64%,92%{width:100%}97%,100%{width:20%}}
+.lv-m-body{position:absolute;left:12px;right:12px;top:80px}
+.lv-m-h2{font-size:15px;line-height:19px;font-weight:600}
+.lv-m-h3{font-size:12.5px;line-height:16px;font-weight:600}
+.lv-m-p{font-size:10.5px;line-height:14px;color:#727272}
+.lv-sl-v{width:268px;overflow:hidden}
+.lv-sl-t{display:flex;width:804px;animation:lv-slt 12s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes lv-slt{0%,14%{transform:translateX(0)}18%,27%{transform:translateX(-268px)}31%,90%{transform:translateX(-536px)}96%,100%{transform:translateX(0)}}
+.lv-sl-s{flex:none;width:268px;display:flex;flex-direction:column;gap:5px}
+.lv-sl-f{display:block;margin-top:4px;overflow:hidden;border-radius:10px}
+.lv-pic{position:relative;display:block;height:128px;overflow:hidden}
+.lv-sun{animation:lv-sun 3s ease-in-out infinite}@keyframes lv-sun{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+.lv-sl-bar{margin-top:10px;display:flex;align-items:center;justify-content:space-between}
+.lv-sl-c{height:22px;overflow:hidden;min-width:44px;padding:0 8px;border-radius:6px;background:#D1E7FF;color:#006EE5;font-size:11px;line-height:22px;font-weight:600;text-align:center}
+.lv-sl-c>span{display:flex;flex-direction:column;animation:lv-sln 12s steps(1) infinite}
+@keyframes lv-sln{0%,14.5%{transform:translateY(0)}15%,27.5%{transform:translateY(-22px)}28%,93%{transform:translateY(-44px)}93.5%,100%{transform:translateY(0)}}
+.lv-sl-btns{display:flex;gap:6px}
+.lv-sl-btns i{position:relative;width:28px;height:28px;border-radius:50%;border:1.5px solid #D1E7FF;background:#fff;color:#006EE5;display:grid;place-items:center}
+.lv-tap{position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#006EE533;opacity:0;pointer-events:none}
+.lv-tap1{animation:lv-tap1 12s ease-out infinite}
+@keyframes lv-tap1{0%,29.5%{opacity:0;transform:scale(.4)}30.5%{opacity:1;transform:scale(.7)}34%{opacity:0;transform:scale(1.6)}45.5%{opacity:0;transform:scale(.4)}46.5%{opacity:1;transform:scale(.7)}50%,100%{opacity:0;transform:scale(1.6)}}
+.lv-tap2{animation:lv-tap2 12s ease-out infinite;width:44px;height:44px;margin:-22px 0 0 -22px;background:#ffffff59}
+@keyframes lv-tap2{0%,61%{opacity:0;transform:scale(.4)}62%{opacity:1;transform:scale(.7)}66%,100%{opacity:0;transform:scale(2)}}
+.lv-m-lead{margin-top:6px!important;font-size:11px;line-height:15px;color:#727272}
+.lv-m-acc{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.lv-m-acc .lv-acc-i{font-size:12px;line-height:16px;padding:10px 8px 10px 12px}
+.lv-m-acc .lv-acc-b ul{font-size:10.5px;line-height:14px;gap:6px}
+.lv-m-fin{position:absolute;left:12px;right:12px;bottom:14px;height:38px;border-radius:12px;background:#006EE5;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:500;animation:lv-mfin 12s ease infinite}
+@keyframes lv-mfin{0%,49%{background:#006EE5;transform:translateY(70px);opacity:0}53%,61.5%{background:#006EE5;transform:translateY(0);opacity:1}62.2%{transform:scale(.95);opacity:1}63.5%,92%{background:#2FB574;transform:scale(1);opacity:1}96%,100%{background:#2FB574;transform:translateY(70px);opacity:0}}
+.lv-ntf{position:absolute;left:8px;right:8px;top:6px;z-index:4;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:16px;background:#ffffffa6;-webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);box-shadow:inset 0 0 0 1px #ffffff99,0 8px 24px #00163a33;font-size:12px;line-height:15px;font-weight:600;animation:lv-ntf 12s cubic-bezier(.3,1.4,.5,1) infinite}
+.lv-ntf small{display:block;font-size:10px;line-height:13px;font-weight:400;color:#727272}
+@keyframes lv-ntf{0%,64%{transform:translateY(-80px);opacity:0}68%,90%{transform:translateY(30px);opacity:1}95%,100%{transform:translateY(-80px);opacity:0}}
+.lv-ntf-i{flex:none;width:30px;height:30px;border-radius:9px;background:#FFF1DC;color:#FE8C00;display:grid;place-items:center}
+.lv-ntf-i svg{animation:lv-wob 1.2s ease-in-out infinite}
+@keyframes lv-wob{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@media (prefers-reduced-motion:reduce){.lv *{animation:none!important}}
+
+</style>
