@@ -465,7 +465,7 @@
 
 /* 14 Результаты */
 .sc-quote { margin: 0; padding: 32px; border-radius: 12px; background: var(--pl); color: var(--p); display: flex; flex-direction: column; gap: 16px; }
-.sc-quote p { font-size: 24px; line-height: 1.45; letter-spacing: -.025em; color: var(--t); max-width: 820px; }
+.sc-quote p { font-size: 24px; line-height: 1.45; letter-spacing: -.025em; color: var(--t); }
 .sc-quote cite { font-style: normal; font-size: 14px; color: #33405a; }
 
 /* 15 Выводы */
