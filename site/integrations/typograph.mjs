@@ -29,12 +29,26 @@ const lastWords = /(\S+) +(\S+)\s*$/u;
 export const noWidows = (text) => (text.trim().split(/\s+/u).length < 4 ? text : text.replace(lastWords, (m, a, b) => `${a}${NBSP}${b}`)
   .replace(/(\S+) +(\S+\u00A0\S+)\s*$/u, (m, a, tail) => (tail.length < 16 ? `${a}${NBSP}${tail}` : m)));
 
+// Слова через дефис («PDF-конспект», «дизайн-ревью») не рвём по дефису. Внутри SVG и <title>
+// разметку добавлять нельзя, там оставляем как есть.
+const hyphenated = /(?<![\p{L}\d-])[\p{L}\d]+(?:-[\p{L}\d]+)+(?![\p{L}\d-])/gu;
+const keepHyphens = (text) => text.replace(hyphenated, (w) => (w.length <= 20 ? `<span style="white-space:nowrap">${w}</span>` : w));
+const NO_MARKUP_OPEN = /^<(svg|title)\b/i;
+const NO_MARKUP_CLOSE = /^<\/(svg|title)>/i;
+
 export const typographHtml = (html) => {
   const parts = html.split(TOKENS);
+  let noMarkup = 0;
   return parts.map((part, i) => {
-    if (i % 2 === 1 || SKIP.test(part)) return part;
-    const text = typograph(part);
-    return BLOCK_END.test(parts[i + 1] ?? '') ? noWidows(text) : text;
+    if (i % 2 === 1) {
+      if (NO_MARKUP_OPEN.test(part) && !part.endsWith('/>')) noMarkup++;
+      else if (NO_MARKUP_CLOSE.test(part)) noMarkup = Math.max(0, noMarkup - 1);
+      return part;
+    }
+    if (SKIP.test(part)) return part;
+    let text = typograph(part);
+    if (BLOCK_END.test(parts[i + 1] ?? '')) text = noWidows(text);
+    return noMarkup ? text : keepHyphens(text);
   }).join('');
 };
 
