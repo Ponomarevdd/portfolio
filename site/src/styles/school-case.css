@@ -251,7 +251,8 @@
 .sc-part__stage--head { justify-content: flex-start; gap: 10px; background: radial-gradient(70% 90% at 0% 100%, #d1e7fff2 0%, #d1e7ff00 70%), #fff; }
 .sc-part__stage--head .ui-h { max-width: 56%; position: relative; z-index: 1; }
 .sc-part__stage--head .ui-tags { margin-top: auto; position: relative; z-index: 1; }
-.sc-part__stage--head img { position: absolute; right: 8px; bottom: 16px; width: 40%; height: auto; }
+.sc-part__stage--head img { position: absolute; right: 16px; bottom: 20px; width: auto; height: auto; max-width: 31%; max-height: 40%; }
+@media (max-width: 600px) { .sc-part__stage--head img { max-width: 24%; } }
 .ui-toc__list { position: relative; margin-top: 6px; display: flex; flex-direction: column; }
 .ui-toc__rail { position: absolute; left: 6px; top: 14px; bottom: 14px; width: 2px; background: var(--pl); }
 .ui-toc__rail span { display: block; width: 2px; height: 100%; background: var(--p); transform-origin: top; transform: scaleY(0); }
@@ -961,7 +962,7 @@
 .sc-persona { display: flex; flex-direction: column; gap: 28px; padding: 32px; border-radius: 16px; background: #fff; opacity: 0; transform: translateY(16px); transition: opacity .6s ease var(--d), transform .7s cubic-bezier(.2,.8,.2,1) var(--d); }
 .sc-persona.is-in { opacity: 1; transform: none; }
 .sc-persona__head { display: flex; align-items: center; gap: 24px; }
-.sc-persona__ava { flex-shrink: 0; width: 72px; height: 72px; border-radius: 50%; background: var(--pl); object-fit: cover; }
+.sc-persona__ava { flex-shrink: 0; width: 72px; height: 72px; border-radius: 20px; background: var(--pl); object-fit: cover; }
 .sc-persona h3 { font-size: 24px; letter-spacing: -.03em; line-height: 1.2; }
 .sc-persona__head small { display: block; margin-top: 4px; font-size: 14px; line-height: 1.4; color: var(--text-secondary); }
 .sc-persona__quote { display: flex; gap: 12px; margin: 0; padding: 18px 20px; border-radius: 14px; background: var(--bg); }
