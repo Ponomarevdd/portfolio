@@ -22,10 +22,21 @@ export const typograph = (text) => text
 const SKIP = /^<(script|style|textarea|pre)\b/i;
 const TOKENS = /(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<textarea\b[\s\S]*?<\/textarea>|<pre\b[\s\S]*?<\/pre>|<!--[\s\S]*?-->|<[^>]+>)/i;
 
-export const typographHtml = (html) => html.split(TOKENS).map((part, i) => {
-  if (i % 2 === 1 || SKIP.test(part)) return part;
-  return typograph(part);
-}).join('');
+// Последнюю строку абзаца (от четырёх слов) не оставляем с одним словом: последнее слово всегда
+// держится за предыдущее, а если оба короткие, к ним прицепляется и третье.
+const BLOCK_END = /^<\/(p|li|blockquote|figcaption)>/i;
+const lastWords = /(\S+) +(\S+)\s*$/u;
+export const noWidows = (text) => (text.trim().split(/\s+/u).length < 4 ? text : text.replace(lastWords, (m, a, b) => `${a}${NBSP}${b}`)
+  .replace(/(\S+) +(\S+\u00A0\S+)\s*$/u, (m, a, tail) => (tail.length < 16 ? `${a}${NBSP}${tail}` : m)));
+
+export const typographHtml = (html) => {
+  const parts = html.split(TOKENS);
+  return parts.map((part, i) => {
+    if (i % 2 === 1 || SKIP.test(part)) return part;
+    const text = typograph(part);
+    return BLOCK_END.test(parts[i + 1] ?? '') ? noWidows(text) : text;
+  }).join('');
+};
 
 async function* htmlFiles(dir) {
   for (const entry of await readdir(dir, { withFileTypes: true })) {
