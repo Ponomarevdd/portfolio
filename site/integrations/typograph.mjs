@@ -22,13 +22,6 @@ export const typograph = (text) => text
 const SKIP = /^<(script|style|textarea|pre)\b/i;
 const TOKENS = /(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<textarea\b[\s\S]*?<\/textarea>|<pre\b[\s\S]*?<\/pre>|<!--[\s\S]*?-->|<[^>]+>)/i;
 
-// Последнюю строку абзаца (от четырёх слов) не оставляем с одним словом: последнее слово всегда
-// держится за предыдущее, а если оба короткие, к ним прицепляется и третье.
-const BLOCK_END = /^<\/(p|li|blockquote|figcaption)>/i;
-const lastWords = /(\S+) +(\S+)\s*$/u;
-export const noWidows = (text) => (text.trim().split(/\s+/u).length < 4 ? text : text.replace(lastWords, (m, a, b) => `${a}${NBSP}${b}`)
-  .replace(/(\S+) +(\S+\u00A0\S+)\s*$/u, (m, a, tail) => (tail.length < 16 ? `${a}${NBSP}${tail}` : m)));
-
 // Слова через дефис («PDF-конспект», «дизайн-ревью») не рвём по дефису. Внутри SVG и <title>
 // разметку добавлять нельзя, там оставляем как есть.
 const hyphenated = /(?<![\p{L}\d-])[\p{L}\d]+(?:-[\p{L}\d]+)+(?![\p{L}\d-])/gu;
@@ -46,8 +39,7 @@ export const typographHtml = (html) => {
       return part;
     }
     if (SKIP.test(part)) return part;
-    let text = typograph(part);
-    if (BLOCK_END.test(parts[i + 1] ?? '')) text = noWidows(text);
+    const text = typograph(part);
     return noMarkup ? text : keepHyphens(text);
   }).join('');
 };

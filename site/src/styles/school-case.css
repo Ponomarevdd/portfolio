@@ -169,6 +169,10 @@
 
 /* 04 Путь пользователя */
 
+/* Сложные анимированные блоки на узких экранах не перестраиваются, а уменьшаются целиком, как десктопный кадр */
+.sc-scale.is-scaled { overflow: clip; }
+.sc-scale.is-scaled > * { width: var(--base); transform: scale(var(--k)); transform-origin: 0 0; }
+
 /* 05 Принципы */
 .sc-principles { display: flex; flex-direction: column; gap: 16px; }
 .sc-pr { display: flex; flex-direction: column; gap: 28px; padding: 32px; border-radius: 16px; background: #fff; }
@@ -566,7 +570,6 @@
   .sc-context { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 699px) {
-  .pr-sys__main { grid-column: span 2; grid-row: auto; }
   .sc-pains__head { display: none; }
   .sc-pains li { grid-template-columns: minmax(0, 1fr); }
   .sc-pains__arrow { height: 36px; }
@@ -588,21 +591,12 @@
   .sc-hl__cup { width: 48px; height: 48px; border-radius: 14px; }
   .sc-stats, .sc-stats--big, .sc-stats--ds, .sc-duties, .sc-roles, .sc-anatomy, .sc-ds, .sc-ill__rules { grid-template-columns: minmax(0, 1fr); }
   .sc-part__stage { height: auto; min-height: 220px; }
-  .sc-resp__stage { height: auto; padding: 0; }
   .sc-pr { padding: 24px 16px 16px; gap: 20px; }
   .sc-pr__text { padding: 0 4px; }
-  .pr-sys { padding: 20px; }
-  .pr-sl { padding: 16px; border-radius: 20px; gap: 16px; }
-  .pr-sl__h { font-size: 18px; line-height: 24px; }
-  .pr-sl__text p:last-child { font-size: 14px; }
-  .sc-resp__stage::after { display: none; }
-  .is-in .sc-resp__frame { animation: none; }
   .ui-trainer__opts { grid-template-columns: minmax(0, 1fr); }
   .sc-queue { padding: 16px; }
   .ui-ticket { padding: 10px 12px; gap: 10px; }
   .sc-stats li, .sc-duties li { padding: 22px; }
-  .sc-states { padding: 12px; }
-  .sc-states__legend { font-size: 12px; }
   .sc-quote p { font-size: 20px; }
   .sc-quote { padding: 22px; }
 }
@@ -768,7 +762,6 @@
   .pr-sys__main { grid-column: auto; }
 }
 .pr-sys__item, .pr-sys__main { min-width: 0; overflow-wrap: break-word; }
-@media (max-width: 699px) { .sc-pr .sc-resp__stage { height: auto; } }
 
 
 /* Анатомия: доработанные карточки */

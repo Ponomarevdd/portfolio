@@ -242,17 +242,17 @@ const lessons = [
           <ol class="sc-principles">
             <li class="sc-pr">
               <div class="sc-pr__text"><h3>Одна мысль на экран</h3><p>Каждый блок урока отвечает на один вопрос.</p></div>
-              <div class="sc-pr__stage pr-sys ui" data-anim aria-hidden="true">
+              <div class="sc-scale" style="--base:960px"><div class="sc-pr__stage pr-sys ui" data-anim aria-hidden="true">
                 <div class="pr-sys__head"><p class="pr-sys__h">Подсистемы Цифровой платформы для школ</p><p class="pr-sys__p">Подсистемы — это инструменты внутри Цифровой платформы для школ, которые помогают организовать образовательный процесс в рамках одной платформы.</p></div>
                 <ul class="pr-sys__grid">
                   <li class="pr-sys__main"><span class="pr-sys__badge">В этом уроке</span><span><b>Тесты</b><small>Оценка знаний</small></span></li>
                   {subsystems.map(([t, c], i) => <li class="pr-sys__item" style={`--i:${i}`}><b>{t}</b><small>{c}</small></li>)}
                 </ul>
-              </div>
+              </div></div>
             </li>
             <li class="sc-pr">
               <div class="sc-pr__text"><h3>Визуальный сторителлинг</h3><p>Типы заданий показываем схемой, а не описанием.</p></div>
-              <div class="sc-pr__stage pr-sl" data-anim data-slider aria-roledescription="слайдер" aria-label="Примеры типов заданий" role="region">
+              <div class="sc-scale" style="--base:960px"><div class="sc-pr__stage pr-sl" data-anim data-slider aria-roledescription="слайдер" aria-label="Примеры типов заданий" role="region">
                 <div class="pr-sl__view">
                   <div class="pr-sl__track" data-sl-track>
                     {tasks.map(([t, d], i) => (
@@ -270,11 +270,11 @@ const lessons = [
                     <button type="button" class="pr-sl__btn" aria-label="Следующий тип задания" data-sl-next><Iconsax name="arrow-right2-linear" size={22}/></button>
                   </div>
                 </div>
-              </div>
+              </div></div>
             </li>
             <li class="sc-pr">
               <div class="sc-pr__text"><h3>Аккуратная вёрстка</h3><p>Блоки урока подстраиваются под любую ширину экрана.</p></div>
-              <figure class="sc-resp sc-pr__stage" data-anim>
+              <div class="sc-scale" style="--base:960px"><figure class="sc-resp sc-pr__stage" data-anim>
                 <div class="sc-resp__stage">
                   <div class="sc-resp__frame ui" aria-hidden="true">
                     <div class="rs-bar"><i></i><i></i><i></i></div>
@@ -288,7 +288,7 @@ const lessons = [
                     </div>
                   </div>
                 </div>
-              </figure>
+              </figure></div>
             </li>
           </ol>
         </div>
@@ -298,13 +298,13 @@ const lessons = [
         <div class="sc-head"><h2 id="h-wire">От вайрфрейма к интерфейсу</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Сначала структура урока, потом интерфейс.</p>
-          <div class="sc-states" data-anim aria-label="Начало лонгрида: вайрфрейм и интерфейс" role="img">
+          <div class="sc-scale" style="--base:1160px"><div class="sc-states" data-anim aria-label="Начало лонгрида: вайрфрейм и интерфейс" role="img">
             <div class="sc-states__stack">
               <div class="sc-state sc-state--wire"><LongreadMini mode="wire" base={img('') ?? ''}/></div>
               <div class="sc-state sc-state--ui"><LongreadMini mode="ui" base={img('') ?? ''}/></div>
             </div>
             <ol class="sc-states__legend"><li>Структура</li><li>Интерфейс</li></ol>
-          </div>
+          </div></div>
         </div>
       </section>
 
@@ -482,7 +482,7 @@ const lessons = [
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-longread">
         <div class="sc-head"><h2 id="h-longread">Лонгрид в действии</h2></div>
         <div class="sc-main">
-          <div class="sc-lms ui" data-anim="once">
+          <div class="sc-scale" style="--base:1100px"><div class="sc-lms ui" data-anim="once">
             <div class="lms-bar">
               <span class="ui-nda">NDA</span>
               <nav class="lms-nav" aria-hidden="true"><span class="on">Моё обучение</span><span>Курсы</span><span>База знаний</span><span>Вебинары</span><span>Поддержка</span></nav>
@@ -541,7 +541,7 @@ const lessons = [
               <div class="lms-read__view"><div class="lms-read__scroll" data-d="scroll"><LongreadMini mode="ui" finish base={img('') ?? ''}/></div></div>
             </div>
             <span class="lms-cursor" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M5 3.2v15.4c0 .5.6.8 1 .4l3.6-3.4 2.4 5.5c.2.4.6.5 1 .4l2-.9c.4-.2.5-.6.4-1l-2.4-5.4 4.9-.3c.5 0 .8-.6.4-1L6 2.8c-.4-.3-1-.1-1 .4Z" fill="#1c1c1c" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
-          </div>
+          </div></div>
         </div>
       </section>
 

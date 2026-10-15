@@ -21,6 +21,22 @@ function countUp(el: HTMLElement) {
   requestAnimationFrame(tick);
 }
 
+// Сложные анимированные блоки уже базовой ширины не перестраиваются, а уменьшаются целиком
+document.querySelectorAll<HTMLElement>('.sc-scale').forEach((box) => {
+  const inner = box.firstElementChild as HTMLElement | null;
+  if (!inner) return;
+  const fit = () => {
+    const base = parseFloat(getComputedStyle(box).getPropertyValue('--base'));
+    const k = Math.min(1, box.clientWidth / base);
+    box.classList.toggle('is-scaled', k < 1);
+    box.style.setProperty('--k', String(k));
+    box.style.height = k < 1 ? `${inner.offsetHeight * k}px` : '';
+  };
+  const ro = new ResizeObserver(fit);
+  ro.observe(box); ro.observe(inner);
+  fit();
+});
+
 const observer = new IntersectionObserver((entries) => {
   for (const entry of entries) {
     const el = entry.target as HTMLElement;
@@ -76,9 +92,11 @@ if (lms && !reduced) {
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) wake?.(); }, { rootMargin: '-15% 0px -15% 0px' }).observe(lms);
   const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
   const ready = () => visible ? Promise.resolve() : new Promise<void>((r) => { wake = () => { wake = null; r(); }; });
+  // На узких экранах блок уменьшен через scale, поэтому экранные размеры переводим в собственные
+  const scaleOf = () => lms.getBoundingClientRect().width / lms.offsetWidth || 1;
   const pos = (el: HTMLElement, dx = .5, dy = .5) => {
-    const a = lms.getBoundingClientRect(), b = el.getBoundingClientRect();
-    return [b.left - a.left + b.width * dx, b.top - a.top + b.height * dy];
+    const a = lms.getBoundingClientRect(), b = el.getBoundingClientRect(), s = scaleOf();
+    return [(b.left - a.left + b.width * dx) / s, (b.top - a.top + b.height * dy) / s];
   };
   const moveTo = async (el: HTMLElement, dx?: number, dy?: number) => {
     const [x, y] = pos(el, dx, dy);
@@ -131,10 +149,11 @@ if (lms && !reduced) {
       const view = scroll.parentElement!;
       await moveTo(view, .62, .55);
       // Урок читается с остановками: аккордеон, слайдер, самопроверка, финальный блок
-      const rel = (el: HTMLElement) => el.getBoundingClientRect().top - scroll.getBoundingClientRect().top;
+      const s = scaleOf();
+      const rel = (el: HTMLElement) => (el.getBoundingClientRect().top - scroll.getBoundingClientRect().top) / s;
       const vr = view.getBoundingClientRect();
       // Окно LMS бывает выше экрана, поэтому считаем по тому, что реально видно
-      const seen = Math.max(320, Math.min(vr.height, innerHeight - Math.max(0, vr.top)) - 24);
+      const seen = Math.max(320, Math.min(vr.height, innerHeight - Math.max(0, vr.top)) / s - 24);
       const last = secs[secs.length - 1];
       const endY = () => Math.max(0, rel(last) + last.offsetHeight + 96 - seen);
       const tocTop = rel(tocBox);
