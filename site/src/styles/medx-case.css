@@ -49,10 +49,9 @@
 .mx-frame--clip { max-height: var(--clip, 2200px); position: relative; }
 .mx-frame--clip::after { content: ''; position: absolute; inset: auto 0 0; height: 160px; background: linear-gradient(#fff0, #fff); }
 
-/* Схемы тянутся на всю ширину сетки, уже 944px уменьшаются целиком */
-.mx-figs { display: flex; flex-direction: column; gap: 24px; }
+/* Схемы в тексте тянутся на всю ширину, уже 944px уменьшаются целиком */
 
-/* Задача и проблема: сложные схемы из исходного материала */
+/* Сетка схем 2 × N: «Задача и проблема» и «Схема вместо абзаца» */
 .mx-collage { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .mx-collage__tile { border-radius: 16px; background: #f7f4ee; overflow: hidden; }
 .mx-collage__tile figure { border-radius: 0 !important; }

@@ -27,6 +27,7 @@ const schemes = [
   ['fig-spike', 'Как вирус проникает в клетку'],
   ['fig-mutations', 'Как вирус летучих мышей научился заражать человека'],
   ['fig-genera', 'Роды коронавирусов и их хозяева'],
+  ['fig-hosts', 'Животные — источники заражения'],
   ['fig-genome', 'Геном SARS-CoV-2'],
   ['fig-lineages', 'Линии SARS-CoV-2'],
 ];
@@ -125,8 +126,8 @@ const covers = [
         <div class="sc-head"><h2 id="h-schemes">Схема вместо абзаца</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Генетика вируса, эпидемиология и механизмы заражения представлены в лонгридах схемами. Каждая схема отвечает на один вопрос из текста.</p>
-          <div class="mx-figs">
-            {schemes.map(([f, label]) => <div class="mx-fig mx-fig--fluid"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label={label} set:html={art(f)}></div></div></div>)}
+          <div class="mx-collage">
+            {schemes.map(([f, label]) => <div class="mx-collage__tile"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label={label} set:html={art(f)}></div></div></div>)}
           </div>
         </div>
       </section>
@@ -134,7 +135,8 @@ const covers = [
       <section class="sc-sec" aria-labelledby="h-ill">
         <div class="sc-head"><h2 id="h-ill">Иллюстрации обложек</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Обложки создавались с помощью генерации в GPT. Генерация допускала ошибки в деталях, поэтому каждая иллюстрация дорабатывалась в Photoshop до медицинской и анатомической точности.</p>
+          <p class="sc-lead">Мы сознательно отказались от типичных стоковых фотографий с улыбающимися врачами. Вместо них для каждого лонгрида создавалась собственная иллюстрация.</p>
+          <p>Обложек требовалось много, в сжатые сроки и в едином стиле, поэтому полностью ручная отрисовка не подходила. Иллюстрации генерировались в GPT, а затем дорабатывались в Photoshop: исправлялись ошибки генерации, выверялись медицинские и анатомические детали, выравнивались цвет и стиль.</p>
           <ul class="mx-covers">
             {covers.map(([f, alt]) => <li><img src={siteUrl(`/images/medx/${f}.webp`)} alt={alt} width="1600" height="900" loading="lazy" decoding="async"/></li>)}
           </ul>
