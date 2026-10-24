@@ -30,15 +30,21 @@ const schemes = [
   ['fig-genome', 'Геном SARS-CoV-2'],
   ['fig-lineages', 'Линии SARS-CoV-2'],
 ];
-const kit = [
-  ['kit-toc', 'Содержание с прогрессом'],
-  ['kit-note', 'Важно'],
-  ['kit-card', 'Карточка с рекомендацией'],
-  ['kit-stage', 'Этап и срок'],
-  ['kit-table', 'Таблица'],
-  ['kit-timeline', 'Таймлайн'],
-  ['kit-summary', 'Итоги'],
-  ['kit-list', 'Список'],
+// Схемы из лонгрида «Истоки пандемии»: показывают, насколько плотный исходный материал
+const complex = [
+  ['fig-structure', 'Строение коронавируса'],
+  ['fig-simplot', 'Сходство геномов с SARS-CoV-2'],
+  ['fig-phylo', 'Родственные связи бетакоронавирусов'],
+  ['fig-s-protein', 'Структура S-белка SARS-CoV-2'],
+];
+const covers = [
+  ['ill-onco-patient', 'Пациентка на химиотерапии под капельницей'],
+  ['ill-origins', 'Летучие мыши и коронавирус'],
+  ['ill-diabetes', 'Пациент после вакцинации'],
+  ['ill-cardio', 'Сердце в разрезе'],
+  ['ill-onco', 'Вакцинация онкологических пациентов'],
+  ['ill-research', 'Исследование SARS-CoV-2 в лаборатории'],
+  ['ill-vector', 'Векторные вакцины'],
 ];
 ---
 <Page title="MedX.pro">
@@ -48,7 +54,7 @@ const kit = [
       <div class="sc-cover__grid">
         <div class="sc-cover__text">
           <h1>MedX.pro</h1>
-          <p class="sc-cover__lead">Интерактивные лонгриды для медиков о вакцинации от COVID-19: кого прививать, когда и при каких противопоказаниях. Курс для системы профессионального развития медицинского персонала.</p>
+          <p class="sc-cover__lead">Курс интерактивных лонгридов о вакцинации от COVID-19 для врачей и медицинского персонала: показания, сроки и противопоказания.</p>
         </div>
         <div class="mx-hero" role="img" aria-label="Начало лонгрида «Вакцинация онкологических пациентов»">
           <div class="sc-scale" style="--base:1440px"><div class="mx-art" set:html={art('longread')}></div></div>
@@ -66,30 +72,33 @@ const kit = [
       <section class="sc-sec" aria-labelledby="h-context">
         <div class="sc-head"><h2 id="h-context">Контекст</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Шёл второй-третий год пандемии. Вакцины от COVID-19 только появились, данных о них было мало, а медикам нужно было быстро разобраться, каким пациентам можно прививаться, когда и при каких противопоказаниях. MedX.pro — система профессионального развития медицинского персонала, и мы делали для неё курс об этом.</p>
-          <div class="mx-fig"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label="Хронология вспышек коронавирусов: 2002, 2012 и 2019 годы" set:html={art('fig-outbreaks')}></div></div></div>
+          <p class="sc-lead">Второй год пандемии COVID-19. Вакцины только вошли в практику, клинических данных о них было немного. Медицинскому персоналу требовалось в короткие сроки освоить, каким пациентам показана вакцинация, в какие сроки её проводить и при каких состояниях она противопоказана. Для системы профессионального развития MedX.pro был разработан курс по этой теме.</p>
+          <div class="mx-fig mx-fig--fluid"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label="Хронология вспышек коронавирусов: 2002, 2012 и 2019 годы" set:html={art('fig-outbreaks')}></div></div></div>
         </div>
       </section>
 
       <section class="sc-sec" aria-labelledby="h-problem">
         <div class="sc-head"><h2 id="h-problem">Задача и проблема</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Клинические рекомендации и научные данные о вакцинах сложные и плотные: генетика вируса, механизмы заражения, схемы терапии. А врачу между приёмами нужно быстро найти ответ и не ошибиться.</p>
-          <p>Задача: превратить этот материал в лонгриды, которые медик прочитает и поймёт, и при этом не упростить его до неточности.</p>
+          <p class="sc-lead">Исходный материал — клинические рекомендации и научные публикации: генетика вируса, механизмы заражения, схемы терапии и противопоказания. Такие тексты плотные и трудны для восприятия, а специалисту нужно быстро найти ответ и не допустить ошибки.</p>
+          <p>Задача — представить этот материал в формате, удобном для изучения, и сохранить медицинскую точность.</p>
+          <div class="mx-collage">
+            {complex.map(([f, label]) => <div class="mx-collage__tile"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label={label} set:html={art(f)}></div></div></div>)}
+          </div>
         </div>
       </section>
 
       <section class="sc-sec" aria-labelledby="h-me">
         <div class="sc-head"><h2 id="h-me">Что я делал</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Был лид-дизайнером проекта: с нуля задал визуальный язык и UI-kit и отвечал за качество всех 22 лонгридов.</p>
+          <p class="sc-lead">Лид-дизайнер проекта. Разработал визуальный язык и UI-kit с нуля и отвечал за качество всех 22 лонгридов.</p>
           <ul class="sc-duties">
-            <li><span class="sc-role__icon"><Iconsax name="brush2-bold" size={28}/></span><h3>Визуальное направление</h3><p>Определил стиль лонгридов: цвета, типографику, ритм и иерархию материала.</p></li>
-            <li><span class="sc-role__icon"><Iconsax name="element-4-bold" size={28}/></span><h3>UI-kit</h3><p>Собрал UI-kit с нуля: цвета, шрифты, отступы, скругления, плашки, таблицы и таймлайны. Все лонгриды собраны на нём.</p></li>
-            <li><span class="sc-role__icon"><Iconsax name="hierarchy-bold" size={28}/></span><h3>Структура лонгрида</h3><p>Спроектировал, как устроен лонгрид и как в него встроены видео, конспект, интерактивы и самопроверка.</p></li>
-            <li><span class="sc-role__icon"><Iconsax name="microscope-bold" size={28}/></span><h3>Схемы</h3><p>Превращал сложные медицинские данные в схемы: генетику вируса, механизмы заражения, рекомендации по терапии.</p></li>
-            <li><span class="sc-role__icon"><Iconsax name="pen-tool-bold" size={28}/></span><h3>Иллюстрации</h3><p>Делал обложки: генерация в GPT и доработка в Photoshop до медицинской и анатомической точности.</p></li>
-            <li><span class="sc-role__icon"><Iconsax name="clipboard-text-bold" size={28}/></span><h3>Работа со смежниками</h3><p>Вместе с методистами и редактором выстраивал подачу материала, с проджект-менеджером планировал сроки выпуска.</p></li>
+            <li><span class="sc-role__icon"><Iconsax name="brush2-bold" size={28}/></span><h3>Визуальное направление</h3><p>Определил стиль лонгридов: цвет, типографику, ритм и иерархию материала.</p></li>
+            <li><span class="sc-role__icon"><Iconsax name="element-4-bold" size={28}/></span><h3>UI-kit</h3><p>Разработал UI-kit с нуля: цвета, шрифты, отступы, скругления, плашки, таблицы и таймлайны. На нём собраны все лонгриды.</p></li>
+            <li><span class="sc-role__icon"><Iconsax name="hierarchy-bold" size={28}/></span><h3>Структура лонгрида</h3><p>Спроектировал структуру лонгрида и место в ней для видео, конспектов, интерактивов и самопроверки.</p></li>
+            <li><span class="sc-role__icon"><Iconsax name="diagram-bold" size={28}/></span><h3>Схемы</h3><p>Переводил сложные медицинские данные в схемы: генетику вируса, механизмы заражения, рекомендации по терапии.</p></li>
+            <li><span class="sc-role__icon"><Iconsax name="pen-tool-bold" size={28}/></span><h3>Иллюстрации</h3><p>Создавал обложки: генерация в GPT и доработка в Photoshop до медицинской и анатомической точности.</p></li>
+            <li><span class="sc-role__icon"><Iconsax name="clipboard-text-bold" size={28}/></span><h3>Работа со смежниками</h3><p>Выстраивал подачу материала совместно с методистами и редактором, планировал выпуск с руководителем проекта.</p></li>
           </ul>
         </div>
       </section>
@@ -97,11 +106,17 @@ const kit = [
       <section class="sc-sec" aria-labelledby="h-roles">
         <div class="sc-head"><h2 id="h-roles">Для кого</h2></div>
         <div class="sc-main">
-          <div class="sc-role mx-role">
-            <span class="sc-role__icon"><Iconsax name="people-bold" size={28}/></span>
-            <h3>Врачи и медицинский персонал</h3>
-            <p class="sc-role__goal">Понять, кого и когда вакцинировать, и не пропустить противопоказания.</p>
-            <ul><li>Мало времени между приёмами</li><li>Данные о вакцинах постоянно обновляются</li><li>Цена ошибки — здоровье пациента</li></ul>
+          <div class="mx-aud">
+            <div class="mx-aud__who">
+              <span class="sc-role__icon"><Iconsax name="hospital-bold" size={28}/></span>
+              <h3>Врачи и медицинский персонал</h3>
+              <p>Определить, кому и когда показана вакцинация, и учесть противопоказания.</p>
+            </div>
+            <ul class="mx-aud__facts">
+              <li><span class="sc-role__icon"><Iconsax name="clock-bold" size={24}/></span><p>Ограниченное время между приёмами</p></li>
+              <li><span class="sc-role__icon"><Iconsax name="document-text-bold" size={24}/></span><p>Данные о вакцинах регулярно обновляются</p></li>
+              <li><span class="sc-role__icon"><Iconsax name="health-bold" size={24}/></span><p>Ошибка напрямую влияет на здоровье пациента</p></li>
+            </ul>
           </div>
         </div>
       </section>
@@ -109,9 +124,9 @@ const kit = [
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-schemes">
         <div class="sc-head"><h2 id="h-schemes">Схема вместо абзаца</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Генетику вируса, эпидемиологию и механизмы заражения мы показывали схемами. Каждая отвечает на один вопрос из лонгрида.</p>
+          <p class="sc-lead">Генетика вируса, эпидемиология и механизмы заражения представлены в лонгридах схемами. Каждая схема отвечает на один вопрос из текста.</p>
           <div class="mx-figs">
-            {schemes.map(([f, label]) => <div class="mx-fig"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label={label} set:html={art(f)}></div></div></div>)}
+            {schemes.map(([f, label]) => <div class="mx-fig mx-fig--fluid"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label={label} set:html={art(f)}></div></div></div>)}
           </div>
         </div>
       </section>
@@ -119,19 +134,17 @@ const kit = [
       <section class="sc-sec" aria-labelledby="h-ill">
         <div class="sc-head"><h2 id="h-ill">Иллюстрации обложек</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Обложки мы генерировали в GPT. Генерация тогда ошибалась в деталях, поэтому каждую иллюстрацию дорабатывали в Photoshop, пока она не становилась медицински и анатомически точной и при этом понятной.</p>
-          <div class="mx-covers">
-            <div class="mx-cover">Обложка лонгрида</div>
-            <div class="mx-cover">Обложка лонгрида</div>
-            <div class="mx-cover">Обложка лонгрида</div>
-          </div>
+          <p class="sc-lead">Обложки создавались с помощью генерации в GPT. Генерация допускала ошибки в деталях, поэтому каждая иллюстрация дорабатывалась в Photoshop до медицинской и анатомической точности.</p>
+          <ul class="mx-covers">
+            {covers.map(([f, alt]) => <li><img src={siteUrl(`/images/medx/${f}.webp`)} alt={alt} width="1600" height="900" loading="lazy" decoding="async"/></li>)}
+          </ul>
         </div>
       </section>
 
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-ds">
         <div class="sc-head"><h2 id="h-ds">Дизайн-система</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Я собрал UI-kit с нуля: цвета, шрифты, отступы, скругления, плашки и схемы. На нём собраны все 22 лонгрида.</p>
+          <p class="sc-lead">UI-kit разработан с нуля: цвета, шрифты, отступы, скругления, плашки и схемы. На нём собраны все 22 лонгрида.</p>
           <div class="sc-ds">
             <div class="sc-ds__card">
               <h3>Два шрифта</h3>
@@ -158,16 +171,6 @@ const kit = [
         </div>
       </section>
 
-      <section class="sc-sec sc-sec--wide" aria-labelledby="h-anatomy">
-        <div class="sc-head"><h2 id="h-anatomy">Анатомия лонгрида</h2></div>
-        <div class="sc-main">
-          <p class="sc-lead">Плашки, из которых собирается любой лонгрид.</p>
-          <div class="mx-kit">
-            {kit.map(([f, label]) => <div class="sc-part"><div class="sc-part__stage"><div class="sc-scale" style="--base:640px"><div class="mx-art" aria-hidden="true" set:html={art(f)}></div></div></div><h3>{label}</h3></div>)}
-          </div>
-        </div>
-      </section>
-
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-longread">
         <div class="sc-head"><h2 id="h-longread">Лонгрид</h2></div>
         <div class="sc-main">
@@ -178,7 +181,7 @@ const kit = [
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-lms">
         <div class="sc-head"><h2 id="h-lms">Концепт «Моё обучение»</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Вокруг лонгридов мы придумали личный кабинет: продолжить с того места, где остановился, учебный план, сохранённые материалы, видео и рекомендации по специализации.</p>
+          <p class="sc-lead">Вокруг лонгридов был разработан концепт личного кабинета: продолжение с места остановки, учебный план, сохранённые материалы, видео и рекомендации по специализации.</p>
           <div class="sc-scale" style="--base:1440px"><div class="mx-frame"><div class="mx-art mx-art--lms" role="img" aria-label="Концепт личного кабинета «Моё обучение»" set:html={art('lms')}></div></div></div>
         </div>
       </section>
@@ -193,7 +196,7 @@ const kit = [
             <li><strong>Концепт</strong><span>личного кабинета</span></li>
           </ul>
           <div class="sc-quote">
-            <p>Все 22 лонгрида собраны на одном UI-kit: схемы, интерактивы, самопроверки, видео и конспекты. Обложки остались медицински и анатомически точными и при этом понятными для аудитории.</p>
+            <p>Все 22 лонгрида собраны на едином UI-kit: схемы, интерактивы, самопроверки, видео и конспекты. Обложки сохраняют медицинскую и анатомическую точность и остаются понятными для аудитории.</p>
           </div>
         </div>
       </section>

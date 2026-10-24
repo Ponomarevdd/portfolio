@@ -99,11 +99,11 @@ const medx: Project = {
   slug: 'medx', href: '/cases/medx/', title: 'MedX.pro: лонгриды о вакцинации для медиков', year: 2021,
   categories: ['UX/UI', 'Веб-дизайн'],
   description: 'Интерактивные лонгриды для врачей и медицинского персонала о вакцинации от COVID-19: схемы вместо сложного текста, самопроверки и медицински точные иллюстрации.',
-  cover: '/images/medx/cover.png', width: 1800, height: 1285,
+  cover: '/images/medx/cover.webp', width: 1800, height: 1285,
   alt: 'Лонгрид MedX о вакцинации онкологических пациентов: шапка, содержание и первый раздел',
   previews: [
-    { src: '/images/medx/scheme.png', alt: 'Схема из лонгрида: как вирус проникает в клетку', width: 1400, height: 847 },
-    { src: '/images/medx/lms.png', alt: 'Концепт личного кабинета «Моё обучение»', width: 1400, height: 700 },
+    { src: '/images/medx/scheme.webp', alt: 'Схема из лонгрида: как вирус проникает в клетку', width: 1400, height: 668 },
+    { src: '/images/medx/lms.webp', alt: 'Концепт личного кабинета «Моё обучение»', width: 1400, height: 700 },
   ],
   identity: { name: 'MedX', tagline: 'Лонгриды о вакцинации', background: '#e8f3ee', color: '#3b876a' },
 };

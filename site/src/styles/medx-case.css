@@ -49,27 +49,42 @@
 .mx-frame--clip { max-height: var(--clip, 2200px); position: relative; }
 .mx-frame--clip::after { content: ''; position: absolute; inset: auto 0 0; height: 160px; background: linear-gradient(#fff0, #fff); }
 
-/* Схемы */
-.mx-figs { display: flex; flex-direction: column; gap: 16px; }
-.mx-figs { gap: 24px; }
-.mx-fig > .sc-scale { max-width: 944px; }
+/* Схемы тянутся на всю ширину сетки, уже 944px уменьшаются целиком */
+.mx-figs { display: flex; flex-direction: column; gap: 24px; }
 
-/* Иллюстрации: заглушки до файлов обложек */
-.mx-covers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.mx-cover { aspect-ratio: 4 / 3; border-radius: 20px; background: var(--pl); display: grid; place-items: center; color: #8fb3a2; font-size: 14px; text-align: center; padding: 16px; }
-.mx-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.mx-steps li { padding: 28px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 10px; }
-.mx-steps h3 { font-size: 20px; letter-spacing: -.02em; }
-.mx-steps p { color: var(--text-secondary); font-size: 15px; line-height: 1.55; }
-@media (max-width: 899px) { .mx-covers, .mx-steps { grid-template-columns: minmax(0, 1fr); } }
+/* Задача и проблема: сложные схемы из исходного материала */
+.mx-collage { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.mx-collage__tile { border-radius: 16px; background: #f7f4ee; overflow: hidden; }
+.mx-collage__tile figure { border-radius: 0 !important; }
+
+/* Для кого: карточка аудитории и условия, в которых она учится */
+.mx-aud { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; }
+.mx-aud__who { padding: 40px; border-radius: 12px; background: var(--pl); display: flex; flex-direction: column; gap: 14px; justify-content: flex-end; min-height: 320px; }
+.mx-aud__who .sc-role__icon { background: #fff; margin-bottom: auto; }
+.mx-aud__who h3 { font-size: 32px; line-height: 1.15; letter-spacing: -.03em; color: var(--t); }
+.mx-aud__who p { font-size: 18px; line-height: 1.55; color: var(--t); max-width: 520px; }
+.mx-aud__facts { display: grid; grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.mx-aud__facts li { padding: 20px 24px; border-radius: 12px; background: #fff; display: flex; align-items: center; gap: 16px; }
+.mx-aud__facts .sc-role__icon { flex: none; width: 48px; height: 48px; border-radius: 14px; }
+.mx-aud__facts p { font-size: 16px; line-height: 1.45; font-weight: 500; }
+
+/* Обложки лонгридов: 2 + 3 + 2 по шестиколоночной сетке */
+.mx-covers { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
+.mx-covers li { grid-column: span 2; }
+.mx-covers li:nth-child(-n+2), .mx-covers li:nth-child(n+6) { grid-column: span 3; }
+.mx-covers img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 16px; }
+
+@media (max-width: 899px) {
+  .mx-collage, .mx-aud { grid-template-columns: minmax(0, 1fr); }
+  .mx-aud__who { padding: 28px; min-height: 0; }
+  .mx-aud__who .sc-role__icon { margin-bottom: 8px; }
+  .mx-aud__who h3 { font-size: 26px; }
+  .mx-covers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mx-covers li, .mx-covers li:nth-child(-n+2), .mx-covers li:nth-child(n+6) { grid-column: span 1; }
+  .mx-covers li:first-child { grid-column: span 2; }
+}
 
 /* Дизайн-система */
 .mx .sc-ds__card > .sc-font { font-family: 'PT Serif', serif; font-weight: 700; letter-spacing: 0; }
 .mx .sc-ds__card > .mx-font2 { font-family: Manrope, sans-serif; font-weight: 600; font-size: 40px; line-height: 1; color: var(--p); }
 .mx .sc-tokens span { font-family: Manrope, sans-serif; }
-
-/* Анатомия: плашки из UI kit */
-.mx-kit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.mx-kit .sc-part__stage { height: auto; min-height: 0; padding: 0; border: 0; display: block; }
-.mx-kit .sc-scale > .mx-art { width: 640px; }
-@media (max-width: 899px) { .mx-kit { grid-template-columns: minmax(0, 1fr); } }
