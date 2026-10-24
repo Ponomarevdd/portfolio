@@ -1,0 +1,75 @@
+/* Кейс MedX. Оболочка и раскладка секций общие с кейсом школ (school-case.css),
+   здесь палитра кейса и фрагменты макетов MedX (.mx-art) на их собственных шрифтах: PT Serif и Manrope. */
+.sc.mx {
+  --p: #3b876a; --pl: #e8f3ee; --t: #173d34; --cap: #60716a; --bg: #f7f4ee; --line: #d9e4dd;
+}
+
+/* Пока статика: всё, что в кейсе школ появляется анимацией, показываем сразу */
+.mx .sc-duties li, .mx .sc-duties .sc-role__icon, .mx .sc-tokens span { opacity: 1; transform: none; }
+
+/* Фрагменты макетов: стили досок канваса, ограниченные контейнером */
+.mx-art { font-family: Manrope, sans-serif; color: #344a43; text-align: left; letter-spacing: 0; line-height: normal; }
+.mx-art *, .mx-art *::before, .mx-art *::after { box-sizing: border-box; }
+.mx-art p, .mx-art h1, .mx-art h2, .mx-art h3, .mx-art h4, .mx-art ul, .mx-art li, .mx-art figure, .mx-art figcaption { margin: 0; padding: 0; }
+.mx-art h1, .mx-art h2, .mx-art h3, .mx-art h4 { font-weight: inherit; }
+.mx-art ul { list-style: none; }
+.mx-art img { max-width: none; }
+.mx-art .p { font-family: Manrope, sans-serif; font-weight: 400; font-size: 20px; line-height: 31px; color: #344a43; }
+.mx-art .lead { font-family: Manrope, sans-serif; font-weight: 600; font-size: 20px; line-height: 31px; color: #173d34; }
+.mx-art .h1 { font-family: 'PT Serif', serif; font-weight: 400; font-size: 38px; line-height: 45px; color: #173d34; }
+.mx-art .h2 { font-family: 'PT Serif', serif; font-weight: 400; font-size: 32px; line-height: 38px; color: #173d34; }
+.mx-art .ct { font-family: Manrope, sans-serif; font-weight: 600; font-size: 26px; line-height: 33px; color: #173d34; }
+.mx-art .li { display: flex; gap: 12px; }
+.mx-art .mk { flex: none; width: 8px; height: 17px; padding-top: 13px; }
+.mx-art .mk span { display: block; width: 4px; height: 4px; border-radius: 50%; background: #173d34; }
+.mx-art .li .p { flex: 1; min-width: 0; }
+.mx-art .sec { display: flex; flex-direction: column; gap: 36px; }
+.mx-art .body { display: flex; flex-direction: column; gap: 20px; }
+.mx-art .note { background: #faebdd; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px; }
+.mx-art .note-h { display: flex; gap: 10px; align-items: center; }
+.mx-art .note-t { font-family: Manrope, sans-serif; font-weight: 700; font-size: 18px; line-height: 27px; color: #75462f; }
+.mx-art .note .p { color: #75462f; }
+.mx-art .toc-sec { position: relative; display: block; padding: 4px 0 4px 30px; font-family: Manrope, sans-serif; font-weight: 700; font-size: 18px; line-height: 24px; color: #173d34; text-decoration: none; }
+.mx-art .toc-sec svg { position: absolute; overflow: visible; }
+.mx-art .toc-sub { position: relative; padding-left: 30px; display: flex; flex-direction: column; gap: 8px; }
+.mx-art .toc-it { position: relative; display: block; padding: 10px 14px; border-radius: 6px; font-family: Manrope, sans-serif; font-weight: 400; font-size: 16px; line-height: 24px; color: #465f57; text-decoration: none; }
+.mx-art .toc-it svg { position: absolute; left: -21px; top: 4px; overflow: visible; }
+.mx-art .ln { position: absolute; display: block; }
+.mx-art--lms { color: #344a43; background: #fdfbf6; }
+.mx-art--lms a { color: #173d34; text-decoration: none; }
+.mx-art--lms button, .mx-art--lms input { font-family: Manrope, sans-serif; }
+
+/* Hero: верх лонгрида в окне */
+.mx-hero { --hh: 480px; position: relative; height: var(--hh); border-radius: 28px; background: #fff; box-shadow: var(--shadow-head); overflow: hidden; }
+.mx-hero__page { position: absolute; left: 0; top: 0; width: 1440px; transform-origin: 0 0; transform: scale(var(--k, .43)); }
+.mx-hero::after { content: ''; position: absolute; inset: auto 0 0; height: 56px; background: linear-gradient(#fff0, #fff); }
+
+/* Окно для больших фрагментов: ширина доски, масштабируется целиком через .sc-scale */
+.mx-frame { border-radius: 20px; background: #fff; overflow: hidden; }
+.mx-frame--clip { max-height: var(--clip, 2200px); position: relative; }
+.mx-frame--clip::after { content: ''; position: absolute; inset: auto 0 0; height: 160px; background: linear-gradient(#fff0, #fff); }
+
+/* Схемы */
+.mx-figs { display: flex; flex-direction: column; gap: 16px; }
+.mx-figs { gap: 24px; }
+.mx-fig > .sc-scale { max-width: 944px; }
+
+/* Иллюстрации: заглушки до файлов обложек */
+.mx-covers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.mx-cover { aspect-ratio: 4 / 3; border-radius: 20px; background: var(--pl); display: grid; place-items: center; color: #8fb3a2; font-size: 14px; text-align: center; padding: 16px; }
+.mx-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.mx-steps li { padding: 28px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 10px; }
+.mx-steps h3 { font-size: 20px; letter-spacing: -.02em; }
+.mx-steps p { color: var(--text-secondary); font-size: 15px; line-height: 1.55; }
+@media (max-width: 899px) { .mx-covers, .mx-steps { grid-template-columns: minmax(0, 1fr); } }
+
+/* Дизайн-система */
+.mx .sc-ds__card > .sc-font { font-family: 'PT Serif', serif; font-weight: 700; letter-spacing: 0; }
+.mx .sc-ds__card > .mx-font2 { font-family: Manrope, sans-serif; font-weight: 600; font-size: 40px; line-height: 1; color: var(--p); }
+.mx .sc-tokens span { font-family: Manrope, sans-serif; }
+
+/* Анатомия: плашки из UI kit */
+.mx-kit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.mx-kit .sc-part__stage { height: auto; min-height: 0; padding: 0; border: 0; display: block; }
+.mx-kit .sc-scale > .mx-art { width: 640px; }
+@media (max-width: 899px) { .mx-kit { grid-template-columns: minmax(0, 1fr); } }

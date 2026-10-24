@@ -14,9 +14,15 @@ importers:
       '@fontsource/golos-text':
         specifier: 5.3.0
         version: 5.3.0
+      '@fontsource/manrope':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@fontsource/onest':
         specifier: ^5.3.1
         version: 5.3.1
+      '@fontsource/pt-serif':
+        specifier: ^5.3.0
+        version: 5.3.0
       astro:
         specifier: 7.3.5
         version: 7.3.5(yaml@2.9.1)
@@ -422,8 +428,14 @@ packages:
   '@fontsource/golos-text@5.3.0':
     resolution: {integrity: sha512-R+gM4qOZSrge4TtEGps0zTpU8X4e7e32L+3yy0J/2LnVB/IERlidEpXPWSZVGzTaL5QnPRVmoebRXSuVtjUIVg==}
 
+  '@fontsource/manrope@5.3.0':
+    resolution: {integrity: sha512-obJ1Dv3+uCA6HlHgW8u4BGYxJR9In2HW7gjJhlflEvkrj1X1iSEwu0fToL+JYGC/FEKFfIz1sBuPduvcL2gIAA==}
+
   '@fontsource/onest@5.3.1':
     resolution: {integrity: sha512-2uA9HUzQHBB8H7T2R6inmrnqPofB6+svATHM/huIG640duJr4rm+uanmAIheTTlbZvRC0ujMtf2T4U4RX51oEQ==}
+
+  '@fontsource/pt-serif@5.3.0':
+    resolution: {integrity: sha512-ST+j/byBGZw6H+TQMX78o6Qlngfj2Va/Q9fAJxq54Is1ZQk1/FhBIuqyJcLmnpi0trG8V/hWO9Bx6ZY09A0DBQ==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -2079,7 +2091,11 @@ snapshots:
 
   '@fontsource/golos-text@5.3.0': {}
 
+  '@fontsource/manrope@5.3.0': {}
+
   '@fontsource/onest@5.3.1': {}
+
+  '@fontsource/pt-serif@5.3.0': {}
 
   '@img/colour@1.1.0':
     optional: true
