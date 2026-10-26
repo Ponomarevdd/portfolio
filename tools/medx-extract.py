@@ -22,14 +22,14 @@ def grab(s, i):
             return s[i:m.end()]
     raise ValueError(tag)
 
-# Картинки канваса → обложки, которые прислал Дмитрий
+# Картинки канваса → обложки и фото, которые прислал Дмитрий (карточки «В первую очередь» в лонгриде — фото)
 BLOBS = {
     '7d4f8a8a6393a20e2422c5bd65e1b573': 'ill-onco-patient.webp',
-    '94fdb2bdb50e54914e7037e88a2e1b92': 'ill-diabetes.webp',
-    '0358809e0ab6974af30c0cdf60b70fad': 'ill-vector.webp',
+    '94fdb2bdb50e54914e7037e88a2e1b92': 'photo-risk.webp',
+    '0358809e0ab6974af30c0cdf60b70fad': 'photo-staff.webp',
     '182759340007e4ac27a5668576ab6b9e': 'ill-onco.webp',
-    '9288a387d4e1e7b43bce57abdf2e58e1': 'ill-onco.webp',
-    'dd3921ea1cc8a470985f25da6f666754': 'ill-onco-patient.webp',
+    '9288a387d4e1e7b43bce57abdf2e58e1': 'ill-onco-patient.webp',
+    'dd3921ea1cc8a470985f25da6f666754': 'ill-onco.webp',
     '14f9017466f308540d5d2116f71217a3': 'ill-origins.webp',
     'b198ff436f278d10a76c4ed89b72b69b': 'ill-origins.webp',
 }
