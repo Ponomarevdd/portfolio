@@ -144,10 +144,24 @@ TIMELINE = ('<div style="position:relative;display:grid;grid-template-columns:re
             + '</div>')
 out = re.sub(r'<svg width="864" height="34"[\s\S]*?</svg>', TIMELINE, o1[3], count=1)
 write('fig-outbreaks', fluid(out))
-write('fig-hosts', smooth_arrows(o1[4], s_bend=True))
+# Животные-хозяева: карточки промежуточных хозяев выше (у панголина подпись в две строки),
+# «Летучие мыши» компактнее; стрелки снизу укорочены под новые размеры
+hosts = o1[4].replace('top:150px;width:250px;height:134px;', 'top:150px;width:250px;height:146px;')
+hosts = hosts.replace('left:282px;top:350px;width:300px;height:100px;', 'left:282px;top:358px;width:300px;height:88px;')
+hosts = hosts.replace('height:88px;background:#e8f3ee;border:1.5px solid #3b876a;border-radius:12px;box-sizing:border-box;padding:16px 20px;display:flex;flex-direction:column;justify-content:center;gap:6px"><div style="display:flex;align-items:center;gap:12px;justify-content:flex-start',
+                      'height:88px;background:#e8f3ee;border:1.5px solid #3b876a;border-radius:12px;box-sizing:border-box;padding:12px 20px;display:flex;flex-direction:column;justify-content:center;gap:0"><div style="display:flex;align-items:center;gap:10px;justify-content:center')
+for x in ('382', '432', '482'): hosts = hosts.replace(f'd="M{x} 346 ', f'd="M{x} 352 ')
+hosts = re.sub(r'(d="M[0-9.]+ 352 L[0-9.]+) 294"', r'\1 306"', hosts)
+hosts = re.sub(r'L(125|739) 294 L', r'L\1 306 L', hosts)
+hosts = hosts.replace('d="M427.2 302.8 L432 294 L436.8 302.8"', 'd="M427.4 314.6 L432 306 L436.6 314.6"')
+write('fig-hosts', smooth_arrows(hosts, s_bend=True))
 write('fig-genome', fluid(o3[0]))
-write('fig-spike', smooth_arrows(fluid(o3[2])))
-write('fig-mutations', fluid(o3[5]))
+# Белок S: выноска «Тримеры белка S» не доходит до шипа вплотную, рисунок отодвинут от шагов
+spike = fluid(o3[2]).replace('d="M110 22 L122 40"', 'd="M122 23 L122 34"').replace('d="M121.1 31.0 L122 40 L114.1 35.7"', 'd="M117.4 25.4 L122 34 L126.6 25.4"')
+spike = spike.replace('margin-top: -12px;', 'margin-top: 8px;')
+write('fig-spike', smooth_arrows(spike))
+# Колонки «одного вида / разные / человек» шире, чтобы подписи не слипались
+write('fig-mutations', fluid(o3[5]).replace('width:88px;', 'width:120px;'))
 write('fig-lineages', round_hv(fluid(o4[0])))
 # Сложные схемы для блока «Задача и проблема»
 write('fig-structure', o1[1])

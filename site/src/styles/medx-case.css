@@ -50,6 +50,9 @@
 .mx-frame--clip::after { content: ''; position: absolute; inset: auto 0 0; height: 160px; background: linear-gradient(#fff0, #fff); }
 
 /* Схемы в тексте тянутся на всю ширину, уже 944px уменьшаются целиком */
+/* «Схема вместо абзаца»: схемы по одной, в размере исходного фрейма лонгрида (944px) */
+.mx-figs { display: flex; flex-direction: column; gap: 24px; }
+.mx-figs .sc-scale { max-width: 944px; }
 
 /* Сетка схем 2 × N: «Задача и проблема» и «Схема вместо абзаца» */
 .mx-collage { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
