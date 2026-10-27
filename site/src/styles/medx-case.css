@@ -55,7 +55,7 @@
 .mx-figs { display: flex; flex-direction: column; gap: 24px; }
 .mx-figs .sc-scale { max-width: 1094px; }
 .mx-figs figure { width: 100% !important; }
-.mx-figs figure > [style*="width: 864px"], .mx-figs figure > [style*="width:864px"], .mx-figs figure > svg[width="864"], .mx-figs svg[width="816"] { margin-inline: auto; }
+.mx-figs figure > [style*="width: 864px"], .mx-figs figure > [style*="width:864px"], .mx-figs figure > svg[width="864"] { margin-inline: auto; }
 
 
 /* Для кого: карточка аудитории и условия, в которых она учится */

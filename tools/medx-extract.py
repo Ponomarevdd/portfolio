@@ -176,6 +176,11 @@ for y, c in (('76', '#3b876a'), ('150', '#c9744a'), ('200', '#6f93a8'), ('240', 
 for t, ty, c in (('S', '80', '#3b876a'), ('E', '155', '#c9744a'), ('M', '205', '#6f93a8'), ('N', '245', '#b08a2e')):
     genome = genome.replace(f'<text x="256" y="{ty}" font-family="Manrope, sans-serif" font-size="15" font-weight="600" fill="#173d34" text-anchor="start">{t}</text>',
                             f'<text x="256" y="{ty}" font-family="Manrope, sans-serif" font-size="16" font-weight="700" fill="{c}" text-anchor="start">{t}</text>')
+# Подпись про серые гены уходит в примечание, чтобы вирус и легенда центрировались друг относительно друга
+gray = '<div style="font-size: 14px; line-height: 21px; color: #60716a; padding-top: 6px;">Серые гены — вспомогательные (3a, 6, 7a, 7b, 8, 10).</div>'
+assert gray in genome
+genome = genome.replace(gray, '').replace('Одна нить РНК длиной около 30 тыс. нуклеотидов</div>',
+                                           'Одна нить РНК длиной около 30 тыс. нуклеотидов. Серые гены — вспомогательные (3a, 6, 7a, 7b, 8, 10).</div>')
 write('fig-genome', genome)
 # Белок S: выноска «Тримеры белка S» не доходит до шипа вплотную, рисунок отодвинут от шагов
 spike = fluid(o3[2]).replace('d="M110 22 L122 40"', 'd="M122 23 L122 34"').replace('d="M121.1 31.0 L122 40 L114.1 35.7"', 'd="M117.4 25.4 L122 34 L126.6 25.4"')
@@ -191,9 +196,14 @@ write('fig-mutations', fluid(o3[5]).replace('width:88px;', 'width:136px;').repla
 write('fig-lineages', round_hv(fluid(o4[0])))
 # Сложные схемы для блока «Задача и проблема»
 write('fig-structure', o1[1])
-write('fig-phylo', o2[2])
-write('fig-simplot', o3[1])
-write('fig-s-protein', dot_heads(round_polyline(o3[3])))
+# Названия подродов без антиквы, как остальные подписи схем
+write('fig-phylo', o2[2].replace('font-family="PT Serif" font-size="28"', 'font-family="Manrope" font-weight="600" font-size="24"'))
+# SimPlot без белой подложки: график и легенда прямо на фоне фрейма
+write('fig-simplot', o3[1].replace('<div style="background:#ffffff;border-radius:12px;padding:20px 24px;display:flex;flex-direction:column;gap:16px">',
+                                   '<div style="display:flex;flex-direction:column;gap:20px">').replace('gap:6px 16px;padding-left:12px', 'gap:6px 16px'))
+# Белок S: низ головки без острых изломов, касательные переходят в прямую плавно
+sprot = o3[3].replace('C382 338 350 352 320 346 L206 346 C172 352 140 338 140 310', 'C382 334 356 346 320 346 L206 346 C170 346 140 334 140 310')
+write('fig-s-protein', dot_heads(round_polyline(sprot)))
 
 # Шапка лонгрида: без бежевого фона под картинкой, иначе он просвечивает на скруглённых углах
 lr = body('Main.dc.html').replace('border-radius: 32px; background: #f7f4ee; overflow: hidden;', 'border-radius: 32px; overflow: hidden; clip-path: inset(0 round 32px);', 1)
