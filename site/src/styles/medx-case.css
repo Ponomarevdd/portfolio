@@ -50,14 +50,13 @@
 .mx-frame--clip::after { content: ''; position: absolute; inset: auto 0 0; height: 160px; background: linear-gradient(#fff0, #fff); }
 
 /* Схемы в тексте тянутся на всю ширину, уже 944px уменьшаются целиком */
-/* «Схема вместо абзаца»: схемы по одной, в размере исходного фрейма лонгрида (944px) */
+/* Схемы по одной во фрейме 1094px (на 150px шире фрейма лонгрида); уже 1094px уменьшаются целиком.
+   Фрейм тянется на всю ширину, блоки фиксированной ширины 864px внутри центрируются */
 .mx-figs { display: flex; flex-direction: column; gap: 24px; }
-.mx-figs .sc-scale { max-width: 944px; }
+.mx-figs .sc-scale { max-width: 1094px; }
+.mx-figs figure { width: 100% !important; }
+.mx-figs figure > [style*="width: 864px"], .mx-figs figure > [style*="width:864px"], .mx-figs figure > svg[width="864"], .mx-figs svg[width="816"] { margin-inline: auto; }
 
-/* Сетка схем 2 × N: «Задача и проблема» и «Схема вместо абзаца» */
-.mx-collage { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.mx-collage__tile { border-radius: 16px; background: #f7f4ee; overflow: hidden; }
-.mx-collage__tile figure { border-radius: 0 !important; }
 
 /* Для кого: карточка аудитории и условия, в которых она учится */
 .mx-aud { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; }
@@ -71,7 +70,7 @@
 .mx-aud__facts p { font-size: 16px; line-height: 1.45; font-weight: 500; }
 
 @media (max-width: 899px) {
-  .mx-collage, .mx-aud { grid-template-columns: minmax(0, 1fr); }
+  .mx-aud { grid-template-columns: minmax(0, 1fr); }
   .mx-aud__who { padding: 28px; min-height: 0; }
   .mx-aud__who .sc-role__icon { margin-bottom: 8px; }
   .mx-aud__who h3 { font-size: 26px; }

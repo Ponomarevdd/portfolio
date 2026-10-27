@@ -73,8 +73,8 @@ const complex = [
         <div class="sc-head"><h2 id="h-problem">Задача и проблема</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Исходный материал — клинические рекомендации и научные публикации: генетика вируса, механизмы заражения, схемы терапии и противопоказания. Такие тексты плотные и трудны для восприятия, а специалисту нужно быстро найти ответ и не допустить ошибки. Задача — представить этот материал в формате, удобном для изучения, и сохранить медицинскую точность.</p>
-          <div class="mx-collage">
-            {complex.map(([f, label]) => <div class="mx-collage__tile"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label={label} set:html={art(f)}></div></div></div>)}
+          <div class="mx-figs">
+            {complex.map(([f, label]) => <div class="mx-fig"><div class="sc-scale" style="--base:1094px"><div class="mx-art" role="img" aria-label={label} set:html={art(f)}></div></div></div>)}
           </div>
         </div>
       </section>
@@ -117,7 +117,7 @@ const complex = [
         <div class="sc-main">
           <p class="sc-lead">Генетика вируса, эпидемиология и механизмы заражения представлены в лонгридах схемами. Каждая схема отвечает на один вопрос из текста.</p>
           <div class="mx-figs">
-            {schemes.map(([f, label]) => <div class="mx-fig"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label={label} set:html={art(f)}></div></div></div>)}
+            {schemes.map(([f, label]) => <div class="mx-fig"><div class="sc-scale" style="--base:1094px"><div class="mx-art" role="img" aria-label={label} set:html={art(f)}></div></div></div>)}
           </div>
         </div>
       </section>

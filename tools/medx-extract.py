@@ -129,11 +129,20 @@ def smooth_arrows(h, s_bend=False, r=24):
         return m.group(1) + d + m.group(3) + tipd + m.group(10)
     return ARROW.sub(one, h)
 
+DOT_PAIR = re.compile(r'(<path d="(M[^"]+)"[^>]*stroke="(#[0-9a-f]{6})"[^>]*></path>\s*)<path d="M[0-9.-]+ [0-9.-]+ L([0-9.-]+) ([0-9.-]+) L[0-9.-]+ [0-9.-]+"[^>]*></path>')
+
+def dot_heads(h, keep=()):
+    """Выноски заканчиваются точкой с белой обводкой (как в «Строении коронавируса»), а не стрелкой, упёртой в элемент."""
+    def one(m):
+        if m.group(2).startswith(keep): return m.group(0)
+        return m.group(1) + f'<circle cx="{m.group(4)}" cy="{m.group(5)}" r="4" fill="{m.group(3)}" stroke="#ffffff" stroke-width="1.5"></circle>'
+    return DOT_PAIR.sub(one, h)
+
 def write(n, h):
     (OUT / f'{n}.html').write_text(clean(h))
 
 o1, o2, o3, o4 = (figures(f'Origins{i}.dc.html') for i in range(1, 5))
-write('fig-genera', fluid(o1[0]))
+# fig-genera рисует tools/medx-genera.py (вариант B с иконками животных)
 # Шкала хронологии из SVG фиксированной ширины в сетку из трёх колонок, чтобы схема тянулась на всю ширину
 TIMELINE = ('<div style="position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;height:34px">'
             '<span style="position:absolute;left:2px;right:2px;top:16px;height:2px;border-radius:1px;background:#3b876a"></span>'
@@ -146,7 +155,7 @@ out = re.sub(r'<svg width="864" height="34"[\s\S]*?</svg>', TIMELINE, o1[3], cou
 write('fig-outbreaks', fluid(out))
 # Животные-хозяева: карточки промежуточных хозяев выше (у панголина подпись в две строки),
 # «Летучие мыши» компактнее; стрелки снизу укорочены под новые размеры
-hosts = o1[4].replace('top:150px;width:250px;height:134px;', 'top:150px;width:250px;height:146px;')
+hosts = o1[4].replace('font:400 28px/34px PT Serif;color:#c9744a', 'font:600 24px/32px Manrope;color:#c9744a').replace('top:150px;width:250px;height:134px;', 'top:150px;width:250px;height:146px;')
 hosts = hosts.replace('left:282px;top:350px;width:300px;height:100px;', 'left:282px;top:358px;width:300px;height:88px;')
 hosts = hosts.replace('height:88px;background:#e8f3ee;border:1.5px solid #3b876a;border-radius:12px;box-sizing:border-box;padding:16px 20px;display:flex;flex-direction:column;justify-content:center;gap:6px"><div style="display:flex;align-items:center;gap:12px;justify-content:flex-start',
                       'height:88px;background:#e8f3ee;border:1.5px solid #3b876a;border-radius:12px;box-sizing:border-box;padding:12px 20px;display:flex;flex-direction:column;justify-content:center;gap:0"><div style="display:flex;align-items:center;gap:10px;justify-content:center')
@@ -155,19 +164,36 @@ hosts = re.sub(r'(d="M[0-9.]+ 352 L[0-9.]+) 294"', r'\1 306"', hosts)
 hosts = re.sub(r'L(125|739) 294 L', r'L\1 306 L', hosts)
 hosts = hosts.replace('d="M427.2 302.8 L432 294 L436.8 302.8"', 'd="M427.4 314.6 L432 306 L436.6 314.6"')
 write('fig-hosts', smooth_arrows(hosts, s_bend=True))
-write('fig-genome', fluid(o3[0]))
+# Геном: буквы S, E, M, N и их выноски в цветах белков из легенды, выноски с точкой на конце
+genome = fluid(o3[0])
+for y, c in (('76', '#3b876a'), ('150', '#c9744a'), ('200', '#6f93a8'), ('240', '#b08a2e')):
+    genome = re.sub(r'(<path d="M([0-9.]+) ([0-9.]+) L250 %s" stroke=")#3b876a(" stroke-width=")1.2"' % y,
+                    lambda m, c=c: m.group(1) + c + m.group(4) + '1.5"', genome)
+    genome = re.sub(r'(<path d="M([0-9.]+) ([0-9.]+) L250 %s"[^>]*></path>)' % y,
+                    lambda m, c=c: m.group(1) + f'<circle cx="{float(m.group(2)):.1f}" cy="{float(m.group(3)):.1f}" r="3.5" fill="{c}" stroke="#ffffff" stroke-width="1.5"></circle>', genome)
+    # прежняя мелкая точка на конце выноски поверх новой не нужна
+    genome = re.sub(r'(r="3.5" fill="%s" stroke="#ffffff" stroke-width="1.5"></circle>)<circle [^>]*r="2.5"[^>]*></circle>' % c, r'\1', genome)
+for t, ty, c in (('S', '80', '#3b876a'), ('E', '155', '#c9744a'), ('M', '205', '#6f93a8'), ('N', '245', '#b08a2e')):
+    genome = genome.replace(f'<text x="256" y="{ty}" font-family="Manrope, sans-serif" font-size="15" font-weight="600" fill="#173d34" text-anchor="start">{t}</text>',
+                            f'<text x="256" y="{ty}" font-family="Manrope, sans-serif" font-size="16" font-weight="700" fill="{c}" text-anchor="start">{t}</text>')
+write('fig-genome', genome)
 # Белок S: выноска «Тримеры белка S» не доходит до шипа вплотную, рисунок отодвинут от шагов
 spike = fluid(o3[2]).replace('d="M110 22 L122 40"', 'd="M122 23 L122 34"').replace('d="M121.1 31.0 L122 40 L114.1 35.7"', 'd="M117.4 25.4 L122 34 L126.6 25.4"')
-spike = spike.replace('margin-top: -12px;', 'margin-top: 8px;')
-write('fig-spike', smooth_arrows(spike))
+spike = spike.replace('margin-top: -12px;', 'margin-top: 20px;').replace('gap: 28px; margin: 0;', 'gap: 36px; margin: 0;', 1)
+# стрелки между стадиями посередине промежутка между вирусами
+for a, b in (('M220 70 L262 70', 'M267 70 L309 70'), ('M254.1 65.8 L262 70 L254.1 74.2', 'M301.1 65.8 L309 70 L301.1 74.2'),
+             ('M508 70 L550 70', 'M554 70 L596 70'), ('M542.1 65.8 L550 70 L542.1 74.2', 'M588.1 65.8 L596 70 L588.1 74.2')):
+    spike = spike.replace(a, b)
+spike = spike.replace('d="M122 23 L122 34"', 'd="M122 23 L122 36"').replace('d="M117.4 25.4 L122 34 L126.6 25.4"', 'd="M117.4 27.4 L122 36 L126.6 27.4"')
+write('fig-spike', dot_heads(smooth_arrows(spike), keep=('M267 ', 'M554 ')))
 # Колонки «одного вида / разные / человек» шире, чтобы подписи не слипались
-write('fig-mutations', fluid(o3[5]).replace('width:88px;', 'width:120px;'))
+write('fig-mutations', fluid(o3[5]).replace('width:88px;', 'width:136px;').replace('padding:16px 24px;display:flex;align-items:center;gap:16px;', 'padding:20px 28px;display:flex;align-items:center;gap:24px;').replace('gap:14px;position:relative;', 'gap:16px;position:relative;'))
 write('fig-lineages', round_hv(fluid(o4[0])))
 # Сложные схемы для блока «Задача и проблема»
 write('fig-structure', o1[1])
 write('fig-phylo', o2[2])
 write('fig-simplot', o3[1])
-write('fig-s-protein', round_polyline(o3[3]))
+write('fig-s-protein', dot_heads(round_polyline(o3[3])))
 
 # Шапка лонгрида: без бежевого фона под картинкой, иначе он просвечивает на скруглённых углах
 lr = body('Main.dc.html').replace('border-radius: 32px; background: #f7f4ee; overflow: hidden;', 'border-radius: 32px; overflow: hidden; clip-path: inset(0 round 32px);', 1)
