@@ -458,6 +458,11 @@
 .sc-tokens small { font-size: 11px; font-weight: 300; opacity: .75; }
 .sc-tokens span:nth-child(1) { grid-column: span 2; }
 .sc-tokens span:nth-child(7) { grid-column: span 2; }
+/* На самых узких экранах в три колонки названия цветов не помещаются */
+@media (max-width: 399px) {
+  .sc-tokens { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sc-tokens span:nth-child(7) { grid-column: auto; }
+}
 .sc-tokens span { opacity: 0; transform: scale(.92); }
 .is-in .sc-tokens span { animation: pr-pop .5s cubic-bezier(.3,1.4,.5,1) forwards; animation-delay: calc(var(--i) * .08s); }
 @keyframes pr-pop { to { opacity: 1; transform: none; } }
@@ -545,7 +550,7 @@
   .a-check, .a-fb { opacity: 1; }
   .sc-map__reveal, .sc-map__reveal > div { transform: none; }
   .sc-map__city { opacity: 1; }
-  .sc-pains li > * { opacity: 1; transform: none; }
+  .sc-pains li > *, .sc-pains .sc-pains__arrow, .sc-pains .sc-fix { opacity: 1; transform: none; }
   .sc-duties li, .sc-duties .sc-role__icon { opacity: 1; transform: none; }
   .sc-tokens span { opacity: 1; transform: none; }
   .pr-sl__track { transition: none; }
@@ -571,8 +576,10 @@
 }
 @media (max-width: 699px) {
   .sc-pains__head { display: none; }
+  /* Пары «боль → решение» в столбик: между парами отступ больше, чем внутри пары, иначе они слипаются */
+  .sc-pains ul { gap: 56px; }
   .sc-pains li { grid-template-columns: minmax(0, 1fr); }
-  .sc-pains__arrow { height: 36px; }
+  .sc-pains__arrow { height: 32px; }
   .sc-pains__arrow .iconsax { rotate: 90deg; }
   .sc-pq p, .sc-fix strong { font-size: 16px; }
   .sc-head h2 { font-size: 28px; }
