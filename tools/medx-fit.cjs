@@ -10,8 +10,8 @@ const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'site/src/data/medx');
 const FONTS = path.join(ROOT, 'site/node_modules/@fontsource/manrope/files');
 const INNER = 1094 - 2 * 40; // ширина фрейма минус поля figure
-const NORM = ['fig-structure', 'fig-simplot', 'fig-phylo', 'fig-s-protein', 'fig-spike', 'fig-mutations', 'fig-genera', 'fig-hosts', 'fig-genome', 'fig-lineages'];
-const FIT = ['fig-structure', 'fig-simplot', 'fig-phylo', 'fig-s-protein', 'fig-hosts'];
+const NORM = ['fig-structure', 'fig-simplot', 'fig-phylo', 'fig-bats', 'fig-spike', 'fig-mutations', 'fig-genera', 'fig-hosts', 'fig-genome', 'fig-lineages'];
+const FIT = ['fig-structure', 'fig-simplot', 'fig-phylo', 'fig-hosts'];
 
 const faces = [400, 500, 600, 700].flatMap((w) => ['latin', 'cyrillic'].map((s) =>
   `@font-face{font-family:Manrope;font-weight:${w};src:url("file://${FONTS}/manrope-${s}-${w}-normal.woff2")}`)).join('');

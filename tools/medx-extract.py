@@ -212,12 +212,14 @@ write('fig-phylo', o2[2].replace('font-family="PT Serif" font-size="28"', 'font-
 # SimPlot без белой подложки: график и легенда прямо на фоне фрейма
 write('fig-simplot', o3[1].replace('<div style="background:#ffffff;border-radius:12px;padding:20px 24px;display:flex;flex-direction:column;gap:16px">',
                                    '<div style="display:flex;flex-direction:column;gap:20px">').replace('gap:6px 16px;padding-left:12px', 'gap:6px 16px'))
-# Белок S: низ головки без острых изломов, касательные переходят в прямую плавно
-sprot = o3[3].replace('C382 338 350 352 320 346 L206 346 C172 352 140 338 140 310', 'C382 334 356 346 320 346 L206 346 C170 346 140 334 140 310')
-write('fig-s-protein', dot_heads(round_polyline(sprot)))
+# Где обитают подковоносы: два блока на всю ширину фрейма (заменила схему структуры S-белка)
+write('fig-bats', fluid(o2[1]))
 
 # Шапка лонгрида: без бежевого фона под картинкой, иначе он просвечивает на скруглённых углах
-lr = body('Main.dc.html').replace('border-radius: 32px; background: #f7f4ee; overflow: hidden;', 'border-radius: 32px; overflow: hidden; clip-path: inset(0 round 32px);', 1)
+# Скругление только через clip-path (overflow + border-radius при масштабировании дают ореол картинки по краю),
+# а слева под текстом подложка непрозрачная, чтобы фото не просвечивало пятнами
+lr = body('Main.dc.html').replace('border-radius: 32px; background: #f7f4ee; overflow: hidden;', 'clip-path: inset(0 round 32px); isolation: isolate;', 1)
+lr = lr.replace('rgba(247,244,238,0.97) 0%, rgba(247,244,238,0.93) 40%', '#f7f4ee 0%, #f7f4ee 40%', 1)
 write('longread', lr)
 # В сайдбаре «Моё обучение» вместо набранного «MedX» настоящий логотип (векторная отрисовка с растра)
 lms = body('Main-v2-photo-kwjf.dc.html')
