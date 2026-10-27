@@ -67,20 +67,11 @@
 .mx-aud__facts .sc-role__icon { flex: none; width: 48px; height: 48px; border-radius: 14px; }
 .mx-aud__facts p { font-size: 16px; line-height: 1.45; font-weight: 500; }
 
-/* Обложки лонгридов: 2 + 3 + 2 по шестиколоночной сетке */
-.mx-covers { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
-.mx-covers li { grid-column: span 2; }
-.mx-covers li:nth-child(-n+2), .mx-covers li:nth-child(n+6) { grid-column: span 3; }
-.mx-covers img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 16px; }
-
 @media (max-width: 899px) {
   .mx-collage, .mx-aud { grid-template-columns: minmax(0, 1fr); }
   .mx-aud__who { padding: 28px; min-height: 0; }
   .mx-aud__who .sc-role__icon { margin-bottom: 8px; }
   .mx-aud__who h3 { font-size: 26px; }
-  .mx-covers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .mx-covers li, .mx-covers li:nth-child(-n+2), .mx-covers li:nth-child(n+6) { grid-column: span 1; }
-  .mx-covers li:first-child { grid-column: span 2; }
 }
 
 /* Дизайн-система */

@@ -60,6 +60,75 @@ def fluid(h):
     h = h.replace('<div style="width: 288px; display: flex; justify-content: center;">', '<div style="flex: 1; display: flex; justify-content: center;">')
     return re.sub(r'(<svg width="864" height="\d+"[^>]*?style=")', r'\1width: 100%; height: auto; ', h)
 
+
+NUM = r'(-?[0-9.]+)'
+def _f(v): return f'{v:.1f}'.rstrip('0').rstrip('.')
+
+def round_hv(h, r=10):
+    """Ортогональные линии (M x y H.. V..) получают скруглённые углы вместо прямых."""
+    def one(m):
+        toks = re.findall(r'([MHV])\s*(-?[0-9.]+)(?:\s+(-?[0-9.]+))?', m.group(1))
+        if len(toks) < 3 or toks[0][0] != 'M': return m.group(0)
+        pts = [(float(toks[0][1]), float(toks[0][2]))]
+        for c, a, _ in toks[1:]:
+            x, y = pts[-1]
+            pts.append((float(a), y) if c == 'H' else (x, float(a)))
+        d = f'M{_f(pts[0][0])} {_f(pts[0][1])}'
+        for i in range(1, len(pts) - 1):
+            (ax, ay), (bx, by), (cx, cy) = pts[i - 1], pts[i], pts[i + 1]
+            l1, l2 = abs(bx - ax) + abs(by - ay), abs(cx - bx) + abs(cy - by)
+            k = min(r, l1 / 2, l2 / 2)
+            if k <= 0: continue
+            sx, sy = (bx - ax) / l1, (by - ay) / l1
+            ex, ey = (cx - bx) / l2, (cy - by) / l2
+            d += f' L{_f(bx - sx * k)} {_f(by - sy * k)} Q{_f(bx)} {_f(by)} {_f(bx + ex * k)} {_f(by + ey * k)}'
+        d += f' L{_f(pts[-1][0])} {_f(pts[-1][1])}'
+        return f'd="{d}"'
+    return re.sub(r'd="(M[0-9. ]+(?:\s*[HV]\s*[0-9.]+){2,})"', one, h)
+
+def round_polyline(h, r=20):
+    """Ломаные выноски (M.. L.. L..) со скруглённым изломом, направление входа сохраняется."""
+    def one(m):
+        pts = [tuple(map(float, q)) for q in re.findall(NUM + ' ' + NUM, m.group(1))]
+        seg = lambda i: ((pts[i + 1][0] - pts[i][0]) ** 2 + (pts[i + 1][1] - pts[i][1]) ** 2) ** .5
+        if min(seg(i) for i in range(len(pts) - 1)) < 20: return m.group(0)  # наконечник стрелки
+        d = f'M{_f(pts[0][0])} {_f(pts[0][1])}'
+        for i in range(1, len(pts) - 1):
+            (ax, ay), (bx, by), (cx, cy) = pts[i - 1], pts[i], pts[i + 1]
+            l1, l2 = ((bx - ax) ** 2 + (by - ay) ** 2) ** .5, ((cx - bx) ** 2 + (cy - by) ** 2) ** .5
+            k = min(r, l1 / 2, l2 / 2)
+            d += (f' L{_f(bx - (bx - ax) / l1 * k)} {_f(by - (by - ay) / l1 * k)}'
+                  f' Q{_f(bx)} {_f(by)} {_f(bx + (cx - bx) / l2 * k)} {_f(by + (cy - by) / l2 * k)}')
+        return f'd="{d} L{_f(pts[-1][0])} {_f(pts[-1][1])}"'
+    return re.sub(r'd="(M[0-9.]+ [0-9.]+(?: L[0-9.]+ [0-9.]+){2,})"', one, h)
+
+ARROW = re.compile(r'(<path d=")(M[0-9. L-]+)("[^>]*></path>\s*<path d=")M([0-9.-]+) ([0-9.-]+) L([0-9.-]+) ([0-9.-]+) L([0-9.-]+) ([0-9.-]+)(")')
+
+def smooth_arrows(h, s_bend=False, r=24):
+    """Наклонные стрелки: выходят прямо и плавно поворачивают в цель, наконечник по направлению входа."""
+    def one(m):
+        pts = [tuple(map(float, q)) for q in re.findall(NUM + ' ' + NUM, m.group(2))]
+        tip = (float(m.group(6)), float(m.group(7)))
+        if len(pts) < 2 or abs(pts[-1][0] - tip[0]) > .6 or abs(pts[-1][1] - tip[1]) > .6: return m.group(0)
+        (x1, y1), (x2, y2) = pts[-2], pts[-1]
+        dx, dy = x2 - x1, y2 - y1
+        if abs(dx) < .6 or abs(dy) < .6: return m.group(0)
+        sx, sy = (1 if dx > 0 else -1), (1 if dy > 0 else -1)
+        head = pts[:-2]
+        d = 'M' + ' L'.join(f'{_f(x)} {_f(y)}' for x, y in head + [(x1, y1)])
+        if s_bend:
+            ym = (y1 + y2) / 2; k = min(r, abs(dx) / 2, abs(dy) / 2)
+            d += (f' L{_f(x1)} {_f(ym - sy * k)} Q{_f(x1)} {_f(ym)} {_f(x1 + sx * k)} {_f(ym)}'
+                  f' L{_f(x2 - sx * k)} {_f(ym)} Q{_f(x2)} {_f(ym)} {_f(x2)} {_f(ym + sy * k)} L{_f(x2)} {_f(y2)}')
+        else:
+            k = min(r, abs(dx), abs(dy))
+            d += f' L{_f(x2 - sx * k)} {_f(y1)} Q{_f(x2)} {_f(y1)} {_f(x2)} {_f(y1 + sy * k)} L{_f(x2)} {_f(y2)}'
+        # наконечник смотрит вдоль вертикали входа
+        hx, hy = 4.6, 8.6
+        tipd = f'M{_f(x2 - hx)} {_f(y2 - sy * hy)} L{_f(x2)} {_f(y2)} L{_f(x2 + hx)} {_f(y2 - sy * hy)}'
+        return m.group(1) + d + m.group(3) + tipd + m.group(10)
+    return ARROW.sub(one, h)
+
 def write(n, h):
     (OUT / f'{n}.html').write_text(clean(h))
 
@@ -75,18 +144,20 @@ TIMELINE = ('<div style="position:relative;display:grid;grid-template-columns:re
             + '</div>')
 out = re.sub(r'<svg width="864" height="34"[\s\S]*?</svg>', TIMELINE, o1[3], count=1)
 write('fig-outbreaks', fluid(out))
-write('fig-hosts', o1[4])
+write('fig-hosts', smooth_arrows(o1[4], s_bend=True))
 write('fig-genome', fluid(o3[0]))
-write('fig-spike', fluid(o3[2]))
+write('fig-spike', smooth_arrows(fluid(o3[2])))
 write('fig-mutations', fluid(o3[5]))
-write('fig-lineages', fluid(o4[0]))
+write('fig-lineages', round_hv(fluid(o4[0])))
 # Сложные схемы для блока «Задача и проблема»
 write('fig-structure', o1[1])
 write('fig-phylo', o2[2])
 write('fig-simplot', o3[1])
-write('fig-s-protein', o3[3])
+write('fig-s-protein', round_polyline(o3[3]))
 
-write('longread', body('Main.dc.html'))
+# Шапка лонгрида: без бежевого фона под картинкой, иначе он просвечивает на скруглённых углах
+lr = body('Main.dc.html').replace('border-radius: 32px; background: #f7f4ee; overflow: hidden;', 'border-radius: 32px; overflow: hidden; clip-path: inset(0 round 32px);', 1)
+write('longread', lr)
 # В сайдбаре «Моё обучение» вместо набранного «MedX» настоящий логотип (векторная отрисовка с растра)
 lms = body('Main-v2-photo-kwjf.dc.html')
 lms = re.sub(r'<div style="padding: 0 12px; font-family: \'PT Serif\'[^>]*>MedX</div>',

@@ -38,15 +38,6 @@ const complex = [
   ['fig-phylo', 'Родственные связи бетакоронавирусов'],
   ['fig-s-protein', 'Структура S-белка SARS-CoV-2'],
 ];
-const covers = [
-  ['ill-onco-patient', 'Пациентка на химиотерапии под капельницей'],
-  ['ill-origins', 'Летучие мыши и коронавирус'],
-  ['ill-diabetes', 'Пациент после вакцинации'],
-  ['ill-cardio', 'Сердце в разрезе'],
-  ['ill-onco', 'Вакцинация онкологических пациентов'],
-  ['ill-research', 'Исследование SARS-CoV-2 в лаборатории'],
-  ['ill-vector', 'Векторные вакцины'],
-];
 ---
 <Page title="MedX.pro">
   <article class="sc mx">
@@ -81,8 +72,7 @@ const covers = [
       <section class="sc-sec" aria-labelledby="h-problem">
         <div class="sc-head"><h2 id="h-problem">Задача и проблема</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Исходный материал — клинические рекомендации и научные публикации: генетика вируса, механизмы заражения, схемы терапии и противопоказания. Такие тексты плотные и трудны для восприятия, а специалисту нужно быстро найти ответ и не допустить ошибки.</p>
-          <p>Задача — представить этот материал в формате, удобном для изучения, и сохранить медицинскую точность.</p>
+          <p class="sc-lead">Исходный материал — клинические рекомендации и научные публикации: генетика вируса, механизмы заражения, схемы терапии и противопоказания. Такие тексты плотные и трудны для восприятия, а специалисту нужно быстро найти ответ и не допустить ошибки. Задача — представить этот материал в формате, удобном для изучения, и сохранить медицинскую точность.</p>
           <div class="mx-collage">
             {complex.map(([f, label]) => <div class="mx-collage__tile"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label={label} set:html={art(f)}></div></div></div>)}
           </div>
@@ -98,7 +88,7 @@ const covers = [
             <li><span class="sc-role__icon"><Iconsax name="element-4-bold" size={28}/></span><h3>UI-kit</h3><p>Разработал UI-kit с нуля: цвета, шрифты, отступы, скругления, плашки, таблицы и таймлайны. На нём собраны все лонгриды.</p></li>
             <li><span class="sc-role__icon"><Iconsax name="hierarchy-bold" size={28}/></span><h3>Структура лонгрида</h3><p>Спроектировал структуру лонгрида и место в ней для видео, конспектов, интерактивов и самопроверки.</p></li>
             <li><span class="sc-role__icon"><Iconsax name="diagram-bold" size={28}/></span><h3>Схемы</h3><p>Переводил сложные медицинские данные в схемы: генетику вируса, механизмы заражения, рекомендации по терапии.</p></li>
-            <li><span class="sc-role__icon"><Iconsax name="pen-tool-bold" size={28}/></span><h3>Иллюстрации</h3><p>Создавал обложки: генерация в GPT и доработка в Photoshop до медицинской и анатомической точности.</p></li>
+            <li><span class="sc-role__icon"><Iconsax name="pen-tool-bold" size={28}/></span><h3>Иллюстрации</h3><p>Создавал обложки лонгридов в Photoshop с медицинской и анатомической точностью.</p></li>
             <li><span class="sc-role__icon"><Iconsax name="clipboard-text-bold" size={28}/></span><h3>Работа со смежниками</h3><p>Выстраивал подачу материала совместно с методистами и редактором, планировал выпуск с руководителем проекта.</p></li>
           </ul>
         </div>
@@ -129,17 +119,6 @@ const covers = [
           <div class="mx-collage">
             {schemes.map(([f, label]) => <div class="mx-collage__tile"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label={label} set:html={art(f)}></div></div></div>)}
           </div>
-        </div>
-      </section>
-
-      <section class="sc-sec" aria-labelledby="h-ill">
-        <div class="sc-head"><h2 id="h-ill">Иллюстрации обложек</h2></div>
-        <div class="sc-main">
-          <p class="sc-lead">Мы сознательно отказались от типичных стоковых фотографий с улыбающимися врачами. Вместо них для каждого лонгрида создавалась собственная иллюстрация.</p>
-          <p>Обложек требовалось много, в сжатые сроки и в едином стиле, поэтому полностью ручная отрисовка не подходила. Иллюстрации генерировались в GPT, а затем дорабатывались в Photoshop: исправлялись ошибки генерации, выверялись медицинские и анатомические детали, выравнивались цвет и стиль.</p>
-          <ul class="mx-covers">
-            {covers.map(([f, alt]) => <li><img src={siteUrl(`/images/medx/${f}.webp`)} alt={alt} width="1600" height="900" loading="lazy" decoding="async"/></li>)}
-          </ul>
         </div>
       </section>
 
@@ -198,7 +177,7 @@ const covers = [
             <li><strong>Концепт</strong><span>личного кабинета</span></li>
           </ul>
           <div class="sc-quote">
-            <p>Все 22 лонгрида собраны на едином UI-kit: схемы, интерактивы, самопроверки, видео и конспекты. Обложки сохраняют медицинскую и анатомическую точность и остаются понятными для аудитории.</p>
+            <p>Все 22 лонгрида собраны на едином UI-kit: схемы, интерактивы, самопроверки, видео и конспекты.</p>
           </div>
         </div>
       </section>
