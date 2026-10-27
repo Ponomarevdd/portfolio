@@ -11,7 +11,7 @@ const DATA = path.join(ROOT, 'site/src/data/medx');
 const FONTS = path.join(ROOT, 'site/node_modules/@fontsource/manrope/files');
 const INNER = 1094 - 2 * 40; // ширина фрейма минус поля figure
 const NORM = ['fig-structure', 'fig-simplot', 'fig-phylo', 'fig-s-protein', 'fig-spike', 'fig-mutations', 'fig-genera', 'fig-hosts', 'fig-genome', 'fig-lineages'];
-const FIT = ['fig-structure', 'fig-simplot', 'fig-phylo', 'fig-hosts'];
+const FIT = ['fig-structure', 'fig-simplot', 'fig-phylo', 'fig-s-protein', 'fig-hosts'];
 
 const faces = [400, 500, 600, 700].flatMap((w) => ['latin', 'cyrillic'].map((s) =>
   `@font-face{font-family:Manrope;font-weight:${w};src:url("file://${FONTS}/manrope-${s}-${w}-normal.woff2")}`)).join('');
@@ -132,7 +132,7 @@ function secondChild(html) {
       const jobs = [];
       for (let n; (n = walk.nextNode());) {
         const el = n.parentElement;
-        if (!n.textContent.trim() || done.has(el) || (title && title.contains(el))) continue;
+        if (!n.textContent.trim() || done.has(el) || (title && title.contains(el)) || el.closest('[data-keep]')) continue;
         done.add(el);
         const svg = el.closest('svg');
         let k;

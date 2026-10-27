@@ -33,7 +33,7 @@ cards = []
 for genus, hosts, human in GENERA:
     tiles = ''.join(
         f'<li style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px 12px;border-radius:12px;background:{BG};'
-        f'font:500 13px/17px Manrope;color:{T};text-align:center">{icon(h, 64, P, 40)}<span>{h}</span></li>' for h in hosts)
+        f'font:500 12px/15px Manrope;color:{T};text-align:center">{icon(h, 64, P, 40)}<span data-keep>{h}</span></li>' for h in hosts)
     # Подвал в одну строку и в одном стиле у обоих состояний: иконка человека + подпись
     foot = (f'<div style="display:flex;align-items:center;gap:6px;padding-top:14px;border-top:1px solid {LINE};'
             f'font:600 13px/18px Manrope;white-space:nowrap;color:{OT if human else CAP}">'

@@ -195,12 +195,12 @@ spike = spike.replace('H864 V300 H0 Z" fill="#e8f3ee"', 'H864 V274 Q864 290 848 
 spike = spike.replace('H864 V300 H0 H640 Z" fill="#e8f3ee"', 'H864 V274 Q864 290 848 290 H640 Z" fill="#e8f3ee"')
 write('fig-spike', dot_heads(smooth_arrows(spike), keep=('M267 ', 'M554 ')))
 # Колонки «одного вида / разные / человек» шире, чтобы подписи не слипались
-# Шапка таблицы просторнее: больше воздуха над подписями колонок и между ними и строками
+# Шапка таблицы просторнее: подписи колонок отодвинуты от общего заголовка и прижаты к строкам
 mut = o3[5].replace('padding:24px;display:flex;flex-direction:column;gap:16px;position:relative;', 'padding:32px 24px 24px;display:flex;flex-direction:column;gap:16px;position:relative;')
-mut = mut.replace('display:flex;padding-left:48px;justify-content:flex-end;', 'display:flex;padding-left:48px;justify-content:flex-end;margin-bottom:12px;')
-mut = mut.replace('flex-direction:column;align-items:center;gap:4px;', 'flex-direction:column;align-items:center;gap:10px;')
+mut = mut.replace('flex-direction:column;align-items:center;gap:4px;', 'flex-direction:column;align-items:center;gap:20px;')
+mut = mut.replace('display:flex;padding-left:48px;justify-content:flex-end;', 'display:flex;padding-left:48px;justify-content:flex-end;margin-bottom:-4px;')
 # линия таймлайна от первой точки до последней
-mut = mut.replace('position:absolute;left:35px;top:96px;bottom:50px;', 'position:absolute;left:35px;top:150px;bottom:102px;')
+mut = mut.replace('position:absolute;left:35px;top:96px;bottom:50px;', 'position:absolute;left:35px;top:144px;bottom:102px;')
 write('fig-mutations', fluid(mut).replace('width:88px;', 'width:136px;').replace('padding:16px 24px;display:flex;align-items:center;gap:16px;', 'padding:20px 28px;display:flex;align-items:center;gap:24px;').replace('gap:14px;position:relative;', 'gap:16px;position:relative;'))
 write('fig-lineages', round_hv(fluid(o4[0])))
 # Сложные схемы для блока «Задача и проблема»
@@ -212,7 +212,7 @@ write('fig-simplot', o3[1].replace('<div style="background:#ffffff;border-radius
                                    '<div style="display:flex;flex-direction:column;gap:20px">').replace('gap:6px 16px;padding-left:12px', 'gap:6px 16px'))
 # Белок S: низ головки без острых изломов, касательные переходят в прямую плавно
 sprot = o3[3].replace('C382 338 350 352 320 346 L206 346 C172 352 140 338 140 310', 'C382 334 356 346 320 346 L206 346 C170 346 140 334 140 310')
-write('fig-s-protein', dot_heads(round_polyline(sprot)))  # перерисовывается в medx-sprotein.py
+write('fig-s-protein', dot_heads(round_polyline(sprot)))
 
 # Шапка лонгрида: без бежевого фона под картинкой, иначе он просвечивает на скруглённых углах
 lr = body('Main.dc.html').replace('border-radius: 32px; background: #f7f4ee; overflow: hidden;', 'border-radius: 32px; overflow: hidden; clip-path: inset(0 round 32px);', 1)
