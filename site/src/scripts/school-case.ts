@@ -1,5 +1,11 @@
 // Кейс «Цифровая платформа для школ»: анимации запускаются только у блоков в зоне видимости.
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Текст макетов набран кривыми (integrations/curves.mjs); меняющиеся подписи берём из готового набора
+const curves: Record<string, Record<string, string>> = JSON.parse(document.getElementById('cv-dyn')?.textContent || '{}');
+const put = (el: HTMLElement, key: string, text: string) => {
+  const html = curves[key]?.[text];
+  if (html) el.innerHTML = html; else el.textContent = text;
+};
 const format = (value: number, decimals: number) => value.toLocaleString('ru-RU', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 
 function countUp(el: HTMLElement) {
@@ -64,7 +70,7 @@ document.querySelectorAll<HTMLElement>('.sc [data-slider]').forEach((root) => {
     i = (n + slides.length) % slides.length;
     track.style.transform = `translateX(${-i * 100}%)`;
     slides.forEach((s, k) => s.setAttribute('aria-hidden', String(k !== i)));
-    count.textContent = `${i + 1} / ${slides.length}`;
+    put(count, 'slider', `${i + 1} / ${slides.length}`);
   };
   const stop = () => { clearInterval(timer); timer = 0; };
   const play = () => { stop(); if (!reduced) timer = window.setInterval(() => go(i + 1), 3600); };
@@ -108,7 +114,7 @@ if (lms && !reduced) {
     cursor.classList.remove('is-click'); void cursor.offsetWidth; cursor.classList.add('is-click');
     el.classList.add('is-press'); await sleep(160); el.classList.remove('is-press');
   };
-  const set = (k: string, v: string) => { $(k).textContent = v; };
+  const set = (k: string, v: string) => put($(k), k, v);
   const instant = (els: HTMLElement[], fn: () => void) => {
     els.forEach((e) => { e.style.transition = 'none'; });
     fn(); void lms.offsetWidth;
@@ -116,7 +122,7 @@ if (lms && !reduced) {
   };
   const reading = (k: number) => {
     toc.forEach((t, i) => { t.classList.toggle('is-done', i < k); t.classList.toggle('is-now', i === k); });
-    tocCount.textContent = `Изучено ${k + 1} из ${toc.length} разделов`;
+    put(tocCount, 'toc-count', `Изучено ${k + 1} из ${toc.length} разделов`);
     tocRail.style.setProperty('--rail', `${Math.round(k / (toc.length - 1) * 100)}%`);
   };
   const reset = () => {
