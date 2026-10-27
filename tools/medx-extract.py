@@ -195,7 +195,13 @@ spike = spike.replace('H864 V300 H0 Z" fill="#e8f3ee"', 'H864 V274 Q864 290 848 
 spike = spike.replace('H864 V300 H0 H640 Z" fill="#e8f3ee"', 'H864 V274 Q864 290 848 290 H640 Z" fill="#e8f3ee"')
 write('fig-spike', dot_heads(smooth_arrows(spike), keep=('M267 ', 'M554 ')))
 # Колонки «одного вида / разные / человек» шире, чтобы подписи не слипались
-write('fig-mutations', fluid(o3[5]).replace('width:88px;', 'width:136px;').replace('padding:16px 24px;display:flex;align-items:center;gap:16px;', 'padding:20px 28px;display:flex;align-items:center;gap:24px;').replace('gap:14px;position:relative;', 'gap:16px;position:relative;'))
+# Шапка таблицы просторнее: больше воздуха над подписями колонок и между ними и строками
+mut = o3[5].replace('padding:24px;display:flex;flex-direction:column;gap:16px;position:relative;', 'padding:32px 24px 24px;display:flex;flex-direction:column;gap:16px;position:relative;')
+mut = mut.replace('display:flex;padding-left:48px;justify-content:flex-end;', 'display:flex;padding-left:48px;justify-content:flex-end;margin-bottom:12px;')
+mut = mut.replace('flex-direction:column;align-items:center;gap:4px;', 'flex-direction:column;align-items:center;gap:10px;')
+# линия таймлайна от первой точки до последней
+mut = mut.replace('position:absolute;left:35px;top:96px;bottom:50px;', 'position:absolute;left:35px;top:150px;bottom:102px;')
+write('fig-mutations', fluid(mut).replace('width:88px;', 'width:136px;').replace('padding:16px 24px;display:flex;align-items:center;gap:16px;', 'padding:20px 28px;display:flex;align-items:center;gap:24px;').replace('gap:14px;position:relative;', 'gap:16px;position:relative;'))
 write('fig-lineages', round_hv(fluid(o4[0])))
 # Сложные схемы для блока «Задача и проблема»
 write('fig-structure', o1[1])

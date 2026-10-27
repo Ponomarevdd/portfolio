@@ -1,7 +1,7 @@
 """Схема «Роды коронавирусов и их хозяева» для кейса MedX (вариант B: пять карточек с иконками животных).
 
 python3 tools/medx-genera.py — пишет site/src/data/medx/fig-genera.html.
-Иконки лежат в site/src/assets/medx-animals (свои, tools/medx-animals.py).
+Силуэты лежат в site/src/assets/medx-animals (PhyloPic, CC0 / Public Domain).
 """
 import pathlib, re
 
@@ -25,15 +25,15 @@ def body(n):
 def vbox(n):
     return re.search(r'viewBox="([^"]+)"', (ICONS / f'{n}.svg').read_text()).group(1)
 
-def icon(name, size, color):
-    return (f'<svg width="{size}" height="{size}" viewBox="{vbox(ANIMAL[name])}" fill="currentColor" style="display:block;flex:none;color:{color}" aria-hidden="true">'
+def icon(name, size, color, h=None):
+    return (f'<svg width="{size}" height="{h or size}" viewBox="{vbox(ANIMAL[name])}" fill="currentColor" style="display:block;flex:none;color:{color}" aria-hidden="true">'
             f'{body(ANIMAL[name])}</svg>')
 
 cards = []
 for genus, hosts, human in GENERA:
     tiles = ''.join(
         f'<li style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px 12px;border-radius:12px;background:{BG};'
-        f'font:500 13px/17px Manrope;color:{T};text-align:center">{icon(h, 44, P)}<span>{h}</span></li>' for h in hosts)
+        f'font:500 13px/17px Manrope;color:{T};text-align:center">{icon(h, 64, P, 40)}<span>{h}</span></li>' for h in hosts)
     # Подвал в одну строку и в одном стиле у обоих состояний: иконка человека + подпись
     foot = (f'<div style="display:flex;align-items:center;gap:6px;padding-top:14px;border-top:1px solid {LINE};'
             f'font:600 13px/18px Manrope;white-space:nowrap;color:{OT if human else CAP}">'
