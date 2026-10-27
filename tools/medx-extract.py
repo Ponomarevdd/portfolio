@@ -193,12 +193,14 @@ spike = spike.replace('d="M122 23 L122 34"', 'd="M122 23 L122 36"').replace('d="
 # Подложка клетки внизу обрезалась краем svg и давала острые углы: доводим её до низа со скруглением
 spike = spike.replace('H864 V300 H0 Z" fill="#e8f3ee"', 'H864 V274 Q864 290 848 290 H16 Q0 290 0 274 Z" fill="#e8f3ee"')
 spike = spike.replace('H864 V300 H0 H640 Z" fill="#e8f3ee"', 'H864 V274 Q864 290 848 290 H640 Z" fill="#e8f3ee"')
-write('fig-spike', dot_heads(smooth_arrows(spike), keep=('M267 ', 'M554 ', 'M396 ', 'M500 ')))
+write('fig-spike', dot_heads(smooth_arrows(spike), keep=('M267 ', 'M554 ', 'M396 ', 'M500 ', 'M720 ')))
 # Колонки «одного вида / разные / человек» шире, чтобы подписи не слипались
 # Шапка таблицы: «Связывание АПФ2 рецептора» сидит вплотную к подписям колонок, под ними больше воздуха до строк
 mut = o3[5].replace('padding:24px;display:flex;flex-direction:column;gap:16px;position:relative;', 'padding:36px 24px 24px;display:flex;flex-direction:column;gap:16px;position:relative;')
 mut = mut.replace('flex-direction:column;align-items:center;gap:4px;', 'flex-direction:column;align-items:center;gap:8px;')
 mut = mut.replace('display:flex;padding-left:48px;justify-content:flex-end;', 'display:flex;padding-left:48px;justify-content:flex-end;margin-bottom:4px;')
+# подписи колонок выровнены по низу («человек» в одну строку стоит на уровне вторых строк соседей)
+mut = mut.replace('display:flex;padding-right:24px;', 'display:flex;align-items:flex-end;padding-right:24px;', 1)
 # линия таймлайна от первой точки до последней
 mut = mut.replace('position:absolute;left:35px;top:96px;bottom:50px;', 'position:absolute;left:35px;top:144px;bottom:102px;')
 write('fig-mutations', fluid(mut).replace('width:88px;', 'width:136px;').replace('padding:16px 24px;display:flex;align-items:center;gap:16px;', 'padding:20px 28px;display:flex;align-items:center;gap:24px;').replace('gap:14px;position:relative;', 'gap:16px;position:relative;'))
