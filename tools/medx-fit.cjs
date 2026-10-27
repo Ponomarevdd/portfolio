@@ -10,7 +10,8 @@ const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'site/src/data/medx');
 const FONTS = path.join(ROOT, 'site/node_modules/@fontsource/manrope/files');
 const INNER = 1094 - 2 * 40; // ширина фрейма минус поля figure
-const FIT = ['fig-structure', 'fig-simplot', 'fig-phylo', 'fig-s-protein', 'fig-hosts'];
+const NORM = ['fig-structure', 'fig-simplot', 'fig-phylo', 'fig-s-protein', 'fig-spike', 'fig-mutations', 'fig-genera', 'fig-hosts', 'fig-genome', 'fig-lineages'];
+const FIT = ['fig-structure', 'fig-simplot', 'fig-phylo', 'fig-hosts'];
 
 const faces = [400, 500, 600, 700].flatMap((w) => ['latin', 'cyrillic'].map((s) =>
   `@font-face{font-family:Manrope;font-weight:${w};src:url("file://${FONTS}/manrope-${s}-${w}-normal.woff2")}`)).join('');
@@ -109,6 +110,49 @@ function secondChild(html) {
     g = g.replace(tag, `<svg width="${f(bb.w)}" height="${f(bb.h)}" viewBox="${f(bb.x)} ${f(bb.y)} ${f(bb.w)} ${f(bb.h)}" style="flex: none;">`);
     fs.writeFileSync(gfile, g);
     console.log('fig-genome вирион', bb);
+  }
+
+  // Единая шкала кеглей во всех схемах (с учётом масштаба рисунка): подписи 14, основной текст 16,
+  // крупные узлы 24, примечание под схемой 14. Заголовок схемы (20) не трогаем.
+  for (const name of NORM) {
+    const file = path.join(DATA, name + '.html');
+    const html = fs.readFileSync(file, 'utf8');
+    if (html.includes('data-norm')) { console.log(name, 'кегли уже сведены'); continue; }
+    await load(`<div style="width:1094px">${html}</div>`);
+    const log = await p.evaluate(() => {
+      const fig = document.querySelector('figure');
+      const w0 = fig.style.width; fig.style.width = '1094px';
+      const kids = [...fig.children];
+      const last = kids[kids.length - 1];
+      // примечание — последний ребёнок из одного текста кеглем 15; заголовок — первый ребёнок кеглем 20
+      const foot = kids.length > 2 && !last.children.length && parseFloat(getComputedStyle(last).fontSize) === 15 ? last : null;
+      const title = parseFloat(getComputedStyle(kids[0]).fontSize) === 20 && !kids[0].children.length ? kids[0] : null;
+      const done = new Set(), out = {};
+      const walk = document.createTreeWalker(fig, NodeFilter.SHOW_TEXT);
+      const jobs = [];
+      for (let n; (n = walk.nextNode());) {
+        const el = n.parentElement;
+        if (!n.textContent.trim() || done.has(el) || (title && title.contains(el))) continue;
+        done.add(el);
+        const svg = el.closest('svg');
+        let k;
+        if (svg) { const vb = svg.viewBox.baseVal; k = svg.getBoundingClientRect().width / (vb && vb.width ? vb.width : svg.width.baseVal.value); }
+        else { const z = el.closest('[data-fit]'); k = z ? parseFloat(z.style.zoom) : 1; }
+        const cs = getComputedStyle(el), o = parseFloat(cs.fontSize);
+        const upper = cs.textTransform === 'uppercase' || /^[А-ЯЁA-Z\s]{6,}$/.test(n.textContent.trim());
+        const t = (foot && foot.contains(el)) || upper ? 14 : o <= 14 ? 14 : o < 20 ? 16 : 24;
+        jobs.push([el, svg, k, o, t, cs.lineHeight]);
+        const key = `${(o * k).toFixed(1)}→${t}`; out[key] = (out[key] || 0) + 1;
+      }
+      for (const [el, svg, k, o, t, lh] of jobs) {
+        el.style.fontSize = (t / k).toFixed(2) + 'px';
+        if (!svg && lh.endsWith('px')) el.style.lineHeight = (parseFloat(lh) * t / o / k).toFixed(2) + 'px';
+      }
+      fig.style.width = w0; fig.setAttribute('data-norm', '');
+      return { html: fig.outerHTML, out };
+    });
+    fs.writeFileSync(file, log.html);
+    console.log(name, JSON.stringify(log.out));
   }
   await b.close();
 })();

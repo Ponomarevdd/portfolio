@@ -190,6 +190,9 @@ for a, b in (('M220 70 L262 70', 'M267 70 L309 70'), ('M254.1 65.8 L262 70 L254.
              ('M508 70 L550 70', 'M554 70 L596 70'), ('M542.1 65.8 L550 70 L542.1 74.2', 'M588.1 65.8 L596 70 L588.1 74.2')):
     spike = spike.replace(a, b)
 spike = spike.replace('d="M122 23 L122 34"', 'd="M122 23 L122 36"').replace('d="M117.4 25.4 L122 34 L126.6 25.4"', 'd="M117.4 27.4 L122 36 L126.6 27.4"')
+# Подложка клетки внизу обрезалась краем svg и давала острые углы: доводим её до низа со скруглением
+spike = spike.replace('H864 V300 H0 Z" fill="#e8f3ee"', 'H864 V274 Q864 290 848 290 H16 Q0 290 0 274 Z" fill="#e8f3ee"')
+spike = spike.replace('H864 V300 H0 H640 Z" fill="#e8f3ee"', 'H864 V274 Q864 290 848 290 H640 Z" fill="#e8f3ee"')
 write('fig-spike', dot_heads(smooth_arrows(spike), keep=('M267 ', 'M554 ')))
 # Колонки «одного вида / разные / человек» шире, чтобы подписи не слипались
 write('fig-mutations', fluid(o3[5]).replace('width:88px;', 'width:136px;').replace('padding:16px 24px;display:flex;align-items:center;gap:16px;', 'padding:20px 28px;display:flex;align-items:center;gap:24px;').replace('gap:14px;position:relative;', 'gap:16px;position:relative;'))
@@ -203,7 +206,7 @@ write('fig-simplot', o3[1].replace('<div style="background:#ffffff;border-radius
                                    '<div style="display:flex;flex-direction:column;gap:20px">').replace('gap:6px 16px;padding-left:12px', 'gap:6px 16px'))
 # Белок S: низ головки без острых изломов, касательные переходят в прямую плавно
 sprot = o3[3].replace('C382 338 350 352 320 346 L206 346 C172 352 140 338 140 310', 'C382 334 356 346 320 346 L206 346 C170 346 140 334 140 310')
-write('fig-s-protein', dot_heads(round_polyline(sprot)))
+write('fig-s-protein', dot_heads(round_polyline(sprot)))  # перерисовывается в medx-sprotein.py
 
 # Шапка лонгрида: без бежевого фона под картинкой, иначе он просвечивает на скруглённых углах
 lr = body('Main.dc.html').replace('border-radius: 32px; background: #f7f4ee; overflow: hidden;', 'border-radius: 32px; overflow: hidden; clip-path: inset(0 round 32px);', 1)
