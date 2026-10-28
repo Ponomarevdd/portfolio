@@ -138,13 +138,22 @@ const complex = [
                 {[['Акцент', '#3B876A', 1], ['Мятный', '#E8F3EE'], ['Заголовки', '#173D34', 1], ['Бежевый', '#F7F4EE'], ['Важно', '#FAEBDD'], ['Текст', '#344A43', 1], ['Итоги', '#123E34', 1]].map(([n, c, dark], i) => <span class={dark ? 'is-dark' : undefined} style={`--c:${c};--i:${i}`}>{n}<small>{c}</small></span>)}
               </div>
             </div>
-            <div class="sc-ds__card">
-              <h3>Отступы</h3>
-              <ul class="sc-weights">
-                {[['60', 'между разделами'], ['44', 'между подразделами'], ['36', 'заголовок → текст'], ['28', 'внутри карточки'], ['20', 'между абзацами'], ['10', 'пункты списка']].map(([v, l]) => <li><b>{v}</b>{l}</li>)}
-              </ul>
+            <div class="sc-ds__card sc-ds__card--stack" data-anim>
+              <h3>Лонгрид из блоков</h3>
+              <div class="sc-stack" aria-hidden="true">
+                <span class="a-stack" style="animation-delay:0s">Шапка лонгрида</span>
+                <span class="a-stack" style="animation-delay:.25s">Содержание</span>
+                <span class="a-stack sc-stack--tip" style="animation-delay:.5s">Плашка «Важно»</span>
+                <span class="a-stack" style="animation-delay:.75s">Таблица · Таймлайн</span>
+                <span class="a-stack" style="animation-delay:1s">Схема · Итоги</span>
+              </div>
             </div>
           </div>
+          <ul class="sc-stats sc-stats--ds">
+            <li><strong data-count="22">22</strong><span>лонгрида в едином стиле</span></li>
+            <li><strong data-count="7">7</strong><span>цветов в палитре</span></li>
+            <li><strong data-count="2">2</strong><span>шрифта: для заголовков и для текста</span></li>
+          </ul>
         </div>
       </section>
 
@@ -168,15 +177,15 @@ const complex = [
 
       <section class="sc-sec sc-results" aria-labelledby="h-results">
         <div class="sc-head"><h2 id="h-results">Результаты</h2></div>
-        <div class="sc-main">
+        <div class="sc-main" data-anim>
           <ul class="sc-stats sc-stats--big">
             <li><strong data-count="22">22</strong><span>интерактивных лонгрида</span></li>
-            <li><strong>С нуля</strong><span>UI-kit проекта</span></li>
+            <li><strong><span data-count="3">3</span> месяца</strong><span>работы над курсом</span></li>
             <li><strong><span data-count="3">3</span> формата</strong><span>лонгрид, видео и конспект</span></li>
             <li><strong>Концепт</strong><span>личного кабинета</span></li>
           </ul>
           <div class="sc-quote">
-            <p>Все 22 лонгрида собраны на едином UI-kit: схемы, интерактивы, самопроверки, видео и конспекты.</p>
+            <p>Клинические рекомендации переведены в схемы, таблицы и таймлайны без потери медицинской точности. Все 22 лонгрида собраны на одном UI-kit, а вокруг них разработан концепт личного кабинета «Моё обучение».</p>
           </div>
         </div>
       </section>

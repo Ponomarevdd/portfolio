@@ -62,10 +62,10 @@
 .mx-cursor.is-click::before { animation: mx-click .5s ease-out; }
 @keyframes mx-click { 0% { opacity: 1; transform: scale(.3); } 100% { opacity: 0; transform: scale(1.4); } }
 
-/* Схемы в тексте тянутся на всю ширину, уже 944px уменьшаются целиком */
-/* Схемы по одной во фрейме 1094px (на 150px шире фрейма лонгрида); уже 1094px уменьшаются целиком.
+/* Схемы по две в ряд (на телефоне по одной), каждая во фрейме 1094px (на 150px шире фрейма лонгрида); уже 1094px уменьшаются целиком.
    Фрейм тянется на всю ширину, блоки фиксированной ширины 864px внутри центрируются */
-.mx-figs { display: flex; flex-direction: column; gap: 24px; }
+.mx-figs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; }
+@media (max-width: 899px) { .mx-figs { grid-template-columns: minmax(0, 1fr); } }
 .mx-figs .sc-scale { max-width: 1094px; }
 .mx-figs figure { width: 100% !important; }
 .mx-figs figure > [style*="width: 864px"], .mx-figs figure > [style*="width:864px"], .mx-figs figure > svg[width="864"] { margin-inline: auto; }
@@ -102,6 +102,9 @@
 .mx .sc-ds__card > .sc-font { font-family: 'PT Serif', serif; font-weight: 700; letter-spacing: 0; }
 .mx .sc-ds__card > .mx-font2 { font-family: Manrope, sans-serif; font-weight: 600; font-size: 40px; line-height: 1; color: var(--p); }
 .mx .sc-tokens span { font-family: Manrope, sans-serif; }
+.mx .sc-stack { font-family: Manrope, sans-serif; }
+.mx .sc-stack span:first-child { background: radial-gradient(80% 120% at 0% 100%, #e8f3ee 0%, #e8f3ee00 70%), #fff; }
+.mx .sc-stack .sc-stack--tip { background: #faebdd; color: #75462f; }
 
 /* В схемах MedX латинские названия видов набраны курсивом; у Manrope нет курсива, разрешаем наклонное начертание */
 .mx-art { font-synthesis: style; }
