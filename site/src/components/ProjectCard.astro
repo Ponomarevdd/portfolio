@@ -6,7 +6,7 @@ import SchoolLive from './SchoolLive.astro';
 import MedxLive from './MedxLive.astro';
 interface Props { project: Project }
 const { project } = Astro.props;
-const href = project.href ?? (project.slug === 'put' ? '/cases/put/' : undefined);
+const href = project.href;
 const Tile = href ? 'a' : 'div';
 ---
 <article class="project" aria-labelledby={`project-${project.slug}`}>
