@@ -109,3 +109,40 @@ if (act && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     }
   })();
 }
+
+// Схемы по две в ряд: фрейм более низкой схемы тянется до высоты соседней, сама схема остаётся прижатой кверху
+const pairUp = () => document.querySelectorAll<HTMLElement>('.mx-figs').forEach((grid) => {
+  const figs = [...grid.querySelectorAll<HTMLElement>('.mx-art > figure')];
+  const two = getComputedStyle(grid).gridTemplateColumns.split(' ').length > 1;
+  figs.forEach((f) => { f.style.minHeight = ''; });
+  if (!two) return;
+  for (let i = 0; i + 1 < figs.length; i += 2) {
+    const h = Math.max(figs[i].offsetHeight, figs[i + 1].offsetHeight);
+    figs[i].style.minHeight = figs[i + 1].style.minHeight = `${h}px`;
+  }
+});
+pairUp();
+addEventListener("load", pairUp);
+addEventListener('resize', pairUp);
+
+// Шапка: сцена 600×480 масштабируется под колонку; содержание дочитывается, гены подсвечиваются по очереди
+const hero = document.querySelector<HTMLElement>('.mx-hero');
+if (hero) {
+  const scene = hero.querySelector<HTMLElement>('.mx-hero__scene')!;
+  new ResizeObserver(() => scene.style.setProperty('--k', String(hero.clientWidth / 600))).observe(hero);
+  const counter = hero.querySelector<HTMLElement>('[data-dyn="mh-read"]')!;
+  const bar = hero.querySelector<HTMLElement>('.mh-bar i')!;
+  const items = [...hero.querySelectorAll<HTMLElement>('.mh-toc li')];
+  const genes = [...hero.querySelectorAll<HTMLElement>('.mh-genes span')];
+  let k = 3, g = 0;
+  const set = () => {
+    put(counter, 'mh-read', `Прочитано ${k} из 8`);
+    bar.style.width = `${(k / 8) * 100}%`;
+    items.forEach((li, i) => li.classList.toggle('is-on', i === Math.min(Math.floor(k / 2), items.length - 1)));
+  };
+  set();
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    setInterval(() => { k = k >= 8 ? 1 : k + 1; set(); }, 1100);
+    setInterval(() => { genes.forEach((e, i) => e.classList.toggle('is-on', i === g)); g = (g + 1) % genes.length; }, 900);
+  }
+}

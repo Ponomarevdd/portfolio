@@ -11,14 +11,8 @@ import '../../styles/medx-case.css';
 const raw = import.meta.glob('../../data/medx/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
 const art = (name: string) => raw[`../../data/medx/${name}.html`].replaceAll('__IMG__', siteUrl('/images/medx')!);
 
-const schemes = [
-  ['fig-spike', 'Как вирус проникает в клетку'],
-  ['fig-mutations', 'Как вирус летучих мышей научился заражать человека'],
-  ['fig-genera', 'Роды коронавирусов и их хозяева'],
-  ['fig-hosts', 'Животные — источники заражения'],
-  ['fig-genome', 'Геном SARS-CoV-2'],
-  ['fig-lineages', 'Линии SARS-CoV-2'],
-];
+// Шапка: гены SARS-CoV-2 в упрощённом виде (название, доля длины, цвет, светлая подпись)
+const genes: [string, number, string, boolean][] = [['ORF1a', 90, '#e8f3ee', false], ['ORF1b', 54, '#cfe3d8', false], ['S', 26, '#3b876a', true], ['E', 8, '#c9744a', true], ['M', 12, '#6f8fa3', true], ['N', 18, '#d8b45c', false]];
 // Лонгрид в действии: счётчик «Прочитано» меняет анимация (medx-case.ts), пункты содержания без выделения
 const read = (k: number) => `Прочитано ${k} из 8`;
 const actLongread = art('longread')
@@ -27,31 +21,45 @@ const actLongread = art('longread')
   .replace('<div style="width: 72px; height: 8px; border-radius: 4px; background: #3b876a;"></div>', '<div class="mx-act__bar"></div>')
   .replace(' aria-current="true" style="background: #e8f3ee; color: #3b876a; font-weight: 500;"', '');
 if (!actLongread.includes('mx-act__bar') || !actLongread.includes('data-dyn=') || actLongread.includes('aria-current')) throw new Error('лонгрид в действии: разметка содержания изменилась');
-// Схемы из лонгрида «Истоки пандемии»: показывают, насколько плотный исходный материал
+// Схемы идут парами примерно одинаковой высоты: в ряду по две, фреймы в паре выравниваются по более высокой
+const schemes = [
+  ['fig-spike', 'Как вирус проникает в клетку'],
+  ['fig-hosts', 'Животные — источники заражения'],
+  ['fig-genome', 'Геном SARS-CoV-2'],
+  ['fig-genera', 'Роды коронавирусов и их хозяева'],
+  ['fig-mutations', 'Как вирус летучих мышей научился заражать человека'],
+  ['fig-lineages', 'Линии SARS-CoV-2'],
+];
 const complex = [
   ['fig-structure', 'Строение коронавируса'],
-  ['fig-simplot', 'Сходство геномов с SARS-CoV-2'],
-  ['fig-phylo', 'Родственные связи бетакоронавирусов'],
   ['fig-bats', 'Где обитают подковоносы — носители SARS-подобных вирусов'],
+  ['fig-phylo', 'Родственные связи бетакоронавирусов'],
+  ['fig-simplot', 'Сходство геномов с SARS-CoV-2'],
 ];
 ---
-<Page title="MedX.pro">
+<Page title="medx.pro">
   <article class="sc mx">
     <header class="page-heading sc-cover">
       <BackLink href={siteUrl('/work/')} label="Все работы"/>
       <div class="sc-cover__grid">
         <div class="sc-cover__text">
-          <h1>MedX.pro</h1>
+          <h1>medx.pro</h1>
           <p class="sc-cover__lead">Курс интерактивных лонгридов о вакцинации от COVID-19 для врачей и медицинского персонала: показания, сроки и противопоказания.</p>
         </div>
-        <div class="mx-hero" role="img" aria-label="Начало лонгрида «Вакцинация онкологических пациентов»">
-          <div class="sc-scale" style="--base:1440px"><div class="mx-art" set:html={art('longread')}></div></div>
+        <div class="mx-hero" role="img" aria-label="Блоки лонгрида: обложка «Принципы работы векторных вакцин», этапы хирургической терапии, геном SARS-CoV-2, плашка «Важно» и содержание">
+          <div class="mx-hero__scene mx-art" aria-hidden="true">
+            <div class="mh-slot" style="--x:10px;--y:44px;--r:-4deg;z-index:2;--d:0s"><div class="mh-card mh-cover" style="--in:0s"><img src={siteUrl('/images/medx/cover-vector.webp')} alt="" width="900" height="506"><p>Принципы работы векторных вакцин</p></div></div>
+            <div class="mh-slot" style="--x:300px;--y:16px;--r:3deg;z-index:3;--d:-1.5s"><div class="mh-card mh-time" style="--in:.15s"><p class="mh-t">Хирургическая терапия</p><div class="mh-line"><i></i><i></i><i></i><em></em><b>За 2 недели до операции</b><b>Операция</b><b>После восстановления</b></div></div></div>
+            <div class="mh-slot" style="--x:316px;--y:198px;--r:-2deg;z-index:4;--d:-3s"><div class="mh-card mh-gen" style="--in:.3s"><p class="mh-gt">Геном SARS-CoV-2</p><div class="mh-genes">{genes.map(([n, w, c, light]) => <span style={`flex:${w};background:${c}${light ? ';color:#fff' : ''}`}>{w > 10 ? n : ''}</span>)}</div></div></div>
+            <div class="mh-slot" style="--x:36px;--y:262px;--r:2.5deg;z-index:3;--d:-4.5s"><div class="mh-card mh-note" style="--in:.45s"><p class="mh-nt"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path transform="translate(2 1)" fill="#75462f" d="M18.26 4.235 L11.72 0.462 C10.65 -0.154 9.33 -0.154 8.26 0.462 L1.73 4.235 C0.66 4.851 0 5.995 0 7.238 L0 14.762 C0 15.994 0.66 17.138 1.73 17.765 L8.27 21.538 C9.33 22.154 10.65 22.154 11.73 21.538 L18.27 17.765 C19.34 17.149 20 16.005 20 14.762 L20 7.238 C19.99 5.995 19.33 4.862 18.26 4.235 Z M9.17 6.325 C9.17 5.874 9.54 5.5 9.99 5.5 C10.45 5.5 10.82 5.874 10.82 6.325 L10.82 12.1 C10.82 12.551 10.45 12.925 9.99 12.925 C9.54 12.925 9.17 12.551 9.17 12.1 Z M9.99 14.6 a1.1 1.1 0 1 1 0 2.2 a1.1 1.1 0 1 1 0 -2.2 Z"/></svg>Важно</p><p class="mh-nb">Место введения вакцины должно быть за пределами облучаемой зоны</p></div></div>
+            <div class="mh-slot" style="--x:334px;--y:282px;--r:-3deg;z-index:2;--d:-2s"><div class="mh-card mh-toc" style="--in:.6s"><p class="mh-th">Содержание</p><p class="mh-read" data-dyn="mh-read" data-dyn-values={Array.from({ length: 8 }, (_, k) => read(k + 1)).join('|')}>{read(3)}</p><div class="mh-bar"><i></i></div><ul><li>В первую очередь</li><li>Особые условия</li><li>Противопоказания</li><li>Лучевая терапия</li></ul></div></div>
+          </div>
         </div>
       </div>
       <dl class="sc-meta">
         <div><dt>Роль</dt><dd>Лид-дизайнер</dd></div>
         <div><dt>Период</dt><dd>Июль — сентябрь 2021</dd></div>
-        <div><dt>Команда</dt><dd>3&nbsp;дизайнера под моим руководством, 3&nbsp;методиста, редактор, проджект‑менеджер</dd></div>
+        <div><dt>Команда</dt><dd>2&nbsp;дизайнера под моим руководством, 2&nbsp;методиста, редактор, проджект‑менеджер, консультант от&nbsp;medx.pro</dd></div>
         <div><dt>Аудитория</dt><dd>Врачи и медицинский персонал</dd></div>
       </dl>
     </header>
@@ -60,7 +68,7 @@ const complex = [
       <section class="sc-sec" aria-labelledby="h-context">
         <div class="sc-head"><h2 id="h-context">Контекст</h2></div>
         <div class="sc-main">
-          <p class="sc-lead">Второй год пандемии COVID-19. Вакцины только вошли в практику, клинических данных о них было немного. Медицинскому персоналу требовалось в короткие сроки освоить, каким пациентам показана вакцинация, в какие сроки её проводить и при каких состояниях она противопоказана. Для системы профессионального развития MedX.pro был разработан курс по этой теме.</p>
+          <p class="sc-lead">Второй год пандемии COVID-19. Вакцины только вошли в практику, клинических данных о них было немного. Медицинскому персоналу требовалось в короткие сроки освоить, каким пациентам показана вакцинация, в какие сроки её проводить и при каких состояниях она противопоказана. Для системы профессионального развития medx.pro был разработан курс по этой теме.</p>
           <div class="mx-fig mx-fig--fluid"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label="Хронология вспышек коронавирусов: 2002, 2012 и 2019 годы" set:html={art('fig-outbreaks')}></div></div></div>
         </div>
       </section>
@@ -150,8 +158,8 @@ const complex = [
             </div>
           </div>
           <ul class="sc-stats sc-stats--ds">
+            <li><strong data-count="45" data-suffix="+">45+</strong><span>компонентов в UI-kit</span></li>
             <li><strong data-count="22">22</strong><span>лонгрида в едином стиле</span></li>
-            <li><strong data-count="7">7</strong><span>цветов в палитре</span></li>
             <li><strong data-count="2">2</strong><span>шрифта: для заголовков и для текста</span></li>
           </ul>
         </div>
@@ -180,12 +188,12 @@ const complex = [
         <div class="sc-main" data-anim>
           <ul class="sc-stats sc-stats--big">
             <li><strong data-count="22">22</strong><span>интерактивных лонгрида</span></li>
-            <li><strong><span data-count="3">3</span> месяца</strong><span>работы над курсом</span></li>
+            <li><strong>В срок</strong><span>весь курс за 3 месяца</span></li>
             <li><strong><span data-count="3">3</span> формата</strong><span>лонгрид, видео и конспект</span></li>
-            <li><strong>Концепт</strong><span>личного кабинета</span></li>
+            <li><strong>Любой экран</strong><span>от телефона до монитора</span></li>
           </ul>
           <div class="sc-quote">
-            <p>Клинические рекомендации переведены в схемы, таблицы и таймлайны без потери медицинской точности. Все 22 лонгрида собраны на одном UI-kit, а вокруг них разработан концепт личного кабинета «Моё обучение».</p>
+            <p>Курс готовили вместе с Центром имени Гамалеи, разработчиком векторной вакцины от SARS-CoV-2, и консультантом medx.pro, поэтому схемы получились точными. Помимо лонгридов, сделали видео и конспекты, а вокруг них разработали концепт личного кабинета «Моё обучение». Все материалы открываются с любого устройства. Курс сдали в срок, от заказчика приходила только положительная обратная связь, а врачи, прошедшие курс, оставляли хорошие отзывы.</p>
           </div>
         </div>
       </section>

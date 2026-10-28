@@ -24,7 +24,8 @@ const TOKENS = /(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<textarea
 
 // Слова через дефис («PDF-конспект», «дизайн-ревью») не рвём по дефису. Внутри SVG и <title>
 // разметку добавлять нельзя, там оставляем как есть.
-const hyphenated = /(?<![\p{L}\d-])[\p{L}\d]+(?:-[\p{L}\d]+)+(?![\p{L}\d-])/gu;
+// Открывающая скобка или кавычка перед словом и знаки после него держатся вместе со словом, иначе «(» повиснет в конце строки.
+const hyphenated = /(?<![\p{L}\d(«"„-])[(«"„]*[\p{L}\d]+(?:-[\p{L}\d]+)+[)»"“.,:;!?]*(?![\p{L}\d-])/gu;
 const keepHyphens = (text) => text.replace(hyphenated, (w) => (w.length <= 20 ? `<span style="white-space:nowrap">${w}</span>` : w));
 const NO_MARKUP_OPEN = /^<(svg|title)\b/i;
 const NO_MARKUP_CLOSE = /^<\/(svg|title)>/i;

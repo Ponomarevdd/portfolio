@@ -37,10 +37,46 @@
 .mx-art--lms a { color: #173d34; text-decoration: none; }
 .mx-art--lms button, .mx-art--lms input { font-family: Manrope, sans-serif; }
 
-/* Hero: верх лонгрида в окне */
-.mx-hero { --hh: 480px; position: relative; height: var(--hh); border-radius: 28px; background: #fff; box-shadow: var(--shadow-head); overflow: hidden; }
-.mx-hero__page { position: absolute; left: 0; top: 0; width: 1440px; transform-origin: 0 0; transform: scale(var(--k, .43)); }
-.mx-hero::after { content: ''; position: absolute; inset: auto 0 0; height: 56px; background: linear-gradient(#fff0, #fff); }
+/* Шапка: блоки лонгрида лежат свободно и парят. Сцена 600×480 масштабируется под колонку (medx-case.ts) */
+.mx-hero { position: relative; aspect-ratio: 600 / 480; }
+/* Абзацы шапки страницы (.page-heading p) сюда не наследуются */
+.sc-cover .mx-hero :where(p) { max-width: none; font-size: 16px; line-height: 1.3; color: inherit; }
+.mx-hero__scene { position: absolute; left: 0; top: 0; width: 600px; height: 480px; transform-origin: 0 0; transform: scale(var(--k, 1)); color: #173d34; }
+.mx-hero .mh-slot { position: absolute; left: 0; top: 0; transform: translate(var(--x), var(--y)) rotate(var(--r)); animation: mh-float 6s ease-in-out var(--d) infinite; }
+.mx-hero .mh-card { border-radius: 18px; background: #fff; box-shadow: 0 1px 2px #173d3412, 0 22px 44px -26px #173d3466; opacity: 0; animation: mh-drop .9s cubic-bezier(.2,.9,.25,1) var(--in) forwards; }
+@keyframes mh-drop { from { opacity: 0; transform: translateY(-36px) rotate(-6deg) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes mh-float { 0%, 100% { translate: 0 0; rotate: 0deg; } 50% { translate: 0 -7px; rotate: .6deg; } }
+.mx-hero .mh-cover { position: relative; width: 300px; height: 176px; overflow: hidden; background: #f7f4ee; }
+.mx-hero .mh-cover img { position: absolute; left: -24px; top: -10px; width: 360px; height: auto; max-width: none; }
+.mx-hero .mh-cover::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, #f7f4ee 0%, #f7f4eef2 30%, #f7f4ee00 62%); }
+.mx-hero .mh-cover p { position: absolute; z-index: 1; left: 20px; right: 20px; bottom: 16px; font-family: 'PT Serif', serif; font-weight: 700; font-size: 20px; line-height: 24px; }
+.mx-hero .mh-time { width: 292px; padding: 20px 22px 22px; }
+.mx-hero .mh-t { font-family: 'PT Serif', serif; font-size: 18px; line-height: 22px; }
+.mx-hero .mh-line { position: relative; margin-top: 22px; height: 64px; }
+.mx-hero .mh-line::before { content: ''; position: absolute; left: 6px; right: 6px; top: 6px; height: 2px; background: #cfe3d8; border-radius: 1px; }
+.mx-hero .mh-line i { position: absolute; top: 0; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 2px solid #3b876a; }
+.mx-hero .mx-hero .mh-line i:nth-of-type(1) { left: 0; } .mx-hero .mh-line i:nth-of-type(2) { left: calc(50% - 7px); border-color: #c9744a; } .mx-hero .mh-line i:nth-of-type(3) { right: 0; }
+.mx-hero .mh-line b { position: absolute; top: 24px; width: 84px; font-size: 11.5px; line-height: 15px; font-weight: 600; color: #344a43; }
+.mx-hero .mx-hero .mh-line b:nth-of-type(1) { left: 0; } .mx-hero .mh-line b:nth-of-type(2) { left: calc(50% - 42px); text-align: center; color: #c9744a; } .mx-hero .mh-line b:nth-of-type(3) { right: 0; text-align: right; }
+.mx-hero .mh-line em { position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; border-radius: 50%; background: #3b876a; box-shadow: 0 0 0 5px #3b876a29; animation: mh-travel 4.5s cubic-bezier(.6,0,.3,1) 1.4s infinite; }
+@keyframes mh-travel { 0%, 8% { left: 2px; } 42%, 58% { left: calc(50% - 5px); } 92%, 100% { left: calc(100% - 12px); } }
+.mx-hero .mh-note { width: 262px; padding: 20px 22px; background: #faebdd; }
+.mx-hero .mh-nt { display: flex; gap: 8px; align-items: center; font-weight: 700; font-size: 15px; color: #75462f; }
+.mx-hero .mh-nb { margin-top: 8px; font-size: 13px; line-height: 19px; color: #75462f; }
+.mx-hero .mh-toc { width: 236px; padding: 20px 20px 16px; background: #f7f4ee; }
+.mx-hero .mh-th { font-weight: 700; font-size: 17px; }
+.mx-hero .mh-read { margin-top: 8px; font-size: 11.5px; color: #60716a; }
+.mx-hero .mh-bar { margin-top: 6px; height: 6px; border-radius: 3px; background: #afccbd; overflow: hidden; }
+.mx-hero .mh-bar i { display: block; height: 100%; width: 37.5%; background: #3b876a; border-radius: 3px; transition: width .5s; }
+.mx-hero .mh-toc ul { margin-top: 10px; display: flex; flex-direction: column; gap: 2px; }
+.mx-hero .mh-toc li { font-size: 12px; line-height: 17px; padding: 4px 8px; border-radius: 5px; color: #465f57; transition: background-color .3s, color .3s; }
+.mx-hero .mh-toc li.is-on { background: #e8f3ee; color: #3b876a; }
+.mx-hero .mh-gen { width: 250px; padding: 16px 18px 18px; }
+.mx-hero .mh-gt { font-size: 12.5px; font-weight: 600; }
+.mx-hero .mh-genes { margin-top: 10px; display: flex; gap: 3px; height: 26px; }
+.mx-hero .mh-genes span { border-radius: 4px; display: grid; place-items: center; font-size: 10px; font-weight: 600; color: #173d34; transition: transform .4s, box-shadow .4s; }
+.mx-hero .mh-genes span.is-on { transform: translateY(-3px); box-shadow: 0 6px 12px -6px #173d3480; }
+@media (prefers-reduced-motion: reduce) { .mx-hero .mh-card { animation: none; opacity: 1; } .mx-hero .mh-slot, .mx-hero .mh-line em { animation: none; } }
 
 /* Окно для больших фрагментов: ширина доски, масштабируется целиком через .sc-scale */
 .mx-frame { border-radius: 20px; background: #fff; overflow: hidden; }
