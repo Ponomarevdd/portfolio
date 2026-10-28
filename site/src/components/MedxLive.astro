@@ -36,7 +36,6 @@ const longread = img(closeTags(longreadRaw.slice(0, cutAt)));
     <div class="mxl-win" aria-hidden="true">
       <div class="mxl-bar">
         <span class="mxl-dots"><i></i><i></i><i></i></span>
-        <span class="mxl-url"><span>medx.pro/learning</span><span>medx.pro/longread/onco</span></span>
       </div>
       <div class="mxl-screen">
         <div class="mxl-page mxl-page--lms mx-art mx-art--lms" set:html={lms}/>
@@ -84,13 +83,10 @@ const longread = img(closeTags(longreadRaw.slice(0, cutAt)));
 
 /* Окно браузера 632 в ширину (макет 1440 в масштабе 632/1440) уходит за нижний край плитки */
 .mxl-win { position: absolute; left: 64px; top: 64px; width: 632px; border-radius: 14px 14px 0 0; overflow: hidden; background: #fdfbf6; box-shadow: 0 0 0 1px #173d3414, 0 30px 60px -30px #173d3473; }
-.mxl-bar { position: relative; height: 40px; display: flex; align-items: center; justify-content: center; background: #f3f2ee; border-bottom: 1px solid #e6e3dc; }
-.mxl-dots { position: absolute; left: 16px; top: 15px; display: flex; gap: 8px; }
+.mxl-bar { position: relative; height: 36px; display: flex; align-items: center; justify-content: center; background: #f3f2ee; border-bottom: 1px solid #e6e3dc; }
+.mxl-dots { position: absolute; left: 16px; top: 13px; display: flex; gap: 8px; }
 .mxl-dots i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
 .mxl-dots i:nth-child(2) { background: #febc2e; } .mxl-dots i:nth-child(3) { background: #28c840; }
-.mxl-url { position: relative; width: 260px; height: 24px; border-radius: 7px; background: #e8e6e0; font: 400 12px/24px Onest, sans-serif; color: #60716a; text-align: center; letter-spacing: -.01em; }
-.mxl-url span { position: absolute; inset: 0; }
-.mxl-url span + span { opacity: 0; }
 .mxl-screen { position: relative; width: 632px; height: 560px; overflow: hidden; }
 .mxl-page { position: absolute; left: 0; top: 0; width: 1440px; transform-origin: 0 0; scale: calc(632 / 1440); }
 .mxl-cur { position: absolute; left: 0; top: 0; z-index: 2; opacity: 0; pointer-events: none; }
@@ -100,12 +96,8 @@ const longread = img(closeTags(longreadRaw.slice(0, cutAt)));
 .mxl-page--lms { animation: mxl-lms 10s cubic-bezier(.3,.7,.2,1) infinite; }
 .mxl-cur { animation: mxl-cur 10s cubic-bezier(.45,0,.2,1) infinite; }
 .mxl-screen [data-go] { animation: mxl-btn 10s ease infinite; }
-.mxl-url span:first-child { animation: mxl-u1 10s ease infinite; }
-.mxl-url span + span { animation: mxl-u2 10s ease infinite; }
 @keyframes mxl-lms { 0%, 34% { opacity: 1; translate: 0 0; } 42%, 88% { opacity: 0; translate: -40px 0; } 96%, 100% { opacity: 1; translate: 0 0; } }
 @keyframes mxl-lr { 0%, 34% { opacity: 0; translate: 40px 0; } 42%, 54% { opacity: 1; translate: 0 0; } 76%, 84% { opacity: 1; translate: 0 -300px; } 92%, 100% { opacity: 0; translate: 0 -300px; } }
-@keyframes mxl-u1 { 0%, 34%, 92%, 100% { opacity: 1; } 38%, 88% { opacity: 0; } }
-@keyframes mxl-u2 { 0%, 34%, 92%, 100% { opacity: 0; } 38%, 88% { opacity: 1; } }
 @keyframes mxl-cur {
   0%, 8% { opacity: 0; transform: translate(calc(var(--cx, 200px) + 150px), calc(var(--cy, 200px) + 110px)); }
   12% { opacity: 1; transform: translate(calc(var(--cx, 200px) + 150px), calc(var(--cy, 200px) + 110px)); }
@@ -115,7 +107,7 @@ const longread = img(closeTags(longreadRaw.slice(0, cutAt)));
   42%, 100% { opacity: 0; transform: translate(var(--cx, 200px), var(--cy, 200px)); }
 }
 @keyframes mxl-btn { 0%, 28% { background: #173d34; } 30%, 34% { background: #3b876a; } 40%, 100% { background: #173d34; } }
-@media (prefers-reduced-motion: reduce) { .mxl-page--lr, .mxl-page--lms, .mxl-cur, .mxl-screen [data-go], .mxl-url span { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .mxl-page--lr, .mxl-page--lms, .mxl-cur, .mxl-screen [data-go] { animation: none; } }
 @media (max-width: 899px) {
   .project .project__gallery.project__gallery--live-rev { grid-template-columns: minmax(0, 1fr); }
   .mxl-tile--logo { aspect-ratio: 4 / 3; }
