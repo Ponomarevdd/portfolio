@@ -98,9 +98,11 @@
 
 @media (max-width: 899px) {
   .mx-aud { grid-template-columns: minmax(0, 1fr); }
-  .mx-aud__who { min-height: 0; }
-  .mx-aud__who .sc-role__icon { margin-bottom: 8px; }
-  .mx-aud__who h3 { font-size: 26px; }
+  /* На телефоне карточка как карточки ролей в кейсе школ: поля 32, заголовок 24 */
+  .mx-aud__who { min-height: 0; padding: 32px; }
+  .mx-aud__who .sc-role__icon { margin-bottom: 4px; }
+  .mx-aud__who h3 { font-size: 24px; }
+  .mx-aud__who p { font-size: 16px; }
 }
 
 /* Дизайн-система */
