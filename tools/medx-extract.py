@@ -225,6 +225,19 @@ write('longread', lr)
 lms = body('Main-v2-photo-kwjf.dc.html')
 lms = re.sub(r'<div style="padding: 0 12px; font-family: \'PT Serif\'[^>]*>MedX</div>',
              '<img src="__IMG__/logo.svg" alt="MedX.pro" width="150" height="58" style="display:block;margin:0 12px;height:auto">', lms, count=1)
+# Аватар Анны Смирновой вместо инициалов
+lms = re.sub(r'<div style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; background: #173D34;[^"]*">АС</div>',
+             '<img src="__IMG__/avatar-anna.webp" alt="" width="40" height="40" style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; object-fit: cover; display: block">', lms, count=1)
+# Первый шаг учебного плана — тот же лонгрид, что в «Продолжить обучение»; оценка риска идёт вторым
+step1 = ('font-size: 20px; line-height: 26px; color: #173D34">Оценка риска перед вакцинацией<',
+         'Начать', 'Ключевые факторы, чек-лист и клинические примеры', '15 минут')
+assert all(x in lms for x in step1), 'учебный план изменился'
+lms = lms.replace(step1[0], step1[0].replace('Оценка риска перед вакцинацией', 'Вакцинация онкологических пациентов'), 1)
+lms = lms.replace('white-space: nowrap">Начать ', 'white-space: nowrap">Продолжить ', 1)
+lms = lms.replace(step1[2], 'Кого вакцинировать и как выбрать время в зависимости от терапии', 1)
+lms = lms.replace('<span style="padding-bottom: 2px">15 минут</span>', '<span style="padding-bottom: 2px">25 минут</span>', 1)
+lms = lms.replace('color: #60716A">Выбор тактики вакцинации</span>', 'color: #60716A">Оценка риска перед вакцинацией</span>', 1)
+lms = lms.replace('Лонгрид · 10 мин', 'Лонгрид · 15 мин', 1)
 write('lms', lms)
 
 print(sorted(p.name for p in OUT.iterdir()))
