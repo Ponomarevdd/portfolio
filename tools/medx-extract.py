@@ -193,7 +193,11 @@ spike = spike.replace('d="M122 23 L122 34"', 'd="M122 23 L122 36"').replace('d="
 # Подложка клетки внизу обрезалась краем svg и давала острые углы: доводим её до низа со скруглением
 spike = spike.replace('H864 V300 H0 Z" fill="#e8f3ee"', 'H864 V274 Q864 290 848 290 H16 Q0 290 0 274 Z" fill="#e8f3ee"')
 spike = spike.replace('H864 V300 H0 H640 Z" fill="#e8f3ee"', 'H864 V274 Q864 290 848 290 H640 Z" fill="#e8f3ee"')
-write('fig-spike', dot_heads(smooth_arrows(spike), keep=('M267 ', 'M554 ', 'M396 ', 'M500 ', 'M720 ')))
+spike = dot_heads(smooth_arrows(spike), keep=('M267 ', 'M554 ', 'M396 ', 'M500 ', 'M720 '))
+# Нить РНК заканчивается просто линией, без стрелки (Дмитрий, 2026-10-28)
+spike, n_rna = re.subn(r'<path d="M724\.2 200\.1 L720 208 L715\.8 200\.1"[^>]*>(</path>)?', '', spike)
+assert n_rna == 1, 'стрелка на конце РНК не найдена'
+write('fig-spike', spike)
 # Колонки «одного вида / разные / человек» шире, чтобы подписи не слипались
 # Шапка таблицы: «Связывание АПФ2 рецептора» сидит вплотную к подписям колонок, под ними больше воздуха до строк
 mut = o3[5].replace('padding:24px;display:flex;flex-direction:column;gap:16px;position:relative;', 'padding:36px 24px 24px;display:flex;flex-direction:column;gap:16px;position:relative;')
