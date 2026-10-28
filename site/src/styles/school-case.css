@@ -2,6 +2,10 @@
    Оболочка страницы живёт в стиле сайта (Onest), фрагменты интерфейса (.ui) — на токенах проекта (Geologica). */
 .sc {
   --p: #006ee5; --pl: #d1e7ff; --t: #1c1c1c; --cap: #727272; --bg: #f6f6f6; --line: #ececec; --ok: #7ad9a8; --err: #ff5242;
+  /* Ритм страницы плавно уменьшается от десктопа (1440) к телефону (375) в одной пропорции 3 : 4:
+     секция 96 → 72, заголовок → текст → блок 32 → 24. Внутри карточек отступы не меняются. */
+  --flow: clamp(24px, 21.183px + .7512vw, 32px);
+  --sec-pad: clamp(72px, 63.55px + 2.2535vw, 96px);
   --shadow-head: 0 1px 2px #1c1c1c08, 0 8px 32px #1c1c1c0d;
   --shadow-card: 0 4px 16px #1c1c1c0f;
 }
@@ -73,14 +77,14 @@
 
 /* Раскладка секций */
 .sc-body { width: calc(100% - var(--page-gutter) * 2); max-width: var(--page-width); margin-inline: auto; }
-.sc-sec { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; padding: 96px 0; border-top: 1px solid #e6e6ee; }
+.sc-sec { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--flow); padding: var(--sec-pad) 0; border-top: 1px solid #e6e6ee; }
 .sc-sec--wide { }
 /* Кнопка под кейсом: сверху отступ даёт сам блок, снизу такой же, как у секции */
-.sc + .action-row { margin: 0 0 32px; } /* + 64px отступа main = 96px */
+.sc + .action-row { margin: 0 0 calc(var(--sec-pad) - 64px); } /* + 64px отступа main = отступ секции */
 .sc-sec--wide .sc-head { flex-direction: row; align-items: baseline; gap: 20px; }
 .sc-head { display: flex; flex-direction: column; gap: 12px; }
 .sc-head h2 { font-size: 34px; line-height: 1.15; letter-spacing: -.04em; }
-.sc-main { min-width: 0; display: flex; flex-direction: column; gap: 32px; }
+.sc-main { min-width: 0; display: flex; flex-direction: column; gap: var(--flow); }
 .sc-main > p:not(.sc-lead) { color: var(--text-secondary); font-size: 18px; line-height: 1.65; max-width: 720px; }
 .sc-lead { font-size: 22px; line-height: 1.45; letter-spacing: -.025em; text-wrap: pretty; }
 .sc-sub { font-size: 22px; letter-spacing: -.03em; margin-top: 16px !important; }
@@ -256,7 +260,8 @@
 .sc-part__stage--head .ui-h { max-width: 56%; position: relative; z-index: 1; }
 .sc-part__stage--head .ui-tags { margin-top: auto; position: relative; z-index: 1; }
 .sc-part__stage--head img { position: absolute; right: 16px; bottom: 20px; width: auto; height: auto; max-width: 31%; max-height: 40%; }
-@media (max-width: 600px) { .sc-part__stage--head img { max-width: 24%; } }
+/* На телефоне иллюстрация оставляла заголовку полкарточки, поэтому её убираем */
+@media (max-width: 600px) { .sc-part__stage--head img { display: none; } .sc-part__stage--head .ui-h { max-width: none; } }
 .ui-toc__list { position: relative; margin-top: 6px; display: flex; flex-direction: column; }
 .ui-toc__rail { position: absolute; left: 6px; top: 14px; bottom: 14px; width: 2px; background: var(--pl); }
 .ui-toc__rail span { display: block; width: 2px; height: 100%; background: var(--p); transform-origin: top; transform: scaleY(0); }
@@ -458,6 +463,11 @@
 .sc-tokens small { font-size: 11px; font-weight: 300; opacity: .75; }
 .sc-tokens span:nth-child(1) { grid-column: span 2; }
 .sc-tokens span:nth-child(7) { grid-column: span 2; }
+/* На самых узких экранах в три колонки названия цветов не помещаются */
+@media (max-width: 399px) {
+  .sc-tokens { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sc-tokens span:nth-child(7) { grid-column: auto; }
+}
 .sc-tokens span { opacity: 0; transform: scale(.92); }
 .is-in .sc-tokens span { animation: pr-pop .5s cubic-bezier(.3,1.4,.5,1) forwards; animation-delay: calc(var(--i) * .08s); }
 @keyframes pr-pop { to { opacity: 1; transform: none; } }
@@ -545,7 +555,7 @@
   .a-check, .a-fb { opacity: 1; }
   .sc-map__reveal, .sc-map__reveal > div { transform: none; }
   .sc-map__city { opacity: 1; }
-  .sc-pains li > * { opacity: 1; transform: none; }
+  .sc-pains li > *, .sc-pains .sc-pains__arrow, .sc-pains .sc-fix { opacity: 1; transform: none; }
   .sc-duties li, .sc-duties .sc-role__icon { opacity: 1; transform: none; }
   .sc-tokens span { opacity: 1; transform: none; }
   .pr-sl__track { transition: none; }
@@ -556,8 +566,7 @@
 
 /* Адаптив */
 @media (max-width: 1099px) {
-  .sc-sec { grid-template-columns: minmax(0, 1fr); gap: 28px; padding: 72px 0; }
-  .sc + .action-row { margin-bottom: 24px; } /* + 48px отступа main = 72px */
+  .sc + .action-row { margin-bottom: calc(var(--sec-pad) - 48px); } /* + 48px отступа main */
   .sc-sec .sc-head { flex-direction: row; align-items: baseline; gap: 16px; }
   .sc-ds { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sc-anatomy { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -571,10 +580,11 @@
 }
 @media (max-width: 699px) {
   .sc-pains__head { display: none; }
+  /* Пары «боль → решение» в столбик: между парами отступ больше, чем внутри пары, иначе они слипаются */
+  .sc-pains ul { gap: 56px; }
   .sc-pains li { grid-template-columns: minmax(0, 1fr); }
-  .sc-pains__arrow { height: 36px; }
+  .sc-pains__arrow { height: 32px; }
   .sc-pains__arrow .iconsax { rotate: 90deg; }
-  .sc-pq, .sc-fix { padding: 20px; }
   .sc-pq p, .sc-fix strong { font-size: 16px; }
   .sc-head h2 { font-size: 28px; }
   .sc-lead { font-size: 20px; }
@@ -591,14 +601,9 @@
   .sc-hl__cup { width: 48px; height: 48px; border-radius: 14px; }
   .sc-stats, .sc-stats--big, .sc-stats--ds, .sc-duties, .sc-roles, .sc-anatomy, .sc-ds, .sc-ill__rules { grid-template-columns: minmax(0, 1fr); }
   .sc-part__stage { height: auto; min-height: 220px; }
-  .sc-pr { padding: 24px 16px 16px; gap: 20px; }
-  .sc-pr__text { padding: 0 4px; }
   .ui-trainer__opts { grid-template-columns: minmax(0, 1fr); }
-  .sc-queue { padding: 16px; }
   .ui-ticket { padding: 10px 12px; gap: 10px; }
-  .sc-stats li, .sc-duties li { padding: 22px; }
   .sc-quote p { font-size: 20px; }
-  .sc-quote { padding: 22px; }
 }
 @media (max-width: 479px) {
   .sc-hl__note { display: none; }
@@ -742,7 +747,7 @@
 @keyframes an-acc-open { 0%, 12% { max-height: 0; padding: 0 12px; margin-bottom: 0; } 22%, 75% { max-height: 60px; padding: 12px; margin-bottom: 8px; } 85%, 100% { max-height: 0; padding: 0 12px; margin-bottom: 0; } }
 @keyframes an-acc-ic { 0%, 12% { background: #fff; color: var(--p); transform: none; } 20%, 75% { background: var(--p); color: #fff; transform: rotate(45deg); } 85%, 100% { background: #fff; color: var(--p); transform: none; } }
 @media (max-width: 899px) {
-  .sc-problem { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .sc-problem { grid-template-columns: minmax(0, 1fr); gap: var(--flow); }
 }
 @media (max-width: 699px) {
   .sc-problem__text > p:not(.sc-lead) { font-size: 16px; }
@@ -978,8 +983,8 @@
 .sc-persona__chips span { padding: 7px 12px; border-radius: 10px; background: var(--bg); font-size: 14px; line-height: 18px; }
 @media (max-width: 899px) { .sc-personas { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 699px) {
-  .sc-persona { padding: 22px; }
-  .sc-persona__cols, .sc-persona__foot { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .sc-persona__head { align-items: flex-start; }
+  .sc-persona__cols, .sc-persona__foot { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .sc-persona__quote p { font-size: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -999,7 +1004,7 @@
 .sc-pile__card:nth-child(4) { --x: 3%; --y: 45%; --r: 4deg; --z: 4; }
 .sc-pile__card:nth-child(5) { --x: 61%; --y: 42%; --r: -4deg; --z: 6; }
 @media (max-width: 699px) {
-  .sc-pile { aspect-ratio: 3 / 4; margin: 32px 0 28px; }
+  .sc-pile { aspect-ratio: 3 / 4; }
   .sc-pile__card { width: 64%; padding: 12px; border-radius: 14px; }
   .sc-pile__card:nth-child(1) { --x: 17%; --y: 31%; width: 66%; }
   .sc-pile__card:nth-child(2) { --x: 0%; --y: 0%; }
