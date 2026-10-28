@@ -1,16 +1,16 @@
 // Шаг 1: открывает собранную страницу кейса со шрифтами макетов и меряет каждое слово,
 // набранное ими: позиции букв, ширину, базовую линию. Текст в SVG (<text>) меряется по буквам целиком.
 // Плюс тексты, которые меняет анимация.
-// node measure.cjs <page path, напр. /cases/my-school/> <out.json>
+// node measure.cjs <page path, напр. /cases/my-school/> <out.json> [ключ в fonts.json, по умолчанию последняя часть пути]
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
-const [route, out] = process.argv.slice(2);
+const [route, out, key] = process.argv.slice(2);
 const SITE = path.resolve(__dirname, '../../site');
 const ORIGIN = 'http://127.0.0.1:4399';
 const { FAMILIES, PAGES } = require('./fonts.json');
-const fams = PAGES[route.split('/').filter(Boolean).pop()];
+const fams = PAGES[key ?? route.split('/').filter(Boolean).pop()];
 if (!fams) throw new Error('нет страницы ' + route + ' в fonts.json');
 
 // Шрифты подключаем сами: в исходниках страницы их больше нет

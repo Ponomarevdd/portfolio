@@ -10,7 +10,7 @@ export interface Project {
   featured?: boolean;
   href?: string;
   previews?: { src: string; alt: string; width: number; height: number }[];
-  live?: 'school';
+  live?: 'school' | 'medx';
   description: string;
   identity: { name: string; tagline: string; background: string; color: string };
 }
@@ -99,6 +99,7 @@ const medx: Project = {
   slug: 'medx', href: '/cases/medx/', title: 'medx.pro: лонгриды о вакцинации для медиков', year: 2021,
   categories: ['UX/UI', 'Веб-дизайн'],
   description: 'Интерактивные лонгриды для врачей и медицинского персонала о вакцинации от COVID-19: схемы вместо сложного текста, самопроверки и медицински точные иллюстрации.',
+  live: 'medx',
   cover: '/images/medx/cover.webp', width: 1800, height: 1285,
   alt: 'Лонгрид medx.pro о вакцинации онкологических пациентов: шапка, содержание и первый раздел',
   previews: [

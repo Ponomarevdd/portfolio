@@ -1,41 +1,10 @@
 /* Кейс MedX. Оболочка и раскладка секций общие с кейсом школ (school-case.css),
-   здесь палитра кейса и фрагменты макетов MedX (.mx-art) на их собственных шрифтах: PT Serif и Manrope. */
+   здесь палитра и блоки кейса; фрагменты макетов (.mx-art) в medx-art.css. */
+@import './medx-art.css';
 .sc.mx {
   --p: #3b876a; --pl: #e8f3ee; --t: #173d34; --cap: #60716a; --bg: #f7f4ee; --line: #d9e4dd;
 }
 
-
-/* Фрагменты макетов: стили досок канваса, ограниченные контейнером */
-.mx-art { font-family: Manrope, sans-serif; color: #344a43; text-align: left; letter-spacing: 0; line-height: normal; }
-.mx-art *, .mx-art *::before, .mx-art *::after { box-sizing: border-box; }
-.mx-art p, .mx-art h1, .mx-art h2, .mx-art h3, .mx-art h4, .mx-art ul, .mx-art li, .mx-art figure, .mx-art figcaption { margin: 0; padding: 0; }
-.mx-art h1, .mx-art h2, .mx-art h3, .mx-art h4 { font-weight: inherit; }
-.mx-art ul { list-style: none; }
-.mx-art img { max-width: none; }
-.mx-art .p { font-family: Manrope, sans-serif; font-weight: 400; font-size: 20px; line-height: 31px; color: #344a43; }
-.mx-art .lead { font-family: Manrope, sans-serif; font-weight: 600; font-size: 20px; line-height: 31px; color: #173d34; }
-.mx-art .h1 { font-family: 'PT Serif', serif; font-weight: 400; font-size: 38px; line-height: 45px; color: #173d34; }
-.mx-art .h2 { font-family: 'PT Serif', serif; font-weight: 400; font-size: 32px; line-height: 38px; color: #173d34; }
-.mx-art .ct { font-family: Manrope, sans-serif; font-weight: 600; font-size: 26px; line-height: 33px; color: #173d34; }
-.mx-art .li { display: flex; gap: 12px; }
-.mx-art .mk { flex: none; width: 8px; height: 17px; padding-top: 13px; }
-.mx-art .mk span { display: block; width: 4px; height: 4px; border-radius: 50%; background: #173d34; }
-.mx-art .li .p { flex: 1; min-width: 0; }
-.mx-art .sec { display: flex; flex-direction: column; gap: 36px; }
-.mx-art .body { display: flex; flex-direction: column; gap: 20px; }
-.mx-art .note { background: #faebdd; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px; }
-.mx-art .note-h { display: flex; gap: 10px; align-items: center; }
-.mx-art .note-t { font-family: Manrope, sans-serif; font-weight: 700; font-size: 18px; line-height: 27px; color: #75462f; }
-.mx-art .note .p { color: #75462f; }
-.mx-art .toc-sec { position: relative; display: block; padding: 4px 0 4px 30px; font-family: Manrope, sans-serif; font-weight: 700; font-size: 18px; line-height: 24px; color: #173d34; text-decoration: none; }
-.mx-art .toc-sec svg:not(.cv) { position: absolute; overflow: visible; }
-.mx-art .toc-sub { position: relative; padding-left: 30px; display: flex; flex-direction: column; gap: 8px; }
-.mx-art .toc-it { position: relative; display: block; padding: 10px 14px; border-radius: 6px; font-family: Manrope, sans-serif; font-weight: 400; font-size: 16px; line-height: 24px; color: #465f57; text-decoration: none; }
-.mx-art .toc-it svg:not(.cv) { position: absolute; left: -21px; top: 4px; overflow: visible; }
-.mx-art .ln { position: absolute; display: block; }
-.mx-art--lms { color: #344a43; background: #fdfbf6; }
-.mx-art--lms a { color: #173d34; text-decoration: none; }
-.mx-art--lms button, .mx-art--lms input { font-family: Manrope, sans-serif; }
 
 /* Шапка: блоки лонгрида лежат свободно и парят. Сцена 600×480 масштабируется под колонку (medx-case.ts) */
 .mx-hero { position: relative; aspect-ratio: 600 / 480; }
@@ -55,9 +24,9 @@
 .mx-hero .mh-line { position: relative; margin-top: 22px; height: 64px; }
 .mx-hero .mh-line::before { content: ''; position: absolute; left: 6px; right: 6px; top: 6px; height: 2px; background: #cfe3d8; border-radius: 1px; }
 .mx-hero .mh-line i { position: absolute; top: 0; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 2px solid #3b876a; }
-.mx-hero .mx-hero .mh-line i:nth-of-type(1) { left: 0; } .mx-hero .mh-line i:nth-of-type(2) { left: calc(50% - 7px); border-color: #c9744a; } .mx-hero .mh-line i:nth-of-type(3) { right: 0; }
+.mx-hero .mh-line i:nth-of-type(1) { left: 0; } .mx-hero .mh-line i:nth-of-type(2) { left: calc(50% - 7px); border-color: #c9744a; } .mx-hero .mh-line i:nth-of-type(3) { right: 0; }
 .mx-hero .mh-line b { position: absolute; top: 24px; width: 84px; font-size: 11.5px; line-height: 15px; font-weight: 600; color: #344a43; }
-.mx-hero .mx-hero .mh-line b:nth-of-type(1) { left: 0; } .mx-hero .mh-line b:nth-of-type(2) { left: calc(50% - 42px); text-align: center; color: #c9744a; } .mx-hero .mh-line b:nth-of-type(3) { right: 0; text-align: right; }
+.mx-hero .mh-line b:nth-of-type(1) { left: 0; } .mx-hero .mh-line b:nth-of-type(2) { left: calc(50% - 42px); text-align: center; color: #c9744a; } .mx-hero .mh-line b:nth-of-type(3) { right: 0; text-align: right; }
 .mx-hero .mh-line em { position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; border-radius: 50%; background: #3b876a; box-shadow: 0 0 0 5px #3b876a29; animation: mh-travel 4.5s cubic-bezier(.6,0,.3,1) 1.4s infinite; }
 @keyframes mh-travel { 0%, 8% { left: 2px; } 42%, 58% { left: calc(50% - 5px); } 92%, 100% { left: calc(100% - 12px); } }
 .mx-hero .mh-note { width: 262px; padding: 20px 22px; background: #faebdd; }

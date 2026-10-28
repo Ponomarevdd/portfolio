@@ -1,0 +1,31 @@
+/* Фрагменты макетов medx.pro (.mx-art) на их собственных шрифтах, PT Serif и Manrope: общие для кейса и живой обложки */
+.mx-art { font-family: Manrope, sans-serif; color: #344a43; text-align: left; letter-spacing: 0; line-height: normal; }
+.mx-art *, .mx-art *::before, .mx-art *::after { box-sizing: border-box; }
+.mx-art p, .mx-art h1, .mx-art h2, .mx-art h3, .mx-art h4, .mx-art ul, .mx-art li, .mx-art figure, .mx-art figcaption { margin: 0; padding: 0; }
+.mx-art h1, .mx-art h2, .mx-art h3, .mx-art h4 { font-weight: inherit; }
+.mx-art ul { list-style: none; }
+.mx-art img { max-width: none; }
+.mx-art .p { font-family: Manrope, sans-serif; font-weight: 400; font-size: 20px; line-height: 31px; color: #344a43; }
+.mx-art .lead { font-family: Manrope, sans-serif; font-weight: 600; font-size: 20px; line-height: 31px; color: #173d34; }
+.mx-art .h1 { font-family: 'PT Serif', serif; font-weight: 400; font-size: 38px; line-height: 45px; color: #173d34; }
+.mx-art .h2 { font-family: 'PT Serif', serif; font-weight: 400; font-size: 32px; line-height: 38px; color: #173d34; }
+.mx-art .ct { font-family: Manrope, sans-serif; font-weight: 600; font-size: 26px; line-height: 33px; color: #173d34; }
+.mx-art .li { display: flex; gap: 12px; }
+.mx-art .mk { flex: none; width: 8px; height: 17px; padding-top: 13px; }
+.mx-art .mk span { display: block; width: 4px; height: 4px; border-radius: 50%; background: #173d34; }
+.mx-art .li .p { flex: 1; min-width: 0; }
+.mx-art .sec { display: flex; flex-direction: column; gap: 36px; }
+.mx-art .body { display: flex; flex-direction: column; gap: 20px; }
+.mx-art .note { background: #faebdd; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px; }
+.mx-art .note-h { display: flex; gap: 10px; align-items: center; }
+.mx-art .note-t { font-family: Manrope, sans-serif; font-weight: 700; font-size: 18px; line-height: 27px; color: #75462f; }
+.mx-art .note .p { color: #75462f; }
+.mx-art .toc-sec { position: relative; display: block; padding: 4px 0 4px 30px; font-family: Manrope, sans-serif; font-weight: 700; font-size: 18px; line-height: 24px; color: #173d34; text-decoration: none; }
+.mx-art .toc-sec svg:not(.cv) { position: absolute; overflow: visible; }
+.mx-art .toc-sub { position: relative; padding-left: 30px; display: flex; flex-direction: column; gap: 8px; }
+.mx-art .toc-it { position: relative; display: block; padding: 10px 14px; border-radius: 6px; font-family: Manrope, sans-serif; font-weight: 400; font-size: 16px; line-height: 24px; color: #465f57; text-decoration: none; }
+.mx-art .toc-it svg:not(.cv) { position: absolute; left: -21px; top: 4px; overflow: visible; }
+.mx-art .ln { position: absolute; display: block; }
+.mx-art--lms { color: #344a43; background: #fdfbf6; }
+.mx-art--lms a { color: #173d34; text-decoration: none; }
+.mx-art--lms button, .mx-art--lms input { font-family: Manrope, sans-serif; }

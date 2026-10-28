@@ -8,6 +8,9 @@ import { fileURLToPath } from 'node:url';
 const PAGES = {
   'cases/my-school/index.html': '../src/data/curves/my-school.json',
   'cases/medx/index.html': '../src/data/curves/medx.json',
+  // Живая обложка medx.pro на главной и в «Моих работах»
+  'index.html': '../src/data/curves/home.json',
+  'work/index.html': '../src/data/curves/work.json',
 };
 
 const TOKENS = /(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<textarea\b[\s\S]*?<\/textarea>|<template\b[\s\S]*?<\/template>|<noscript\b[\s\S]*?<\/noscript>|<!--[\s\S]*?-->|<[^>]+>)/i;
