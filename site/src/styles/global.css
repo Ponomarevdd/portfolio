@@ -89,7 +89,7 @@ main { position: relative; z-index: 1; padding-top: 94px; padding-bottom: 64px; 
   .project__categories { order: 1; margin-top: 12px; flex-wrap: wrap; }
   .project__details h2 { font-size: 18px; }
   .project__description { font-size: 14px; }
-  .project__categories li { font-size: 11px; padding: 7px 8px; }
+  .project__categories li { font-size: 11px; }
   .work { gap: 64px; }
   main { padding-top: 74px; padding-bottom: 48px; }
 }
