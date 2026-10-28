@@ -44,8 +44,23 @@
 
 /* Окно для больших фрагментов: ширина доски, масштабируется целиком через .sc-scale */
 .mx-frame { border-radius: 20px; background: #fff; overflow: hidden; }
-.mx-frame--clip { max-height: var(--clip, 2200px); position: relative; }
-.mx-frame--clip::after { content: ''; position: absolute; inset: auto 0 0; height: 160px; background: linear-gradient(#fff0, #fff); }
+
+/* Лонгрид в действии: окно 1440×900, страница прокручивается внутри (medx-case.ts), содержание прилипает */
+.mx-act { position: relative; height: 900px; }
+.mx-act__view { height: 100%; overflow: hidden; transition: opacity .5s; }
+.mx-act.is-fade .mx-act__view { opacity: 0; }
+.mx-act nav[aria-label] { position: sticky; top: 32px; }
+.mx-act__bar { width: 0; height: 8px; border-radius: 4px; background: #3b876a; transition: width .6s cubic-bezier(.2,.7,.2,1); }
+.mx-act .toc-sec, .mx-act .toc-it { transition: background-color .3s, color .3s; }
+.mx-act .toc-sec.is-hover, .mx-act .toc-it.is-hover { color: #3b876a; }
+.mx-act .toc-it.is-hover { background: #f0f6f2; }
+.mx-act .toc-sec.is-on { color: #3b876a; }
+.mx-act .toc-it.is-on { background: #e8f3ee; color: #3b876a; }
+.mx-cursor { position: absolute; left: 0; top: 0; z-index: 3; pointer-events: none; opacity: 0; transition: transform .9s cubic-bezier(.45,0,.2,1), opacity .4s; will-change: transform; }
+.mx-cursor svg { display: block; width: 30px; height: 30px; filter: drop-shadow(0 2px 4px #173d3433); }
+.mx-cursor::before { content: ''; position: absolute; left: -10px; top: -10px; width: 34px; height: 34px; border-radius: 50%; background: #3b876a59; opacity: 0; transform: scale(.3); }
+.mx-cursor.is-click::before { animation: mx-click .5s ease-out; }
+@keyframes mx-click { 0% { opacity: 1; transform: scale(.3); } 100% { opacity: 0; transform: scale(1.4); } }
 
 /* Схемы в тексте тянутся на всю ширину, уже 944px уменьшаются целиком */
 /* Схемы по одной во фрейме 1094px (на 150px шире фрейма лонгрида); уже 1094px уменьшаются целиком.

@@ -218,7 +218,7 @@ write('fig-bats', fluid(o2[1]))
 # Шапка лонгрида: без бежевого фона под картинкой, иначе он просвечивает на скруглённых углах
 # Скругление только через clip-path (overflow + border-radius при масштабировании дают ореол картинки по краю),
 # а слева под текстом подложка непрозрачная, чтобы фото не просвечивало пятнами
-lr = body('Main.dc.html').replace('border-radius: 32px; background: #f7f4ee; overflow: hidden;', 'clip-path: inset(0 round 32px); isolation: isolate;', 1)
+lr = body('Main.dc.html').replace('border-radius: 32px; background: #f7f4ee; overflow: hidden;', 'clip-path: inset(0 round 32px); isolation: isolate;', 1).replace('left: -33px; top: 16px; width: 1010px', 'left: -33px; top: 0; width: 1010px', 1)  # фон итогов без тёмной полосы сверху
 lr = lr.replace('rgba(247,244,238,0.97) 0%, rgba(247,244,238,0.93) 40%', '#f7f4ee 0%, #f7f4ee 40%', 1)
 write('longread', lr)
 # В сайдбаре «Моё обучение» вместо набранного «MedX» настоящий логотип (векторная отрисовка с растра)

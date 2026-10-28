@@ -107,6 +107,8 @@ const fontCss = fams.flatMap((f) => FAMILIES[f].faces.flatMap((w) => ['latin', '
       const n = root.querySelector('[data-sl-track]')?.children.length ?? 0;
       add('slider', root.querySelector('[data-sl-count]'), Array.from({ length: n }, (_, k) => `${k + 1} / ${n}`));
     });
+    // Подписи, которые меняет скрипт страницы: data-dyn="ключ", варианты в data-dyn-values через «|»
+    document.querySelectorAll('[data-dyn][data-dyn-values]').forEach((el) => add(el.dataset.dyn, el, el.dataset.dynValues.split('|')));
     const counts = [...document.querySelectorAll('[data-count]')].filter((el) => geo(getComputedStyle(el))).length;
     box.remove();
     return { total, nodes, dyn, counts };

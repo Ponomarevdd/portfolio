@@ -19,6 +19,14 @@ const schemes = [
   ['fig-genome', 'Геном SARS-CoV-2'],
   ['fig-lineages', 'Линии SARS-CoV-2'],
 ];
+// Лонгрид в действии: счётчик «Прочитано» меняет анимация (medx-case.ts), пункты содержания без выделения
+const read = (k: number) => `Прочитано ${k} из 8`;
+const actLongread = art('longread')
+  .replace('<p style="font-size: 15px; line-height: 24px; color: #60716a;">Прочитано 3 из 8</p>',
+    `<p style="font-size: 15px; line-height: 24px; color: #60716a;" data-dyn="mx-read" data-dyn-values="${Array.from({ length: 9 }, (_, k) => read(k)).join('|')}">${read(0)}</p>`)
+  .replace('<div style="width: 72px; height: 8px; border-radius: 4px; background: #3b876a;"></div>', '<div class="mx-act__bar"></div>')
+  .replace(' aria-current="true" style="background: #e8f3ee; color: #3b876a; font-weight: 500;"', '');
+if (!actLongread.includes('mx-act__bar') || !actLongread.includes('data-dyn=') || actLongread.includes('aria-current')) throw new Error('лонгрид в действии: разметка содержания изменилась');
 // Схемы из лонгрида «Истоки пандемии»: показывают, насколько плотный исходный материал
 const complex = [
   ['fig-structure', 'Строение коронавируса'],
@@ -141,9 +149,12 @@ const complex = [
       </section>
 
       <section class="sc-sec sc-sec--wide" aria-labelledby="h-longread">
-        <div class="sc-head"><h2 id="h-longread">Лонгрид</h2></div>
+        <div class="sc-head"><h2 id="h-longread">Лонгрид в действии</h2></div>
         <div class="sc-main">
-          <div class="sc-scale" style="--base:1440px"><div class="mx-frame mx-frame--clip" style="--clip:2600px"><div class="mx-art" role="img" aria-label="Лонгрид «Вакцинация онкологических пациентов»" set:html={art('longread')}></div></div></div>
+          <div class="sc-scale" style="--base:1440px"><div class="mx-frame mx-act" data-anim>
+            <div class="mx-act__view"><div class="mx-art" role="img" aria-label="Лонгрид «Вакцинация онкологических пациентов»: прокрутка и переход по содержанию" set:html={actLongread}></div></div>
+            <span class="mx-cursor" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M5 3.2v15.4c0 .5.6.8 1 .4l3.6-3.4 2.4 5.5c.2.4.6.5 1 .4l2-.9c.4-.2.5-.6.4-1l-2.4-5.4 4.9-.3c.5 0 .8-.6.4-1L6 2.8c-.4-.3-1-.1-1 .4Z" fill="#173d34" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
+          </div></div>
         </div>
       </section>
 
