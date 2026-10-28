@@ -749,6 +749,8 @@
 @keyframes an-acc-ic { 0%, 12% { background: #fff; color: var(--p); transform: none; } 20%, 75% { background: var(--p); color: #fff; transform: rotate(45deg); } 85%, 100% { background: #fff; color: var(--p); transform: none; } }
 @media (max-width: 899px) {
   .sc-problem { grid-template-columns: minmax(0, 1fr); gap: var(--flow); }
+  /* Между абзацами визуально как от текста до фрейма: минус воздух над строчными буквами */
+  .sc-problem__text { gap: calc(var(--flow) - .45em); }
 }
 @media (max-width: 699px) {
   .sc-problem__text > p:not(.sc-lead) { font-size: 16px; }
