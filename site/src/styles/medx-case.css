@@ -116,54 +116,56 @@
 /* В схемах MedX латинские названия видов набраны курсивом; у Manrope нет курсива, разрешаем наклонное начертание */
 .mx-art { font-synthesis: style; }
 
-/* Отзывчивая вёрстка: начало лонгрида в рамке, которая сужается (анимация sc-narrow из кейса школ).
-   Раскладка меняется по ширине рамки через container queries */
-.mx-resp .sc-resp__stage { height: 600px; background: var(--bg); }
-.mx-resp .sc-resp__stage::after { background: linear-gradient(#f7f4ee00, var(--bg)); }
-.mx-resp .sc-resp__frame { border-color: #e3e9e5; }
-.mr { padding: 20px; display: flex; flex-direction: column; gap: 20px; background: #fff; }
-.mr-hero { position: relative; height: 290px; border-radius: 18px; overflow: hidden; background: #f7f4ee; isolation: isolate; }
-.mr-hero img { position: absolute; right: 0; top: 0; width: 72%; height: 100%; object-fit: cover; object-position: 30% 30%; transform: scaleX(-1); }
-.mr-hero::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, #f7f4ee 0%, #f7f4ee 34%, #f7f4ee8c 50%, #f7f4ee00 66%); }
-.mr-hero__text { position: relative; z-index: 2; height: 100%; box-sizing: border-box; padding: 28px 30px; max-width: 380px; display: flex; flex-direction: column; gap: 12px; }
-.mr-title { font-family: 'PT Serif', serif; font-weight: 700; font-size: 34px; line-height: 38px; color: #173d34; }
-.mr-sub { font-weight: 500; font-size: 15px; line-height: 21px; color: #173d34; }
-.mr-note { margin-top: auto !important; font-size: 13px; line-height: 19px; color: #60716a; }
-.mr-body { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 20px; align-items: start; }
-.mr-toc { padding: 18px 14px; border-radius: 12px; background: #f7f4ee; display: flex; flex-direction: column; gap: 6px; }
-.mr-toc__h { font-weight: 700; font-size: 16px; line-height: 22px; color: #173d34; }
-.mr-toc__read { font-size: 11px; line-height: 16px; color: #60716a; }
-.mr-toc__bar { display: block; height: 5px; border-radius: 3px; background: #afccbd; }
-.mr-toc__bar i { display: block; width: 37.5%; height: 100%; border-radius: 3px; background: #3b876a; }
-.mr-toc__list { margin-top: 6px !important; display: flex; flex-direction: column; gap: 2px; }
-.mr-toc__list li { padding: 6px 8px; border-radius: 5px; font-weight: 600; font-size: 12px; line-height: 16px; color: #173d34; }
-.mr-toc__list li.is-on { background: #e8f3ee; color: #3b876a; }
-.mr-art { display: flex; flex-direction: column; gap: 14px; }
-.mr-h { font-family: 'PT Serif', serif; font-size: 24px; line-height: 30px; color: #173d34; }
-.mr-p { font-size: 14px; line-height: 22px; color: #344a43; }
-.mr-tip { padding: 16px 18px; border-radius: 12px; background: #faebdd; display: flex; flex-direction: column; gap: 6px; }
-.mr-tip__h { display: flex; gap: 8px; align-items: center; font-weight: 700; font-size: 13px; line-height: 18px; color: #75462f; }
-.mr-tip__h svg { flex: none; }
-.mr-tip .mr-p { color: #75462f; }
-.mr-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.mr-card { padding: 14px; border-radius: 12px; background: #f7f4ee; display: flex; flex-direction: column; gap: 12px; }
-.mr-card img { display: block; width: 100%; height: 110px; border-radius: 10px; object-fit: cover; }
-.mr-card__h { font-weight: 600; font-size: 15px; line-height: 20px; color: #173d34; }
-@container (max-width: 860px) {
-  .mr-hero { height: 250px; }
-  .mr-hero__text { max-width: 300px; padding: 24px; }
-  .mr-title { font-size: 28px; line-height: 32px; }
-  .mr-body { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .mr-toc__list { display: none; }
+/* Отзывчивая вёрстка: раздел лонгрида в рамке, которая сужается от 1440 до планшета и телефона.
+   Размеры как в макете (сцена 1488 масштабируется под колонку), раскладка меняется по ширине рамки (container queries) */
+.mx-resp .sc-resp__stage { height: 1180px; padding: 24px 24px 0; background: var(--bg); }
+.mx-resp .sc-resp__stage::after { height: 120px; background: linear-gradient(#f7f4ee00, var(--bg)); }
+.mx-resp .sc-resp__frame { border-color: #e3e9e5; border-radius: 28px; }
+.is-in .mx-resp .sc-resp__frame, .mx-resp.is-in .sc-resp__frame { animation: mx-narrow 10s cubic-bezier(.6,0,.3,1) infinite; }
+@keyframes mx-narrow { 0%, 24% { width: 100%; } 34%, 58% { width: 960px; } 68%, 92% { width: 390px; } 100% { width: 100%; } }
+.mx-resp .rs-bar { padding: 14px 20px; gap: 8px; }
+.mx-resp .rs-bar i { width: 12px; height: 12px; }
+.mr { padding: 48px 64px 64px; display: flex; gap: 32px; align-items: flex-start; background: #fff; }
+.mr .mr-toc { flex: none; }
+.mr-art { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+.mr-lead { font-weight: 600; color: #173d34; margin-top: 16px !important; }
+.mr-h2 { margin-top: 40px !important; margin-bottom: 16px !important; }
+.mr-stages { display: flex; gap: 16px; align-items: center; }
+.mr-stage { flex: 1; min-width: 0; align-self: stretch; border-radius: 16px; padding: 24px; background: #f7f4ee; display: flex; flex-direction: column; gap: 14px; }
+.mr-stage--before { background: #e8f3ee; }
+.mr-stage__k { font-weight: 500; font-size: 18px; line-height: 25px; color: #60716a; }
+.mr-stage__t { font-family: 'PT Serif', serif; font-size: 32px; line-height: 39px; color: #173d34; }
+.mr-op { flex: none; width: 144px; display: flex; flex-direction: column; gap: 14px; }
+.mr-op p { font-weight: 700; font-size: 18px; line-height: 27px; color: #173d34; text-align: center; }
+.mr-op > svg { display: block; width: 144px; height: 24px; overflow: visible; }
+.mr-op > svg.mr-op__down { display: none; }
+.mr .mr-time { list-style: none; border-radius: 16px; padding: 40px 28px 12px; background: #e8f3ee; display: flex; flex-direction: column; }
+.mr .mr-time li { position: relative; padding: 0 0 36px 48px; display: flex; flex-direction: column; gap: 12px; }
+.mr-time li::before { content: ''; position: absolute; left: 6px; top: 7px; width: 16px; height: 16px; border-radius: 50%; background: #3b876a; }
+.mr-time li:not(:last-child)::after { content: ''; position: absolute; left: 13px; top: 16px; bottom: -7px; width: 2px; background: #aacbb9; }
+.mr-time h4 { font-weight: 600; font-size: 26px; line-height: 34px; color: #173d34; }
+@container (max-width: 1100px) {
+  .mr { flex-direction: column; padding: 40px; gap: 28px; }
+  .mr .mr-toc { width: auto !important; align-self: stretch; padding: 24px !important; gap: 0 !important; }
+  .mr .mr-toc > div:last-child { display: none !important; }
+  .mr-stage__t { font-size: 28px; line-height: 34px; }
 }
-@container (max-width: 420px) {
-  .mr { padding: 12px; gap: 16px; }
-  .mr-hero { height: auto; display: flex; flex-direction: column; }
-  .mr-hero img { position: relative; width: 100%; height: 150px; }
-  .mr-hero::before { display: none; }
-  .mr-hero__text { padding: 16px 18px 18px; max-width: none; gap: 8px; }
-  .mr-title { font-size: 24px; line-height: 28px; }
-  .mr-note { margin-top: 4px !important; }
-  .mr-h { font-size: 20px; line-height: 26px; }
-  .mr-cards { grid-template-columns: minmax(0, 1fr); }
+@container (max-width: 560px) {
+  .mr { padding: 20px 16px 32px; gap: 20px; }
+  .mr .mr-toc { padding: 20px !important; }
+  .mr .mr-toc h2 { font-size: 22px !important; line-height: 28px !important; }
+  .mr .h2 { font-size: 26px; line-height: 32px; }
+  .mr .p { font-size: 17px; line-height: 26px; }
+  .mr-lead { margin-top: 4px !important; }
+  .mr-h2 { margin-top: 24px !important; margin-bottom: 8px !important; }
+  .mr-stages { flex-direction: column; align-items: stretch; gap: 12px; }
+  .mr-stage { padding: 20px; gap: 10px; }
+  .mr-stage__t { font-size: 24px; line-height: 30px; }
+  .mr-op { width: auto; flex-direction: row; align-items: center; gap: 12px; padding-left: 20px; }
+  .mr-op p { font-size: 16px; line-height: 22px; text-align: left; }
+  .mr-op > svg { display: none; }
+  .mr-op > svg.mr-op__down { display: block; order: -1; width: 24px; height: 40px; }
+  .mr .mr-time { padding: 28px 20px 4px; }
+  .mr .mr-time li { padding-left: 40px; padding-bottom: 28px; gap: 8px; }
+  .mr-time h4 { font-size: 21px; line-height: 28px; }
 }
