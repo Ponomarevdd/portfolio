@@ -1,5 +1,6 @@
-// Шаг 1: открывает собранную страницу кейса со шрифтом Geologica и меряет каждое слово,
-// набранное этим шрифтом: позиции букв, ширину, базовую линию. Плюс тексты, которые меняет анимация.
+// Шаг 1: открывает собранную страницу кейса со шрифтами макетов и меряет каждое слово,
+// набранное ими: позиции букв, ширину, базовую линию. Текст в SVG (<text>) меряется по буквам целиком.
+// Плюс тексты, которые меняет анимация.
 // node measure.cjs <page path, напр. /cases/my-school/> <out.json>
 const { chromium } = require('playwright');
 const fs = require('fs');
@@ -7,25 +8,31 @@ const path = require('path');
 
 const [route, out] = process.argv.slice(2);
 const SITE = path.resolve(__dirname, '../../site');
-const GEO = path.join(SITE, 'node_modules/@fontsource/geologica');
 const ORIGIN = 'http://127.0.0.1:4399';
+const { FAMILIES, PAGES } = require('./fonts.json');
+const fams = PAGES[route.split('/').filter(Boolean).pop()];
+if (!fams) throw new Error('нет страницы ' + route + ' в fonts.json');
 
-// Шрифт подключаем сами: в исходниках страницы его больше нет
-const fontCss = ['300', '500', '600'].flatMap((w) => ['latin', 'cyrillic'].map((s) => fs.readFileSync(`${GEO}/${s}-${w}.css`, 'utf8')))
-  .join('\n').replace(/url\(\.\/files\//g, 'url(/__geo/');
+// Шрифты подключаем сами: в исходниках страницы их больше нет
+const fontCss = fams.flatMap((f) => FAMILIES[f].faces.flatMap((w) => ['latin', 'cyrillic'].map((s) =>
+  fs.readFileSync(path.join(SITE, 'node_modules/@fontsource', FAMILIES[f].pkg, `${s}-${w}.css`), 'utf8')
+    .replace(/url\(\.\/files\//g, `url(/__font/${FAMILIES[f].pkg}/`)))).join('\n');
 
 (async () => {
   const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
   const ctx = await b.newContext({ viewport: { width: 1440, height: 1000 }, javaScriptEnabled: false });
   const p = await ctx.newPage();
-  await p.route('**/__geo/*', (r) => r.fulfill({ body: fs.readFileSync(path.join(GEO, 'files', path.basename(new URL(r.request().url()).pathname))), contentType: 'font/woff2' }));
+  await p.route('**/__font/**', (r) => { const [, , pkg, file] = new URL(r.request().url()).pathname.split('/');
+    r.fulfill({ body: fs.readFileSync(path.join(SITE, 'node_modules/@fontsource', pkg, 'files', file)), contentType: 'font/woff2' }); });
   await p.goto(ORIGIN + route, { waitUntil: 'domcontentloaded' }); 
   await p.evaluate((css) => { const s = document.createElement('style'); s.textContent = css; document.head.append(s); }, fontCss);
-  await p.evaluate(() => Promise.all(['300', '500', '600'].map((w) => document.fonts.load(`${w} 16px Geologica`, 'Аа'))).then(() => document.fonts.ready));
+  const faces = fams.flatMap((f) => FAMILIES[f].faces.map((w) => `${w} 16px "${f}"`));
+  await p.evaluate((faces) => Promise.all(faces.map((f) => document.fonts.load(f, 'Аа'))).then(() => document.fonts.ready), faces);
 
-  const res = await p.evaluate(() => {
+  const res = await p.evaluate((fams) => {
     const NWS = /[^ \t\n\r\f]/;
-    const geo = (cs) => /^["']?Geologica/.test(cs.fontFamily);
+    const famOf = (cs) => fams.find((f) => cs.fontFamily.replace(/["']/g, '').split(',')[0].trim() === f);
+    const geo = (cs) => !!famOf(cs);
     const box = document.createElement('div');
     box.style.cssText = 'position:absolute;left:0;top:0;visibility:hidden;white-space:pre;contain:layout';
     document.body.append(box);
@@ -34,7 +41,7 @@ const fontCss = ['300', '500', '600'].flatMap((w) => ['latin', 'cyrillic'].map((
       PROPS.forEach((k) => { box.style[k] = cs[k]; });
       box.innerHTML = '<span>Ж</span><i style="display:inline-block;width:0;height:0"></i>';
       const sr = box.firstChild.getBoundingClientRect(), base = box.lastChild.getBoundingClientRect().top;
-      return { w: +cs.fontWeight, fs: parseFloat(cs.fontSize), asc: base - sr.top, ch: sr.height, lh: box.getBoundingClientRect().height, tt: cs.textTransform, fvn: cs.fontVariantNumeric };
+      return { f: famOf(cs), it: cs.fontStyle !== 'normal', w: +cs.fontWeight, fs: parseFloat(cs.fontSize), asc: base - sr.top, ch: sr.height, lh: box.getBoundingClientRect().height, tt: cs.textTransform, fvn: cs.fontVariantNumeric };
     };
     const word = (s, tt) => {
       box.innerHTML = '<span></span>'; const sp = box.firstChild; sp.textContent = s;
@@ -54,9 +61,18 @@ const fontCss = ['300', '500', '600'].flatMap((w) => ['latin', 'cyrillic'].map((
       if (P.closest('script,style,template,noscript')) continue;
       if (!NWS.test(n.data)) continue;
       const i = total++;
-      if (P.namespaceURI !== 'http://www.w3.org/1999/xhtml') continue;
       const cs = getComputedStyle(P);
       if (!geo(cs)) continue;
+      if (P instanceof SVGTextElement) {
+        // Текст схемы: позиции букв в координатах самого <text>
+        if (P.children.length) throw new Error('<tspan> в схеме не поддерживается: ' + n.data);
+        const ch = [];
+        for (let c = 0; c < P.getNumberOfChars(); c++) { const q = P.getStartPositionOfChar(c); ch.push([q.x, q.y]); }
+        const s = cs.textTransform === 'uppercase' ? n.data.toUpperCase() : n.data;
+        nodes.push({ i, t: n.data, svg: { s, ch, f: famOf(cs), w: +cs.fontWeight, it: cs.fontStyle !== 'normal', fs: parseFloat(cs.fontSize), fill: cs.fill, tr: P.getAttribute('transform') } });
+        continue;
+      }
+      if (P.namespaceURI !== 'http://www.w3.org/1999/xhtml') continue;
       const st = styleOf(cs);
       nodes.push({ i, t: n.data, sr: visibleToAT(P), st, toks: tokens(n.data, st) });
     }
@@ -94,9 +110,9 @@ const fontCss = ['300', '500', '600'].flatMap((w) => ['latin', 'cyrillic'].map((
     const counts = [...document.querySelectorAll('[data-count]')].filter((el) => geo(getComputedStyle(el))).length;
     box.remove();
     return { total, nodes, dyn, counts };
-  });
-  if (res.counts) throw new Error(`${res.counts} счётчиков data-count набраны Geologica — их надо обработать отдельно`);
+  }, fams);
+  if (res.counts) throw new Error(`${res.counts} счётчиков data-count набраны шрифтом макетов — их надо обработать отдельно`);
   fs.writeFileSync(out, JSON.stringify(res));
-  console.log(`text nodes ${res.total}, geologica ${res.nodes.length}, words ${res.nodes.reduce((a, n) => a + n.toks.filter((t) => t.s).length, 0)}, dyn ${Object.keys(res.dyn).join(',')}`);
+  console.log(`text nodes ${res.total}, mockup ${res.nodes.length}, svg ${res.nodes.filter((n) => n.svg).length}, words ${res.nodes.reduce((a, n) => a + (n.toks || []).filter((t) => t.s).length, 0)}, dyn ${Object.keys(res.dyn).join(',')}`);
   await b.close();
 })();

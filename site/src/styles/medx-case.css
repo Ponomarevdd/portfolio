@@ -30,10 +30,10 @@
 .mx-art .note-t { font-family: Manrope, sans-serif; font-weight: 700; font-size: 18px; line-height: 27px; color: #75462f; }
 .mx-art .note .p { color: #75462f; }
 .mx-art .toc-sec { position: relative; display: block; padding: 4px 0 4px 30px; font-family: Manrope, sans-serif; font-weight: 700; font-size: 18px; line-height: 24px; color: #173d34; text-decoration: none; }
-.mx-art .toc-sec svg { position: absolute; overflow: visible; }
+.mx-art .toc-sec svg:not(.cv) { position: absolute; overflow: visible; }
 .mx-art .toc-sub { position: relative; padding-left: 30px; display: flex; flex-direction: column; gap: 8px; }
 .mx-art .toc-it { position: relative; display: block; padding: 10px 14px; border-radius: 6px; font-family: Manrope, sans-serif; font-weight: 400; font-size: 16px; line-height: 24px; color: #465f57; text-decoration: none; }
-.mx-art .toc-it svg { position: absolute; left: -21px; top: 4px; overflow: visible; }
+.mx-art .toc-it svg:not(.cv) { position: absolute; left: -21px; top: 4px; overflow: visible; }
 .mx-art .ln { position: absolute; display: block; }
 .mx-art--lms { color: #344a43; background: #fdfbf6; }
 .mx-art--lms a { color: #173d34; text-decoration: none; }
@@ -71,7 +71,7 @@
 
 @media (max-width: 899px) {
   .mx-aud { grid-template-columns: minmax(0, 1fr); }
-  .mx-aud__who { padding: 28px; min-height: 0; }
+  .mx-aud__who { min-height: 0; }
   .mx-aud__who .sc-role__icon { margin-bottom: 8px; }
   .mx-aud__who h3 { font-size: 26px; }
 }

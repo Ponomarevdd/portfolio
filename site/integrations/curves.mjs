@@ -1,11 +1,14 @@
-// Текст макетов в кривых: после сборки заменяет набранный Geologica текст на SVG-слова
+// Текст макетов в кривых: после сборки заменяет текст, набранный шрифтами макетов, на SVG-слова
 // из заранее сгенерированного файла (tools/case-curves). Сам шрифт страница не грузит.
 // Если текст на странице поменялся, сборка падает: кривые надо перегенерировать.
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const PAGES = { 'cases/my-school/index.html': '../src/data/curves/my-school.json' };
+const PAGES = {
+  'cases/my-school/index.html': '../src/data/curves/my-school.json',
+  'cases/medx/index.html': '../src/data/curves/medx.json',
+};
 
 const TOKENS = /(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<textarea\b[\s\S]*?<\/textarea>|<template\b[\s\S]*?<\/template>|<noscript\b[\s\S]*?<\/noscript>|<!--[\s\S]*?-->|<[^>]+>)/i;
 const NAMED = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' };
@@ -30,7 +33,11 @@ export function applyCurves(html, data, file) {
     if (!NWS.test(decode(part))) continue;
     const node = byIndex.get(ord++);
     if (!node) continue;
-    if (svg || decode(part) !== node.t) throw new Error(`curves: текст в ${file} изменился («${decode(part).trim().slice(0, 40)}»), перегенерируйте tools/case-curves/run.sh`);
+    if (node.svg && svg && decode(part) === node.t && /^<text\b/i.test(parts[k - 1]) && /^<\/text>/i.test(parts[k + 1])) {
+      // Текст схемы: весь элемент <text> заменяется буквами-кривыми
+      parts[k - 1] = parts[k + 1] = ''; parts[k] = node.h; continue;
+    }
+    if (svg || node.svg || decode(part) !== node.t) throw new Error(`curves: текст в ${file} изменился («${decode(part).trim().slice(0, 40)}»), перегенерируйте tools/case-curves/run.sh`);
     parts[k] = node.h;
   }
   if (ord !== data.total) throw new Error(`curves: в ${file} ${ord} текстовых узлов вместо ${data.total}, перегенерируйте tools/case-curves/run.sh`);
