@@ -96,7 +96,7 @@ const school: Project = {
   live: 'school',
 };
 const medx: Project = {
-  slug: 'medx', href: '/cases/medx/', title: 'Medx.pro: лонгриды о вакцинации для медиков', year: 2021,
+  slug: 'medx', href: '/cases/medx/', title: 'Medx.pro: лонгриды о вакцинации', year: 2021,
   categories: ['UX/UI', 'Веб-дизайн'],
   description: 'Интерактивные лонгриды для врачей и медицинского персонала о вакцинации от COVID-19: схемы вместо сложного текста, самопроверки и медицински точные иллюстрации.',
   live: 'medx',
