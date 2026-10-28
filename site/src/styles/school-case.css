@@ -160,7 +160,8 @@
 .sc-duties h3 { font-size: 20px; letter-spacing: -.02em; }
 .sc-duties p { color: var(--text-secondary); font-size: 15px; line-height: 1.55; }
 .sc-duties li { opacity: 0; transform: translateY(16px); }
-.sc-duties .sc-role__icon { margin-bottom: 4px; opacity: 0; transform: scale(.6); }
+/* Под иконкой визуально столько же, сколько над ней (28): 14 + gap 10 + 4 px внутреннего отступа строки до заглавной */
+.sc-duties .sc-role__icon { margin-bottom: 14px; opacity: 0; transform: scale(.6); }
 .sc-duties.is-in li { animation: sc-pains-in .6s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(var(--i) * .08s); }
 .sc-duties.is-in .sc-role__icon { animation: pr-pop .5s cubic-bezier(.3,1.4,.5,1) forwards; animation-delay: calc(var(--i) * .08s + .25s); }
 .sc-roles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
