@@ -208,7 +208,11 @@ mut = mut.replace('display:flex;padding-right:24px;', 'display:flex;align-items:
 # линия таймлайна от первой точки до последней
 mut = mut.replace('position:absolute;left:35px;top:96px;bottom:50px;', 'position:absolute;left:35px;top:144px;bottom:102px;')
 write('fig-mutations', fluid(mut).replace('width:88px;', 'width:136px;').replace('padding:16px 24px;display:flex;align-items:center;gap:16px;', 'padding:20px 28px;display:flex;align-items:center;gap:24px;').replace('gap:14px;position:relative;', 'gap:16px;position:relative;'))
-write('fig-lineages', round_hv(fluid(o4[0])))
+# Этиология ОРВИ вместо «Линий SARS-CoV-2» (Дмитрий, 2026-10-28): без антиквы, выноска с точкой на конце
+orvi = fluid(o1[2]).replace('font-family="PT Serif" font-size="34"', 'data-keep="" font-family="Manrope" font-weight="700" font-size="32"')
+orvi = orvi.replace('font:400 24px/32px PT Serif;color:#3b876a', 'font:600 24px/32px Manrope;color:#3b876a')
+assert 'PT Serif' not in orvi, 'в схеме ОРВИ осталась антиква'
+write('fig-orvi', dot_heads(orvi))
 # Сложные схемы для блока «Задача и проблема»
 write('fig-structure', o1[1])
 # Названия подродов без антиквы, как остальные подписи схем
