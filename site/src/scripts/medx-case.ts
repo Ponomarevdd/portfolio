@@ -1,3 +1,4 @@
+import './case-reveal';
 // Кейс MedX: фрагменты макетов шире базовой ширины не перестраиваются, а уменьшаются целиком.
 document.querySelectorAll<HTMLElement>('.sc-scale').forEach((box) => {
   const inner = box.firstElementChild as HTMLElement | null;

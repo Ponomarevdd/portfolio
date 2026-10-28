@@ -71,13 +71,13 @@ const complex = [
         <div class="sc-head"><h2 id="h-me">Что я делал</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Лид-дизайнер проекта. Разработал визуальный язык и UI-kit с нуля и отвечал за качество всех 22 лонгридов.</p>
-          <ul class="sc-duties">
-            <li><span class="sc-role__icon"><Iconsax name="brush2-bold" size={28}/></span><h3>Визуальное направление</h3><p>Определил стиль лонгридов: цвет, типографику, ритм и иерархию материала.</p></li>
-            <li><span class="sc-role__icon"><Iconsax name="element-4-bold" size={28}/></span><h3>UI-kit</h3><p>Разработал UI-kit с нуля: цвета, шрифты, отступы, скругления, плашки, таблицы и таймлайны. На нём собраны все лонгриды.</p></li>
-            <li><span class="sc-role__icon"><Iconsax name="hierarchy-bold" size={28}/></span><h3>Структура лонгрида</h3><p>Спроектировал структуру лонгрида и место в ней для видео, конспектов, интерактивов и самопроверки.</p></li>
-            <li><span class="sc-role__icon"><Iconsax name="diagram-bold" size={28}/></span><h3>Схемы</h3><p>Переводил сложные медицинские данные в схемы: генетику вируса, механизмы заражения, рекомендации по терапии.</p></li>
-            <li><span class="sc-role__icon"><Iconsax name="pen-tool-bold" size={28}/></span><h3>Иллюстрации</h3><p>Создавал обложки лонгридов в Photoshop с медицинской и анатомической точностью.</p></li>
-            <li><span class="sc-role__icon"><Iconsax name="clipboard-text-bold" size={28}/></span><h3>Работа со смежниками</h3><p>Выстраивал подачу материала совместно с методистами и редактором, планировал выпуск с руководителем проекта.</p></li>
+          <ul class="sc-duties" data-anim="once">
+            <li style="--i:0"><span class="sc-role__icon"><Iconsax name="brush2-bold" size={28}/></span><h3>Визуальное направление</h3><p>Определил стиль лонгридов: цвет, типографику, ритм и иерархию материала.</p></li>
+            <li style="--i:1"><span class="sc-role__icon"><Iconsax name="element-4-bold" size={28}/></span><h3>UI-kit</h3><p>Разработал UI-kit с нуля: цвета, шрифты, отступы, скругления, плашки, таблицы и таймлайны. На нём собраны все лонгриды.</p></li>
+            <li style="--i:2"><span class="sc-role__icon"><Iconsax name="hierarchy-bold" size={28}/></span><h3>Структура лонгрида</h3><p>Спроектировал структуру лонгрида и место в ней для видео, конспектов, интерактивов и самопроверки.</p></li>
+            <li style="--i:3"><span class="sc-role__icon"><Iconsax name="diagram-bold" size={28}/></span><h3>Схемы</h3><p>Переводил сложные медицинские данные в схемы: генетику вируса, механизмы заражения, рекомендации по терапии.</p></li>
+            <li style="--i:4"><span class="sc-role__icon"><Iconsax name="pen-tool-bold" size={28}/></span><h3>Иллюстрации</h3><p>Создавал обложки лонгридов в Photoshop с медицинской и анатомической точностью.</p></li>
+            <li style="--i:5"><span class="sc-role__icon"><Iconsax name="clipboard-text-bold" size={28}/></span><h3>Работа со смежниками</h3><p>Выстраивал подачу материала совместно с методистами и редактором, планировал выпуск с руководителем проекта.</p></li>
           </ul>
         </div>
       </section>
@@ -85,16 +85,16 @@ const complex = [
       <section class="sc-sec" aria-labelledby="h-roles">
         <div class="sc-head"><h2 id="h-roles">Для кого</h2></div>
         <div class="sc-main">
-          <div class="mx-aud">
+          <div class="mx-aud" data-anim="once">
             <div class="mx-aud__who">
               <span class="sc-role__icon"><Iconsax name="hospital-bold" size={28}/></span>
               <h3>Врачи и медицинский персонал</h3>
               <p>Определить, кому и когда показана вакцинация, и учесть противопоказания.</p>
             </div>
             <ul class="mx-aud__facts">
-              <li><span class="sc-role__icon"><Iconsax name="clock-bold" size={24}/></span><p>Ограниченное время между приёмами</p></li>
-              <li><span class="sc-role__icon"><Iconsax name="document-text-bold" size={24}/></span><p>Данные о вакцинах регулярно обновляются</p></li>
-              <li><span class="sc-role__icon"><Iconsax name="health-bold" size={24}/></span><p>Ошибка напрямую влияет на здоровье пациента</p></li>
+              <li style="--i:0"><span class="sc-role__icon"><Iconsax name="clock-bold" size={24}/></span><p>Ограниченное время между приёмами</p></li>
+              <li style="--i:1"><span class="sc-role__icon"><Iconsax name="document-text-bold" size={24}/></span><p>Данные о вакцинах регулярно обновляются</p></li>
+              <li style="--i:2"><span class="sc-role__icon"><Iconsax name="health-bold" size={24}/></span><p>Ошибка напрямую влияет на здоровье пациента</p></li>
             </ul>
           </div>
         </div>
@@ -124,7 +124,7 @@ const complex = [
                 <li style="font-family:Manrope,sans-serif"><b>Sans</b>Текст, плашки, содержание</li>
               </ul>
             </div>
-            <div class="sc-ds__card">
+            <div class="sc-ds__card" data-anim>
               <h3>Цвета</h3>
               <div class="sc-tokens" aria-hidden="true">
                 {[['Акцент', '#3B876A', 1], ['Мятный', '#E8F3EE'], ['Заголовки', '#173D34', 1], ['Бежевый', '#F7F4EE'], ['Важно', '#FAEBDD'], ['Текст', '#344A43', 1], ['Итоги', '#123E34', 1]].map(([n, c, dark], i) => <span class={dark ? 'is-dark' : undefined} style={`--c:${c};--i:${i}`}>{n}<small>{c}</small></span>)}
@@ -159,9 +159,9 @@ const complex = [
         <div class="sc-head"><h2 id="h-results">Результаты</h2></div>
         <div class="sc-main">
           <ul class="sc-stats sc-stats--big">
-            <li><strong>22</strong><span>интерактивных лонгрида</span></li>
+            <li><strong data-count="22">22</strong><span>интерактивных лонгрида</span></li>
             <li><strong>С нуля</strong><span>UI-kit проекта</span></li>
-            <li><strong>3 формата</strong><span>лонгрид, видео и конспект</span></li>
+            <li><strong><span data-count="3">3</span> формата</strong><span>лонгрид, видео и конспект</span></li>
             <li><strong>Концепт</strong><span>личного кабинета</span></li>
           </ul>
           <div class="sc-quote">

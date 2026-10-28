@@ -4,8 +4,6 @@
   --p: #3b876a; --pl: #e8f3ee; --t: #173d34; --cap: #60716a; --bg: #f7f4ee; --line: #d9e4dd;
 }
 
-/* Пока статика: всё, что в кейсе школ появляется анимацией, показываем сразу */
-.mx .sc-duties li, .mx .sc-duties .sc-role__icon, .mx .sc-tokens span { opacity: 1; transform: none; }
 
 /* Фрагменты макетов: стили досок канваса, ограниченные контейнером */
 .mx-art { font-family: Manrope, sans-serif; color: #344a43; text-align: left; letter-spacing: 0; line-height: normal; }
@@ -68,6 +66,15 @@
 .mx-aud__facts li { padding: 20px 24px; border-radius: 12px; background: #fff; display: flex; align-items: center; gap: 16px; }
 .mx-aud__facts .sc-role__icon { flex: none; width: 48px; height: 48px; border-radius: 14px; }
 .mx-aud__facts p { font-size: 16px; line-height: 1.45; font-weight: 500; }
+
+/* Появление при прокрутке, как карточки в кейсе школ */
+.mx-aud__who, .mx-aud__facts li { opacity: 0; transform: translateY(16px); }
+.mx-aud .sc-role__icon { opacity: 0; transform: scale(.6); }
+.mx-aud.is-in .mx-aud__who, .mx-aud.is-in .mx-aud__facts li { animation: sc-pains-in .6s cubic-bezier(.2,.8,.2,1) forwards; }
+.mx-aud.is-in .mx-aud__facts li { animation-delay: calc(.16s + var(--i) * .1s); }
+.mx-aud.is-in .mx-aud__who .sc-role__icon { animation: pr-pop .5s cubic-bezier(.3,1.4,.5,1) .25s forwards; }
+.mx-aud.is-in .mx-aud__facts .sc-role__icon { animation: pr-pop .5s cubic-bezier(.3,1.4,.5,1) forwards; animation-delay: calc(.4s + var(--i) * .1s); }
+@media (prefers-reduced-motion: reduce) { .mx-aud__who, .mx-aud__facts li, .mx-aud .sc-role__icon { opacity: 1; transform: none; } }
 
 @media (max-width: 899px) {
   .mx-aud { grid-template-columns: minmax(0, 1fr); }
