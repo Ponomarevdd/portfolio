@@ -166,6 +166,7 @@
 .sc-roles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .sc-role { padding: 32px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 14px; }
 .sc-role__icon { width: 56px; height: 56px; border-radius: 14px; display: grid; place-items: center; background: var(--pl); color: var(--p); }
+.sc-role > .sc-role__icon { margin-bottom: 11px; }
 .sc-role h3 { font-size: 24px; letter-spacing: -.03em; }
 .sc-role__goal { font-size: 16px; line-height: 1.55; }
 .sc-role ul { display: flex; flex-direction: column; gap: 8px; }
@@ -824,6 +825,8 @@
 .an-icons > span { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 14px; background: var(--bg); }
 .an-icons i { flex-shrink: 0; width: 40px; height: 40px; border-radius: 10px; background: var(--pl); display: grid; place-items: center; overflow: hidden; }
 .an-icons i svg { width: 24px; height: 32px; }
+/* Иконки профилей той же толщины, что Iconsax Linear рядом (1.5 из 24 при 26px), и масштабируются вместе с блоком */
+.an-icons i:not(.an-icons__ic) svg path { vector-effect: none; stroke-width: 2.9; }
 .an-icons .an-icons__ic { color: var(--p); }
 .an-icons .an-icons__ic svg { width: 26px; height: 26px; }
 .an-icons b { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
