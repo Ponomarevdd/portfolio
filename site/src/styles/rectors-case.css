@@ -93,47 +93,11 @@
 @keyframes rc-scroll-t { 0%, 14% { transform: none; } 34%, 52% { transform: translateY(-22%); } 72%, 88% { transform: translateY(-36%); } 100% { transform: none; } }
 @keyframes rc-scroll-p { 0%, 14% { transform: none; } 34%, 52% { transform: translateY(-24%); } 72%, 88% { transform: translateY(-48%); } 100% { transform: none; } }
 
-/* Дизайн-система */
-.rc .sc-ds__card > .rc-font { font-family: 'Golos Text', sans-serif; font-weight: 600; letter-spacing: -.01em; }
-.rc .rc-weights { font-family: 'Golos Text', sans-serif; }
-.rc .rc-weights b { flex: none; width: 40px; }
-.rc .rc-tokens span { font-family: 'Golos Text', sans-serif; }
-.rc .rc-tokens { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(60px, 1fr); }
-.rc .rc-tokens span:nth-child(n) { grid-column: auto; }
-.rc .rc-tokens span:last-child { box-shadow: inset 0 0 0 1px #ececec; }
-.rc-kit__set { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
-.rc-kit__btn { display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 40px; border-radius: 10px; background: var(--ra-p); color: #fff; font-size: 16px; font-weight: 500; }
-.rc-kit__link { display: inline-flex; align-items: center; gap: 16px; font-size: 16px; font-weight: 500; color: var(--ra-p); }
-.rc-kit__search { position: relative; box-sizing: border-box; width: 100%; height: 48px; display: flex; align-items: center; gap: 14px; padding: 0 16px; border-radius: 10px; background: var(--ra-band); color: var(--ra-cap); font-size: 14px; box-shadow: inset 0 0 0 1px transparent; }
-.rc-kit__search .iconsax { color: var(--ra-t); }
-.rc-kit__search i { position: absolute; left: 50px; top: 15px; width: 1px; height: 18px; background: var(--ra-p); opacity: 0; }
-.rc-kit__news { font-size: 18px; line-height: 23px; font-weight: 500; color: var(--ra-h); }
-.rc-kit__pages { display: inline-flex; align-items: center; gap: 14px; font-size: 15px; color: var(--ra-cap); }
-.rc-kit__pages b { font-weight: 400; color: var(--ra-h); }
-.rc-kit__pages .iconsax { color: var(--ra-h); }
-.rc-kit__pages .iconsax:first-child { color: var(--ra-cap); }
-/* Состояния компонентов сменяют друг друга, пока карточка на экране */
-.rc-kit.is-in .rc-kit__btn { animation: rc-k-btn 6s ease-in-out infinite; }
-.rc-kit.is-in .rc-kit__link { animation: rc-k-link 6s ease-in-out infinite; }
-.rc-kit.is-in .rc-kit__search { animation: rc-k-search 6s ease-in-out infinite; }
-.rc-kit.is-in .rc-kit__search i { animation: rc-k-caret 6s steps(1) infinite; }
-.rc-kit.is-in .rc-kit__news { animation: rc-k-news 6s ease-in-out infinite; }
-@keyframes rc-k-btn { 0%, 12%, 30%, 100% { background: var(--ra-p); } 16%, 26% { background: var(--ra-p2); } }
-@keyframes rc-k-link { 0%, 30%, 46%, 100% { color: var(--ra-p); } 34%, 42% { color: var(--ra-p2); } }
-@keyframes rc-k-search { 0%, 48%, 74%, 100% { background: var(--ra-band); box-shadow: inset 0 0 0 1px transparent; } 52%, 70% { background: #ebebeb; box-shadow: inset 0 0 0 1px var(--ra-p); } }
-@keyframes rc-k-caret { 0%, 52% { opacity: 0; } 54%, 58% { opacity: 1; } 60%, 62% { opacity: 0; } 64%, 68% { opacity: 1; } 70%, 100% { opacity: 0; } }
-@keyframes rc-k-news { 0%, 74%, 92%, 100% { color: var(--ra-h); } 78%, 88% { color: var(--ra-p); } }
-
 @media (prefers-reduced-motion: reduce) {
   .rc-old img { transition: none; }
-  .rc-devices .rc-scroll, .rc-kit .rc-kit__set > * { animation: none !important; }
+  .rc-devices .rc-scroll { animation: none !important; }
 }
 
-@media (max-width: 1099px) and (min-width: 700px) {
-  /* в две колонки компоненты встают на всю ширину под шрифтом и цветами */
-  .rc-kit { grid-column: span 2; }
-  .rc-kit .rc-kit__set { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; justify-items: start; gap: 20px 32px; }
-}
 @media (max-width: 899px) {
   .rc-goals { grid-template-columns: minmax(0, 1fr); }
   .rc-cmp__stage { aspect-ratio: 1 / 1; }

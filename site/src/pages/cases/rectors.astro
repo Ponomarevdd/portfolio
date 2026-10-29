@@ -75,7 +75,6 @@ const tokens: [string, string, boolean?][] = [['Акцент', '#0066FF', true],
           <ul class="sc-duties rc-goals" data-anim="once">
             <li style="--i:0"><span class="sc-role__icon"><Iconsax name="brush2-bold" size={28}/></span><h3>Современный и удобный</h3><p>Новый облик и понятная структура разделов.</p></li>
             <li style="--i:1"><span class="sc-role__icon"><Iconsax name="mobile-bold" size={28}/></span><h3>Для всех устройств</h3><p>Сайт одинаково удобен на компьютере, планшете и телефоне.</p></li>
-            <li style="--i:2"><span class="sc-role__icon"><Iconsax name="element-4-bold" size={28}/></span><h3>Единый стиль</h3><p>Все разделы собраны из одних и тех же компонентов.</p></li>
           </ul>
         </div>
       </section>
@@ -84,11 +83,10 @@ const tokens: [string, string, boolean?][] = [['Акцент', '#0066FF', true],
         <div class="sc-head"><h2 id="h-me">Что я делал</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Единственный дизайнер проекта. Работал в паре с проджект‑менеджером, готовые макеты передал разработчикам заказчика.</p>
-          <ul class="sc-duties" data-anim="once">
+          <ul class="sc-duties rc-goals" data-anim="once">
             <li style="--i:0"><span class="sc-role__icon"><Iconsax name="hierarchy-bold" size={28}/></span><h3>Структура и навигация</h3><p>Собрал 13 пунктов бокового меню в четыре раздела в шапке. Структура Совета и документы открываются в подменю.</p></li>
             <li style="--i:1"><span class="sc-role__icon"><Iconsax name="monitor-bold" size={28}/></span><h3>Дизайн страниц</h3><p>Главная, новости, страница новости, Президиум, документы, обратная связь и страница с контентом. Каждая в трёх ширинах: десктоп, планшет и телефон.</p></li>
-            <li style="--i:2"><span class="sc-role__icon"><Iconsax name="element-4-bold" size={28}/></span><h3>UI-kit</h3><p>Меню, подменю, кнопки, поиск, карточки новостей и футер со всеми состояниями.</p></li>
-            <li style="--i:3"><span class="sc-role__icon"><Iconsax name="code-bold" size={28}/></span><h3>Передача в разработку</h3><p>Подготовил макеты и компоненты для разработчиков заказчика.</p></li>
+            <li style="--i:2"><span class="sc-role__icon"><Iconsax name="code-bold" size={28}/></span><h3>Передача в разработку</h3><p>Подготовил макеты и компоненты для разработчиков заказчика.</p></li>
           </ul>
         </div>
       </section>
@@ -154,45 +152,6 @@ const tokens: [string, string, boolean?][] = [['Акцент', '#0066FF', true],
             <div class="rc-device rc-devices__tab"><div class="rc-device__screen"><img class="rc-scroll" src={img('new-tablet.webp')} alt="" width="999" height="1560" loading="lazy"></div></div>
             <div class="rc-device rc-devices__phone"><div class="rc-device__screen"><img class="rc-scroll" src={img('new-phone.webp')} alt="" width="416" height="1560" loading="lazy"></div></div>
           </div></div>
-        </div>
-      </section>
-
-      <section class="sc-sec sc-sec--wide" aria-labelledby="h-ds">
-        <div class="sc-head"><h2 id="h-ds">Дизайн-система</h2></div>
-        <div class="sc-main">
-          <p class="sc-lead">UI-kit построен на шрифте Golos Text и одном акцентном синем. Из одних и тех же компонентов собраны все страницы сайта во всех трёх ширинах.</p>
-          <div class="sc-ds">
-            <div class="sc-ds__card">
-              <h3>Шрифт</h3>
-              <p class="sc-font rc-font" aria-hidden="true">Golos Text</p>
-              <ul class="sc-weights rc-weights">
-                <li style="font-weight:600"><b>600</b>Заголовки страниц и разделов</li>
-                <li style="font-weight:500"><b>500</b>Новости, меню и кнопки</li>
-                <li style="font-weight:400"><b>400</b>Текст, даты и подписи</li>
-              </ul>
-            </div>
-            <div class="sc-ds__card" data-anim>
-              <h3>Цвета</h3>
-              <div class="sc-tokens rc-tokens" aria-hidden="true">
-                {tokens.map(([n, c, dark], i) => <span class={dark ? 'is-dark' : undefined} style={`--c:${c};--i:${i}`}>{n}<small>{c}</small></span>)}
-              </div>
-            </div>
-            <div class="sc-ds__card rc-kit" data-anim>
-              <h3>Компоненты</h3>
-              <div class="ra rc-kit__set" aria-hidden="true">
-                <span class="rc-kit__btn">Отправить</span>
-                <span class="rc-kit__link">Все новости<Iconsax name="arrow-right-linear" size={20}/></span>
-                <span class="rc-kit__search"><Iconsax name="search-normal1-linear" size={20}/><span>Введите название новости</span><i></i></span>
-                <span class="rc-kit__news">Общее собрание Совета ректоров вузов Москвы и МО</span>
-                <span class="rc-kit__pages"><Iconsax name="arrow-left2-linear" size={16}/><b>1</b><span>2</span><span>3</span><span>…</span><span>10</span><Iconsax name="arrow-right2-linear" size={16}/></span>
-              </div>
-            </div>
-          </div>
-          <ul class="sc-stats sc-stats--ds">
-            <li><strong data-count="7">7</strong><span>типов страниц</span></li>
-            <li><strong data-count="3">3</strong><span>ширины: десктоп, планшет и телефон</span></li>
-            <li><strong data-count="4">4</strong><span>раздела в меню вместо 13 пунктов</span></li>
-          </ul>
         </div>
       </section>
     </div>
