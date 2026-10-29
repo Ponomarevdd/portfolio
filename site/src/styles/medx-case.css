@@ -171,3 +171,15 @@
   .mr-time li::before { top: 6px; }
   .mr-time li:not(:last-child)::after { top: 14px; bottom: -14px; }
 }
+
+/* Хронология вспышек в «Контексте» не масштабируется, а перестраивается: на узком экране карточки
+   идут столбиком, горизонтальная шкала превращается в вертикальную линию с точками у карточек */
+@media (max-width: 899px) {
+  .mx-art .mxo { padding: 24px !important; }
+  .mxo .mxo-line { display: none !important; }
+  .mxo .mxo-cards { position: relative; grid-template-columns: minmax(0, 1fr) !important; gap: 12px !important; padding-left: 26px; }
+  .mxo .mxo-cards::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 2px; border-radius: 1px; background: #3b876a; }
+  .mxo .mxo-cards > div { position: relative; }
+  .mxo .mxo-cards > div::before { content: ''; position: absolute; left: -27px; top: 30px; width: 14px; height: 14px; border-radius: 50%; box-sizing: border-box; border: 2px solid #f7f4ee; background: #3b876a; }
+  .mxo .mxo-cards > div:last-child::before { background: #c9744a; }
+}

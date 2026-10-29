@@ -152,7 +152,11 @@ TIMELINE = ('<div style="position:relative;display:grid;grid-template-columns:re
                       for c in ('#3b876a', '#3b876a', '#c9744a'))
             + '</div>')
 out = re.sub(r'<svg width="864" height="34"[\s\S]*?</svg>', TIMELINE, o1[3], count=1)
-write('fig-outbreaks', fluid(out))
+# Классы для отзывчивой раскладки: на узком экране карточки идут столбиком, шкала становится вертикальной (medx-case.css)
+out = out.replace('<div style="position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;height:34px">', '<div class="mxo-line" style="position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;height:34px">', 1)
+out = out.replace('<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"><div style="background:#ffffff', '<div class="mxo-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"><div style="background:#ffffff', 1)
+assert 'mxo-line' in out and 'mxo-cards' in out, 'разметка хронологии вспышек изменилась'
+write('fig-outbreaks', fluid(out).replace('<figure style="', '<figure class="mxo" style="', 1))
 # Животные-хозяева: карточки промежуточных хозяев выше (у панголина подпись в две строки),
 # «Летучие мыши» компактнее; стрелки снизу укорочены под новые размеры
 hosts = o1[4].replace('font:400 28px/34px PT Serif;color:#c9744a', 'font:600 24px/32px Manrope;color:#c9744a').replace('top:150px;width:250px;height:134px;', 'top:150px;width:250px;height:146px;')
