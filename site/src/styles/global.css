@@ -36,6 +36,7 @@ main { position: relative; z-index: 1; padding-top: 94px; padding-bottom: 64px; 
 .project__gallery { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); grid-template-rows: repeat(2, 260px); gap: 20px; }
 .project__cover, .project__identity { position: relative; overflow: hidden; border-radius: var(--card-radius); }
 .project__cover--main { grid-row: span 2; }
+.lazy-cover__ph { background: #eceef1; }
 .project__cover img { width: 100%; height: 100%; display: block; object-fit: cover; }
 .project__cover--detail img { object-position: 80% center; transform: scale(1.8); transform-origin: 80% 60%; }
 .project__identity { display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--identity-bg); color: var(--identity-color); }

@@ -1,0 +1,37 @@
+---
+// Главная сайта Совета ректоров в ширине 1280, пересобранная по макету. Слайды, пункты меню и подменю
+// переключает скрипт страницы (классы is-on), сам блок статичен. Стили в styles/rectors-art.css.
+import { siteUrl } from '../utils/url';
+import Iconsax from './Iconsax.astro';
+import { rcImg, rcSlides, rcNav, rcEvents, rcOrg, rcDocs } from '../data/rectors';
+interface Props { sub?: boolean; lazy?: boolean }
+const { sub = false, lazy = false } = Astro.props;
+const img = (n: string) => siteUrl(rcImg(n));
+const loading = lazy ? 'lazy' : 'eager';
+---
+<div class="ra ra-desk">
+  <header class="ra-head">
+    <div class="ra-brand"><img src={img('logo.webp')} alt="" width="98" height="98" loading={loading}><div class="ra-brand__name">Совет ректоров вузов<br>Москвы и Московской области</div></div>
+    <ul class="ra-nav">{rcNav.map((n) => <li>{n}</li>)}</ul>
+  </header>
+  {sub && <div class="ra-sub">
+    <div class="ra-sub__col"><div class="ra-cap">Организационная структура</div><ul>{rcOrg.map((n) => <li>{n}</li>)}</ul></div>
+    <div class="ra-sub__col"><div class="ra-cap">Документы</div><ul>{rcDocs.map((n) => <li>{n}</li>)}</ul></div>
+  </div>}
+  <section class="ra-band">
+    {rcSlides.map((s, i) => <div class:list={['ra-slide', { 'is-on': i === 0 }]}><h3>{s.title.split('|').map((l, k) => <>{k > 0 && <br/>}{l}</>)}</h3><img src={img(s.img)} alt="" width="554" height="313" loading={loading}></div>)}
+    <div class="ra-arrows"><i><Iconsax name="arrow-left2-linear" size={16}/></i><i data-next><Iconsax name="arrow-right2-linear" size={16}/></i></div>
+  </section>
+  <div class="ra-main">
+    <section>
+      <h3 class="ra-h2">Новости</h3>
+      <article class="ra-news"><div class="ra-news__top"><h4>Общее собрание Совета ректоров вузов Москвы и МО</h4><span class="ra-date">22.01.2020</span></div><img src={img('ph-meeting.webp')} alt="" width="670" height="371" loading="lazy"></article>
+      <article class="ra-news"><div class="ra-news__top"><h4>Расширенное заседание Президиума</h4><span class="ra-date">29.10.2019</span></div><div class="ra-news__text">29 октября 2019 г. в Российском государственном геолого-разведочном университете им. Серго Орджоникидзе (МГРИ-РГГРУ) состоялось расширенное заседание Президиума Совета ректоров.</div></article>
+    </section>
+    <section>
+      <h3 class="ra-h2">Мероприятия</h3>
+      <ul class="ra-events">{rcEvents.map((e) => <li><h4>{e}</h4><div class="ra-events__meta"><span>17.03.2021</span><span>РЭУ им. Г.В. Плеханова</span></div></li>)}</ul>
+      <div class="ra-more">Все мероприятия<Iconsax name="arrow-right-linear" size={20}/></div>
+    </section>
+  </div>
+</div>

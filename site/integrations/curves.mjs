@@ -8,9 +8,12 @@ import { fileURLToPath } from 'node:url';
 const PAGES = {
   'cases/my-school/index.html': '../src/data/curves/my-school.json',
   'cases/medx/index.html': '../src/data/curves/medx.json',
+  'cases/rectors/index.html': '../src/data/curves/rectors.json',
   // Живая обложка medx.pro на главной и в «Моих работах»
   'index.html': '../src/data/curves/home.json',
   'work/index.html': '../src/data/curves/work.json',
+  // Обложка «Совета ректоров»: отдельная страница, главная и «Мои работы» подгружают её лениво
+  'covers/rectors/index.html': '../src/data/curves/cover-rectors.json',
 };
 
 const TOKENS = /(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<textarea\b[\s\S]*?<\/textarea>|<template\b[\s\S]*?<\/template>|<noscript\b[\s\S]*?<\/noscript>|<!--[\s\S]*?-->|<[^>]+>)/i;

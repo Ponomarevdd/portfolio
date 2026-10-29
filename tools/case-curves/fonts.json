@@ -23,6 +23,14 @@
         400,
         700
       ]
+    },
+    "Golos Text": {
+      "pkg": "golos-text",
+      "faces": [
+        400,
+        500,
+        600
+      ]
     }
   },
   "PAGES": {
@@ -40,6 +48,12 @@
     "work": [
       "Manrope",
       "PT Serif"
+    ],
+    "rectors": [
+      "Golos Text"
+    ],
+    "cover-rectors": [
+      "Golos Text"
     ]
   }
 }

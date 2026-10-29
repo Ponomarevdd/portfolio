@@ -1,0 +1,108 @@
+/* Фрагменты сайта Совета ректоров, пересобранные по макетам Дмитрия (Figma «Совет ректоров чистовой»).
+   Шрифт макетов Golos Text: при сборке текст переводится в кривые (integrations/curves.mjs), сам шрифт страница не грузит.
+   Десктоп собран в ширине 1280 (контент 1170, как в макете), телефон — 320. Масштаб задаёт обёртка. */
+.ra { --ra-p: #0066ff; --ra-p2: #0038ff; --ra-h: #1e1e1e; --ra-t: #404040; --ra-cap: #a8a8a8; --ra-logo: #5a7aaa; --ra-band: #f0f0f0; --ra-page: #fafafa; --ra-line: #dddddd;
+  font-family: 'Golos Text', sans-serif; font-weight: 400; color: var(--ra-t); letter-spacing: 0; text-align: left; }
+.ra p, .ra h3, .ra h4 { margin: 0; font-weight: inherit; }
+.ra ul { margin: 0; padding: 0; list-style: none; }
+.ra img { display: block; max-width: none; }
+.ra :where(svg:not(.cv)) { display: block; }
+
+/* Десктоп: главная */
+.ra-desk { position: relative; width: 1280px; background: var(--ra-page); overflow: hidden; }
+.ra-head { position: relative; z-index: 2; height: 159px; padding: 0 55px; display: flex; align-items: center; justify-content: space-between; background: #fff; box-shadow: 0 8px 16px #0000000a; }
+.ra-brand { display: flex; align-items: center; gap: 20px; }
+.ra-brand img { width: 98px; height: 98px; }
+.ra-brand__name { font-size: 18px; line-height: 27px; font-weight: 500; color: var(--ra-logo); }
+.ra-nav { display: flex; gap: 63px; }
+.ra-nav li { position: relative; font-size: 18px; line-height: 22px; font-weight: 500; color: var(--ra-h); transition: color .3s; }
+.ra-nav li::after { content: ''; position: absolute; left: -2px; right: -2px; bottom: -47px; height: 2px; background: var(--ra-p); transform: scaleX(0); transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+.ra-nav li.is-on { color: var(--ra-p); }
+.ra-nav li.is-on::after { transform: none; }
+
+.ra-band { position: relative; height: 441px; background: var(--ra-band); }
+.ra-slide { position: absolute; inset: 0; padding: 0 55px; transition: opacity .6s ease; }
+.ra-slide:not(.is-on) { opacity: 0; }
+.ra-slide h3 { position: absolute; left: 55px; top: 91px; width: 470px; font-size: 36px; line-height: 43px; font-weight: 600; color: var(--ra-h); }
+.ra-slide img { position: absolute; left: 671px; top: 64px; width: 554px; height: 313px; border-radius: 20px; object-fit: cover; }
+.ra-arrows { position: absolute; left: 55px; top: 320px; display: flex; gap: 40px; }
+.ra-arrows i { width: 32px; height: 32px; border-radius: 50%; background: #fff; display: grid; place-items: center; color: var(--ra-h); transition: background-color .3s, color .3s; }
+.ra-arrows i.is-press { background: var(--ra-p); color: #fff; }
+
+.ra-main { display: grid; grid-template-columns: 670px 370px; justify-content: space-between; padding: 90px 55px 80px; }
+.ra-h2 { font-size: 32px; line-height: 38px; font-weight: 600; color: var(--ra-h); margin-bottom: 50px !important; }
+.ra-news { display: flex; flex-direction: column; }
+.ra-news__top { display: flex; justify-content: space-between; gap: 40px; }
+.ra-news h4 { max-width: 470px; font-size: 26px; line-height: 31px; font-weight: 500; color: var(--ra-h); transition: color .3s; }
+.ra-date { flex: none; padding-top: 10px; font-size: 16px; line-height: 19px; color: var(--ra-cap); }
+.ra-news img { margin-top: 30px; width: 670px; height: 371px; border-radius: 20px; object-fit: cover; }
+.ra-news + .ra-news { margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--ra-line); }
+.ra-news__text { margin-top: 30px; max-width: 570px; font-size: 18px; line-height: 27px; }
+.ra-events li { padding: 30px 0; border-bottom: 1px solid var(--ra-line); }
+.ra-events li:first-child { padding-top: 0; }
+.ra-events h4 { font-size: 22px; line-height: 26px; font-weight: 500; color: var(--ra-h); }
+.ra-events__meta { margin-top: 30px; display: flex; justify-content: space-between; font-size: 16px; line-height: 19px; }
+.ra-events__meta span:first-child { color: var(--ra-cap); }
+.ra-more { display: inline-flex; align-items: center; gap: 20px; margin-top: 40px; font-size: 18px; line-height: 22px; font-weight: 500; color: var(--ra-p); }
+
+/* Подменю «Совет ректоров» */
+.ra-sub { position: absolute; left: 0; right: 0; top: 159px; z-index: 1; display: flex; justify-content: flex-end; gap: 90px; padding: 36px 55px 40px; background: #fff; box-shadow: 0 8px 16px #0000000a; }
+.ra-sub__col { width: 300px; }
+.ra-cap { font-size: 14px; line-height: 17px; font-weight: 600; text-transform: uppercase; color: var(--ra-cap); }
+.ra-sub__col ul { margin-top: 20px; display: flex; flex-direction: column; gap: 14px; }
+.ra-sub__col li { font-size: 16px; line-height: 19px; transition: color .3s; }
+.ra-sub__col li.is-on { color: var(--ra-p); }
+
+/* Телефон: главная */
+.ra-phone { position: relative; width: 320px; background: var(--ra-page); overflow: hidden; }
+.ra-mhead { position: relative; z-index: 2; height: 110px; padding: 0 15px; display: flex; align-items: center; justify-content: space-between; background: #fff; box-shadow: 0 8px 16px #0000000a; }
+.ra-mhead .ra-brand { gap: 14px; }
+.ra-mhead .ra-brand img { width: 70px; height: 70px; }
+.ra-mhead .ra-brand__name { width: 140px; font-size: 12px; line-height: 16px; }
+.ra-burger { position: relative; width: 24px; height: 18px; }
+.ra-burger i { position: absolute; left: 0; width: 24px; height: 2px; border-radius: 1px; background: var(--ra-h); transition: transform .35s, opacity .2s; }
+.ra-burger i:nth-child(1) { top: 0; } .ra-burger i:nth-child(2) { top: 8px; } .ra-burger i:nth-child(3) { top: 16px; }
+.is-menu .ra-burger i:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.is-menu .ra-burger i:nth-child(2) { opacity: 0; }
+.is-menu .ra-burger i:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+.ra-mband { position: relative; height: 377px; background: var(--ra-band); }
+.ra-mslide { position: absolute; inset: 0; transition: opacity .6s ease, transform .6s ease; }
+.ra-mslide:not(.is-on) { opacity: 0; transform: translateX(16px); }
+.ra-mslide h3 { position: absolute; left: 15px; right: 15px; top: 50px; font-size: 18px; line-height: 22px; font-weight: 600; color: var(--ra-h); }
+.ra-mslide img { position: absolute; left: 15px; top: 136px; width: 290px; height: 165px; border-radius: 10px; object-fit: cover; }
+.ra-dots { position: absolute; left: 0; right: 0; top: 321px; display: flex; justify-content: center; gap: 6px; }
+.ra-dots i { width: 6px; height: 6px; border-radius: 50%; background: #c4c4c4; transition: background-color .3s; }
+.ra-dots i.is-on { background: var(--ra-p); }
+.ra-mmain { padding: 60px 15px 40px; }
+.ra-mmain .ra-h2 { font-size: 18px; line-height: 22px; margin-bottom: 30px !important; }
+.ra-mnews .ra-news__top { gap: 16px; }
+.ra-mnews h4 { font-size: 16px; line-height: 19px; font-weight: 500; color: var(--ra-h); }
+.ra-mnews .ra-date { padding-top: 4px; font-size: 12px; line-height: 14px; }
+.ra-mnews img { margin-top: 20px; width: 290px; height: 156px; border-radius: 10px; object-fit: cover; }
+.ra-mnews + .ra-mnews { margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--ra-line); }
+.ra-mnews .ra-news__text { margin-top: 20px; font-size: 14px; line-height: 21px; }
+.ra-mmain .ra-more { gap: 12px; margin-top: 30px; font-size: 14px; line-height: 17px; }
+
+/* Телефон: меню-аккордеон */
+.ra-mmenu { position: absolute; left: 0; right: 0; top: 110px; bottom: 0; z-index: 1; padding: 6px 15px 24px; background: #fff; overflow: hidden; opacity: 0; transform: translateY(-12px); transition: opacity .35s, transform .35s cubic-bezier(.2,.7,.2,1); pointer-events: none; }
+.is-menu .ra-mmenu { opacity: 1; transform: none; }
+.ra-mmenu > li { padding: 14px 0; font-size: 18px; line-height: 22px; font-weight: 500; color: var(--ra-h); }
+.ra-mmenu__row { display: flex; align-items: center; justify-content: space-between; }
+.ra-mmenu__row .iconsax { transition: transform .35s; }
+.ra-mmenu .is-open .ra-mmenu__row .iconsax { transform: rotate(180deg) !important; }
+.ra-acc { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s cubic-bezier(.2,.7,.2,1); }
+.ra-mmenu .is-open .ra-acc { grid-template-rows: 1fr; }
+.ra-acc > div { overflow: hidden; }
+.ra-acc .ra-cap { margin-top: 18px; font-size: 12px; line-height: 14px; }
+.ra-acc ul { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+.ra-acc li { font-size: 14px; line-height: 17px; font-weight: 400; color: var(--ra-t); }
+
+/* Курсор поверх макета */
+.ra-cursor { position: absolute; left: 0; top: 0; z-index: 5; pointer-events: none; opacity: 0; will-change: transform; }
+.ra-cursor svg { display: block; filter: drop-shadow(0 2px 4px #1e1e1e33); }
+.ra-cursor::before { content: ''; position: absolute; left: -11px; top: -11px; width: 36px; height: 36px; border-radius: 50%; background: #0066ff4d; opacity: 0; transform: scale(.3); }
+.ra-cursor.is-click::before { animation: ra-click .5s ease-out; }
+@keyframes ra-click { 0% { opacity: 1; transform: scale(.3); } 100% { opacity: 0; transform: scale(1.4); } }
+.ra-tap { position: absolute; z-index: 5; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; background: #0066ff40; opacity: 0; transform: scale(.4); pointer-events: none; }
+.ra-tap.is-tap { animation: ra-tap .6s ease-out; }
+@keyframes ra-tap { 0% { opacity: 1; transform: scale(.4); } 100% { opacity: 0; transform: scale(1.3); } }

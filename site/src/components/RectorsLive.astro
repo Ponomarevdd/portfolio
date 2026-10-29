@@ -1,0 +1,48 @@
+---
+// Живая обложка кейса «Совет ректоров»: окно новой главной (курсор листает слайдер и открывает подменю)
+// и телефон (слайдер листается свайпом, открывается меню-аккордеон). Сцены масштабируются под плитки.
+// Обложка подгружается лениво отдельной страницей /covers/rectors/ (scripts/lazy-covers.ts),
+// текст макетов в кривых (integrations/curves.mjs), шрифт Golos Text не грузится. Анимация в scripts/rectors-cover.ts.
+import { siteUrl } from '../utils/url';
+import RectorsDesk from './RectorsDesk.astro';
+import RectorsPhone from './RectorsPhone.astro';
+import '../styles/rectors-art.css';
+interface Props { href?: string }
+const { href } = Astro.props;
+const Tile = href ? 'a' : 'div';
+const link = siteUrl(href);
+const cursor = '<svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 3.2v15.4c0 .5.6.8 1 .4l3.6-3.4 2.4 5.5c.2.4.6.5 1 .4l2-.9c.4-.2.5-.6.4-1l-2.4-5.4 4.9-.3c.5 0 .8-.6.4-1L6 2.8c-.4-.3-1-.1-1 .4Z" fill="#1e1e1e" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+---
+<Tile href={link} class="project__cover rcl rcl-tile rcl-tile--d" aria-label="Сайт Совета ректоров: новая главная на компьютере">
+  <div class="rcl-stage" data-w="760" data-h="540">
+    <div class="rcl-win">
+      <div class="rcl-bar"><i></i><i></i><i></i><span></span></div>
+      <div class="rcl-view"><div class="rcl-fit"><RectorsDesk sub/><span class="ra-cursor" set:html={cursor}></span></div></div>
+    </div>
+  </div>
+</Tile>
+<Tile href={link} class="project__cover rcl rcl-tile rcl-tile--m" aria-label="Сайт Совета ректоров на телефоне">
+  <div class="rcl-stage" data-w="532" data-h="540">
+    <div class="rcl-phone"><div class="rcl-screen"><div class="rcl-pfit"><RectorsPhone/></div><span class="ra-tap"></span></div></div>
+  </div>
+</Tile>
+<style is:global>
+.rcl-tile--d { background: radial-gradient(70% 80% at 20% 0%, #4d94ff 0%, #4d94ff00 70%), #0066ff; }
+.rcl-tile--m { background: #eceef1; }
+.rcl-stage { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(var(--s, 1)); transform-origin: 50% 50%; }
+.rcl-tile--d .rcl-stage { width: 760px; height: 540px; }
+.rcl-tile--m .rcl-stage { width: 532px; height: 540px; }
+.rcl-win { position: absolute; left: 40px; top: 40px; width: 680px; height: 500px; display: flex; flex-direction: column; border-radius: 18px 18px 0 0; background: #fff; overflow: hidden; box-shadow: 0 24px 60px #00225933; }
+.rcl-bar { flex: none; height: 30px; display: flex; align-items: center; gap: 6px; padding: 0 14px; border-bottom: 1px solid #efeff2; }
+.rcl-bar i { width: 8px; height: 8px; border-radius: 50%; background: #e6e8ec; }
+.rcl-bar span { margin-left: 10px; width: 150px; height: 7px; border-radius: 4px; background: #efeff2; }
+.rcl-view { position: relative; flex: 1; overflow: hidden; }
+.rcl-fit { position: absolute; left: 0; top: 0; width: 1280px; transform-origin: 0 0; transform: scale(.53125); } /* 680 / 1280 */
+.rcl .ra-sub { opacity: 0; transform: translateY(-14px); transition: opacity .35s, transform .45s cubic-bezier(.2,.7,.2,1); }
+.rcl.is-sub .ra-sub { opacity: 1; transform: none; }
+.rcl .ra-cursor { transition: transform .9s cubic-bezier(.45,0,.2,1), opacity .4s; }
+.rcl-phone { position: absolute; left: 136px; top: 40px; width: 260px; height: 540px; box-sizing: border-box; padding: 10px 10px 0; border-radius: 36px 36px 0 0; background: #fff; box-shadow: 0 24px 60px #1c2b4a26; }
+.rcl-screen { position: relative; height: 100%; border-radius: 26px 26px 0 0; overflow: hidden; background: #fafafa; }
+.rcl-pfit { position: absolute; left: 0; top: 0; width: 320px; transform-origin: 0 0; transform: scale(.75); } /* 240 / 320 */
+@media (prefers-reduced-motion: reduce) { .rcl .ra-cursor { display: none; } }
+</style>

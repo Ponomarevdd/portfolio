@@ -10,7 +10,7 @@ export interface Project {
   featured?: boolean;
   href?: string;
   previews?: { src: string; alt: string; width: number; height: number }[];
-  live?: 'school' | 'medx';
+  live?: 'school' | 'medx' | 'rectors';
   description: string;
   identity: { name: string; tagline: string; background: string; color: string };
 }
@@ -37,5 +37,14 @@ const medx: Project = {
   ],
   identity: { name: 'medx.pro', tagline: 'Лонгриды о вакцинации', background: '#e8f3ee', color: '#3b876a' },
 };
-export const projects: Project[] = [school, medx];
+const rectors: Project = {
+  slug: 'rectors', href: '/cases/rectors/', title: 'Совет ректоров вузов Москвы: редизайн сайта', year: 2022,
+  categories: ['UX/UI', 'Образование'],
+  description: 'Редизайн сайта Совета ректоров вузов Москвы и Московской области: современный облик, понятная навигация и отзывчивая вёрстка для любых устройств.',
+  live: 'rectors',
+  cover: '/images/rectors/new-home.webp', width: 1560, height: 2849,
+  alt: 'Новая главная страница сайта Совета ректоров на компьютере и телефоне',
+  identity: { name: 'Совет ректоров', tagline: 'Редизайн сайта', background: '#e5efff', color: '#0066ff' },
+};
+export const projects: Project[] = [school, medx, rectors];
 export const allProjects = projects;
