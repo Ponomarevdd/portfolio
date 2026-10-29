@@ -141,9 +141,9 @@
 .mr-op > svg.mr-op__down { display: none; }
 .mr .mr-time { list-style: none; border-radius: 16px; padding: 40px 28px 12px; background: #e8f3ee; display: flex; flex-direction: column; }
 .mr .mr-time li { position: relative; padding: 0 0 36px 48px; display: flex; flex-direction: column; gap: 12px; }
-.mr-time li::before { content: ''; position: absolute; left: 6px; top: 9px; width: 16px; height: 16px; border-radius: 50%; background: #3b876a; }
-/* Линия идёт от точки до следующей точки, не заходя на них */
-.mr-time li:not(:last-child)::after { content: ''; position: absolute; left: 13px; top: 33px; bottom: -1px; width: 2px; background: #aacbb9; }
+.mr-time li::before { content: ''; position: absolute; z-index: 1; left: 6px; top: 7px; width: 16px; height: 16px; border-radius: 50%; background: #3b876a; }
+/* Как в макете: сплошная линия от точки до точки, точки поверх неё */
+.mr-time li:not(:last-child)::after { content: ''; position: absolute; left: 13px; top: 16px; bottom: -16px; width: 2px; background: #aacbb9; }
 .mr-time h4 { font-weight: 600; font-size: 26px; line-height: 34px; color: #173d34; }
 @container (max-width: 1100px) {
   .mr { flex-direction: column; padding: 40px; gap: 28px; }
@@ -169,5 +169,5 @@
   .mr .mr-time li { padding-left: 40px; padding-bottom: 28px; gap: 8px; }
   .mr-time h4 { font-size: 21px; line-height: 28px; }
   .mr-time li::before { top: 6px; }
-  .mr-time li:not(:last-child)::after { top: 30px; bottom: 2px; }
+  .mr-time li:not(:last-child)::after { top: 14px; bottom: -14px; }
 }
