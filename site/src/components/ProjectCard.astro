@@ -4,18 +4,14 @@ import type { Project } from '../data/projects';
 import CategoryIcon from './CategoryIcon.astro';
 import SchoolLive from './SchoolLive.astro';
 import MedxLive from './MedxLive.astro';
+import RectorsIso from './RectorsIso.astro';
 interface Props { project: Project }
 const { project } = Astro.props;
 const href = project.href;
 const Tile = href ? 'a' : 'div';
 ---
 <article class="project" aria-labelledby={`project-${project.slug}`}>
-  {project.live === 'school' ? <div class="project__gallery project__gallery--live"><SchoolLive href={href}/></div> : project.live === 'medx' ? <div class="project__gallery project__gallery--live project__gallery--live-rev"><MedxLive href={href}/></div> : project.live === 'rectors' ? <div class="project__gallery project__gallery--live" data-lazy-cover>
-    {/* Обложка подгружается, когда карточка подходит к экрану (scripts/lazy-covers.ts); до этого — пустые плитки */}
-    <a class="lazy-cover__src" href={siteUrl('/covers/rectors/')} hidden tabindex="-1" aria-hidden="true"></a>
-    <Tile href={siteUrl(href)} class="project__cover lazy-cover__ph" aria-label={project.title}></Tile>
-    <Tile href={siteUrl(href)} class="project__cover lazy-cover__ph" aria-hidden="true" tabindex="-1"></Tile>
-  </div> : <div class="project__gallery">
+  {project.live === 'school' ? <div class="project__gallery project__gallery--live"><SchoolLive href={href}/></div> : project.live === 'medx' ? <div class="project__gallery project__gallery--live project__gallery--live-rev"><MedxLive href={href}/></div> : project.live === 'rectors' ? <div class="project__gallery project__gallery--one"><RectorsIso href={href} label={project.title}/></div> : <div class="project__gallery">
     <Tile href={siteUrl(href)} class="project__cover project__cover--main">
       <img src={siteUrl(project.cover)} alt={project.alt} width={project.width} height={project.height} loading={project.slug === 'put' ? 'eager' : 'lazy'} decoding="async" />
     </Tile>

@@ -8,4 +8,3 @@ import { allProjects } from '../../data/projects';
   <header class="page-heading"><BackLink/><h1>Мои работы</h1><p>Сайты, интерфейсы и визуальные истории.</p></header>
   <section class="work" id="work" aria-label="Мои работы">{allProjects.map(project => <ProjectCard project={project}/>)}</section>
 </Page>
-<script>import '../../scripts/lazy-covers';</script>

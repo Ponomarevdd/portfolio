@@ -36,7 +36,6 @@ main { position: relative; z-index: 1; padding-top: 94px; padding-bottom: 64px; 
 .project__gallery { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); grid-template-rows: repeat(2, 260px); gap: 20px; }
 .project__cover, .project__identity { position: relative; overflow: hidden; border-radius: var(--card-radius); }
 .project__cover--main { grid-row: span 2; }
-.lazy-cover__ph { background: #eceef1; }
 .project__cover img { width: 100%; height: 100%; display: block; object-fit: cover; }
 .project__cover--detail img { object-position: 80% center; transform: scale(1.8); transform-origin: 80% 60%; }
 .project__identity { display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--identity-bg); color: var(--identity-color); }
@@ -46,6 +45,7 @@ main { position: relative; z-index: 1; padding-top: 94px; padding-bottom: 64px; 
 .project:nth-child(even) .project__gallery { grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); }
 .project__gallery--live, .project:nth-child(even) .project__gallery--live { grid-template-columns: minmax(0, 760fr) minmax(0, 532fr); grid-template-rows: 540px; }
 .project:nth-child(even) .project__cover--main { grid-column: 2; grid-row: 1 / span 2; }
+.project__gallery--one, .project:nth-child(even) .project__gallery--one { grid-template-columns: minmax(0, 1fr); grid-template-rows: 540px; }
 .project__description { max-width: 760px; margin: 6px 0 0; color: var(--text-secondary); font-size: 16px; line-height: 1.65; letter-spacing: -.025em; }
 .project__details { padding-top: 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .project__details h2 { min-width: 0; margin: 0; font-size: 20px; font-weight: 400; letter-spacing: -.035em; line-height: 1.35; }
@@ -59,6 +59,7 @@ main { position: relative; z-index: 1; padding-top: 94px; padding-bottom: 64px; 
   .intro h1 { font-size: 28px; }
   .project__gallery { grid-template-rows: repeat(2, 220px); }
   .project__gallery--live, .project:nth-child(even) .project__gallery--live { grid-template-rows: 460px; }
+  .project__gallery--one, .project:nth-child(even) .project__gallery--one { grid-template-rows: 460px; }
 }
 @media (max-width: 899px) {
   .intro { padding: 64px 32px; }
@@ -70,6 +71,8 @@ main { position: relative; z-index: 1; padding-top: 94px; padding-bottom: 64px; 
   .project__gallery--live, .project:nth-child(even) .project__gallery--live { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; }
   .lv-tile--d { aspect-ratio: 760 / 540; }
   .lv-tile--m { aspect-ratio: 4 / 3; }
+  .project__gallery--one, .project:nth-child(even) .project__gallery--one { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; }
+  .project__gallery--one .ri { aspect-ratio: 4 / 3; }
   .work { gap: 80px; }
 }
 @media (max-width: 599px) {

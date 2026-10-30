@@ -1,0 +1,55 @@
+---
+// Обложка «Совета ректоров»: один фрейм. Старая главная лежит в изометрии, на неё по очереди
+// опускаются блоки новой главной, потом поднимаются, и всё повторяется. Внутри только картинки макетов
+// (без живого текста и шрифтов), анимация на CSS и идёт, только пока обложка на экране.
+import { siteUrl } from '../utils/url';
+interface Props { href?: string; label: string }
+const { href, label } = Astro.props;
+const Tile = href ? 'a' : 'div';
+const img = (name: string) => siteUrl(`/images/rectors/${name}`);
+// Блоки новой главной в координатах страницы шириной 1200 (картинка 1560 → 1200)
+const blocks = [
+  { x: 0, y: 0, w: 1200, h: 160 },
+  { x: 0, y: 160, w: 1200, h: 449 },
+  { x: 0, y: 609, w: 692, h: 652 },
+  { x: 692, y: 609, w: 508, h: 652 },
+];
+---
+<Tile href={siteUrl(href)} class="project__cover ri" aria-label={label}>
+  <div class="ri-stage">
+    <div class="ri-plane">
+      <img class="ri-old" src={img('old-home.webp')} alt="" width="1107" height="1163" loading="lazy" decoding="async">
+      {blocks.map((b, i) => (
+        <div class="ri-blk" style={`left:${b.x}px;top:${b.y}px;width:${b.w}px;height:${b.h}px;--d:${(i * .35).toFixed(2)}s`}>
+          <img src={img('new-home.webp')} alt="" width="1200" height="2191" loading="lazy" decoding="async" style={`left:${-b.x}px;top:${-b.y}px`}>
+        </div>
+      ))}
+    </div>
+  </div>
+</Tile>
+<style is:global>
+.ri { display: block; background: radial-gradient(70% 90% at 85% 0%, #ffffff 0%, #ffffff00 70%), #e3ebf7; }
+/* Сцена 1312×540 заполняет плитку по большей стороне, лишнее по краям обрезается */
+.ri-stage { position: absolute; left: 50%; top: 50%; width: 1312px; height: 540px; transform: translate(-50%, -50%) scale(var(--s, 1)); }
+.ri-plane { position: absolute; left: 50%; top: 50%; width: 1200px; height: 1261px; transform-style: preserve-3d; transform: translate(-50%, -50%) translateY(14px) scale(.5) rotateX(58deg) rotateZ(-42deg); }
+.ri-old { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 12px; box-shadow: -24px 36px 60px #1c2b4a33; filter: saturate(.7); }
+.ri-blk { position: absolute; overflow: hidden; border-radius: 10px; box-shadow: -14px 22px 36px #1c2b4a33; opacity: 0; transform: translateZ(520px); }
+.ri-blk img { position: absolute; width: 1200px; height: auto; max-width: none; }
+.ri.is-on .ri-blk { animation: ri-drop 9s cubic-bezier(.3,0,.2,1) var(--d) infinite; }
+@keyframes ri-drop {
+  0%, 14% { transform: translateZ(520px); opacity: 0; }
+  26%, 70% { transform: translateZ(6px); opacity: 1; }
+  86%, 100% { transform: translateZ(420px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ri .ri-blk, .ri.is-on .ri-blk { animation: none; opacity: 1; transform: translateZ(6px); }
+}
+</style>
+<script>
+  // Масштаб сцены под плитку и анимация только на экране
+  document.querySelectorAll<HTMLElement>('.ri').forEach((tile) => {
+    const stage = tile.querySelector<HTMLElement>('.ri-stage')!;
+    new ResizeObserver(() => stage.style.setProperty('--s', String(Math.max(tile.clientWidth / 1312, tile.clientHeight / 540)))).observe(tile);
+    new IntersectionObserver(([e]) => tile.classList.toggle('is-on', e.isIntersecting)).observe(tile);
+  });
+</script>

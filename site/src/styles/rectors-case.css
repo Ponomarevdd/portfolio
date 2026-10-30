@@ -11,8 +11,8 @@
 .rc-win__view { position: relative; flex: 1; min-height: 0; overflow: hidden; }
 /* Фрагмент 1280px уменьшается под ширину окна: --k ставит скрипт (data-fit) или задаёт сам блок */
 .rc-fit { position: absolute; left: 0; top: 0; width: 1280px; transform-origin: 0 0; transform: scale(var(--k, .5)); }
-.rc-device { position: relative; box-sizing: border-box; padding: 10px; border-radius: 34px; background: #fff; box-shadow: 0 1px 2px #1e1e1e0d, 0 24px 48px -28px #1e1e1e40; }
-.rc-device__screen { position: relative; height: 100%; border-radius: 24px; overflow: hidden; background: #fafafa; }
+.rc-device { position: relative; box-sizing: border-box; padding: 6px; border-radius: 22px; background: #fff; box-shadow: 0 1px 2px #1e1e1e0d, 0 24px 48px -28px #1e1e1e40; }
+.rc-device__screen { position: relative; height: 100%; border-radius: 16px; overflow: hidden; background: #fafafa; }
 
 /* Шапка кейса: старая главная сменяется новой */
 .rc-hero { position: relative; aspect-ratio: 600 / 480; }
@@ -50,7 +50,7 @@
 .rc-nav.is-sub .ra-sub { opacity: 1; transform: none; }
 .rc-nav .ra-cursor { transition: transform .9s cubic-bezier(.45,0,.2,1), opacity .4s; }
 .rc-nav .ra-cursor svg { width: 40px; height: 40px; }
-.rc-nav__phone { flex: none; width: 350px; }
+.rc-nav__phone { flex: none; width: 342px; }
 .rc-nav__phone .ra-phone { transform-origin: 0 0; transform: scale(1.0313); } /* 330 / 320 */
 
 /* Сравнение «было — стало»: старый скриншот поверх нового, граница двигается */
@@ -80,18 +80,16 @@
 /* Отзывчивая вёрстка: одна главная на трёх устройствах, страницы листаются */
 .rc-devices { position: relative; height: 560px; }
 .rc-devices__desk { position: absolute; left: 0; bottom: 0; width: 740px; height: 560px; }
-.rc-devices__tab { position: absolute; left: 760px; bottom: 0; width: 330px; height: 490px; padding: 12px; border-radius: 30px; }
-.rc-devices__tab .rc-device__screen { border-radius: 18px; }
+.rc-devices__tab { position: absolute; left: 760px; bottom: 0; width: 330px; height: 490px; }
 .rc-devices__phone { position: absolute; right: 0; bottom: 0; width: 210px; height: 420px; }
-.rc-devices__phone .rc-device__screen { border-radius: 26px; }
 .rc-devices .rc-win__view, .rc-devices .rc-device__screen { background: #fafafa; }
 .rc-scroll { display: block; width: 100%; height: auto; }
 .rc-devices.is-in .rc-devices__desk .rc-scroll { animation: rc-scroll-d 14s cubic-bezier(.6,0,.3,1) infinite; }
 .rc-devices.is-in .rc-devices__tab .rc-scroll { animation: rc-scroll-t 14s cubic-bezier(.6,0,.3,1) .6s infinite; }
 .rc-devices.is-in .rc-devices__phone .rc-scroll { animation: rc-scroll-p 14s cubic-bezier(.6,0,.3,1) 1.2s infinite; }
 @keyframes rc-scroll-d { 0%, 14% { transform: none; } 34%, 52% { transform: translateY(-28%); } 72%, 88% { transform: translateY(-46%); } 100% { transform: none; } }
-@keyframes rc-scroll-t { 0%, 14% { transform: none; } 34%, 52% { transform: translateY(-22%); } 72%, 88% { transform: translateY(-36%); } 100% { transform: none; } }
-@keyframes rc-scroll-p { 0%, 14% { transform: none; } 34%, 52% { transform: translateY(-24%); } 72%, 88% { transform: translateY(-48%); } 100% { transform: none; } }
+@keyframes rc-scroll-t { 0%, 14% { transform: none; } 34%, 52% { transform: translateY(-2%); } 72%, 88% { transform: translateY(-4%); } 100% { transform: none; } }
+@keyframes rc-scroll-p { 0%, 14% { transform: none; } 34%, 52% { transform: translateY(-24%); } 72%, 88% { transform: translateY(-43%); } 100% { transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
   .rc-old img { transition: none; }
