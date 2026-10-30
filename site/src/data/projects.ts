@@ -42,8 +42,8 @@ const rectors: Project = {
   categories: ['UX/UI', 'Образование'],
   description: 'Редизайн сайта Совета ректоров вузов Москвы и Московской области: современный облик, понятная навигация и отзывчивая вёрстка для любых устройств.',
   live: 'rectors',
-  cover: '/images/rectors/cover.webp', width: 2624, height: 1139,
-  alt: 'Новая главная страница сайта Совета ректоров на ноутбуке',
+  cover: '/images/rectors/new-home.webp', width: 1560, height: 2849,
+  alt: 'Старая главная страница сайта Совета ректоров сменяется новой',
   identity: { name: 'Совет ректоров', tagline: 'Редизайн сайта', background: '#e5efff', color: '#0066ff' },
 };
 export const projects: Project[] = [school, medx, rectors];

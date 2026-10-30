@@ -4,13 +4,14 @@ import type { Project } from '../data/projects';
 import CategoryIcon from './CategoryIcon.astro';
 import SchoolLive from './SchoolLive.astro';
 import MedxLive from './MedxLive.astro';
+import RectorsCover from './RectorsCover.astro';
 interface Props { project: Project }
 const { project } = Astro.props;
 const href = project.href;
 const Tile = href ? 'a' : 'div';
 ---
 <article class="project" aria-labelledby={`project-${project.slug}`}>
-  {project.live === 'school' ? <div class="project__gallery project__gallery--live"><SchoolLive href={href}/></div> : project.live === 'medx' ? <div class="project__gallery project__gallery--live project__gallery--live-rev"><MedxLive href={href}/></div> : project.live === 'rectors' ? <div class="project__gallery project__gallery--one"><Tile href={siteUrl(href)} class="project__cover project__cover--shot"><img src={siteUrl(project.cover)} srcset={`${siteUrl('/images/rectors/cover-1312.webp')} 1312w, ${siteUrl(project.cover)} 2624w`} sizes="(max-width: 1440px) 100vw, 1312px" alt={project.alt} width={project.width} height={project.height} loading="lazy" decoding="async" /></Tile></div> : <div class="project__gallery">
+  {project.live === 'school' ? <div class="project__gallery project__gallery--live"><SchoolLive href={href}/></div> : project.live === 'medx' ? <div class="project__gallery project__gallery--live project__gallery--live-rev"><MedxLive href={href}/></div> : project.live === 'rectors' ? <div class="project__gallery project__gallery--one"><RectorsCover href={href} label={project.title}/></div> : <div class="project__gallery">
     <Tile href={siteUrl(href)} class="project__cover project__cover--main">
       <img src={siteUrl(project.cover)} alt={project.alt} width={project.width} height={project.height} loading={project.slug === 'put' ? 'eager' : 'lazy'} decoding="async" />
     </Tile>
