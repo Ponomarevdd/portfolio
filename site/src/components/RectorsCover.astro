@@ -16,9 +16,9 @@ const cursor = '<svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 3.2v
     <div class="rcv-win">
       <div class="rcv-bar"><i></i><i></i><i></i><span></span></div>
       <div class="rcv-view"><div class="rcv-fit">
-        <div class="rcv-new"><img src={img('new-article.webp')} alt="" width="1560" height="2975" loading="lazy" decoding="async"></div>
+        <div class="rcv-new"><img src={img('new-article-wide.webp')} alt="" width="1784" height="2975" loading="lazy" decoding="async"></div>
         <div class="rcv-old"><img src={img('old-article.webp')} alt="" width="1067" height="836" loading="lazy" decoding="async"></div>
-        <span class="rcv-line"><b><Iconsax name="arrow-left2-linear" size={22}/><Iconsax name="arrow-right2-linear" size={22}/></b></span>
+        <span class="rcv-line"><b><Iconsax name="arrow-left2-linear" size={18}/><Iconsax name="arrow-right2-linear" size={18}/></b></span>
         <span class="ra-cursor" set:html={cursor}></span>
       </div></div>
     </div>
@@ -33,21 +33,20 @@ const cursor = '<svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 3.2v
 .rcv-bar i { width: 10px; height: 10px; border-radius: 50%; background: #e6e8ec; }
 .rcv-bar span { margin-left: 12px; width: 220px; height: 9px; border-radius: 5px; background: #efeff2; }
 .rcv-view { position: relative; flex: 1; overflow: hidden; background: #fafafa; }
-.rcv-fit { position: absolute; left: 0; top: 0; width: 1280px; height: 2136px; transform-origin: 0 0; transform: scale(.78125); } /* 1000 / 1280 */
-.rcv-new, .rcv-old { position: absolute; left: 0; top: 0; width: 1280px; }
-.rcv-new img, .rcv-old img { display: block; width: 1120px; height: auto; margin: 0 auto; }
-/* Страница шире макета: шапка белая во всю ширину окна, по бокам поля */
-.rcv-new { background: linear-gradient(#fff 0 149px, #fafafa 149px 1737px, #fff 1737px); }
-.rcv-new::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 149px; box-shadow: 0 8px 16px #0000000a; pointer-events: none; }
+.rcv-fit { position: absolute; left: 0; top: 0; width: 1000px; height: 1669px; } /* без масштаба: картинки в своём размере, чтобы не мылились */
+.rcv-new, .rcv-old { position: absolute; left: 0; top: 0; width: 1000px; }
+.rcv-new img { display: block; width: 1000px; height: auto; } /* макет 1200 с продлёнными краями фона: контент 875 по центру */
+.rcv-old img { display: block; width: 875px; height: auto; margin: 0 auto; }
 .rcv-new { transform: translateY(var(--y, 0px)); transition: transform 1.5s cubic-bezier(.65,0,.35,1); }
 .rcv-old { height: 100%; background: #fff; padding-top: 0; clip-path: inset(0 0 0 100%); transition: clip-path 1.6s cubic-bezier(.65,0,.35,1); }
 .rcv-line { position: absolute; left: 100%; top: 0; z-index: 3; width: 4px; height: 100%; margin-left: -2px; background: #0066ff; opacity: 0; transition: left 1.6s cubic-bezier(.65,0,.35,1), opacity .3s; }
-.rcv-line b { position: absolute; left: 50%; top: 330px; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: #0066ff; color: #fff; display: grid; grid-auto-flow: column; place-content: center; box-shadow: 0 6px 20px #0066ff59; }
+.rcv-line b { position: absolute; left: 50%; top: 250px; width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 50%; background: #0066ff; color: #fff; display: grid; grid-auto-flow: column; place-content: center; box-shadow: 0 6px 20px #0066ff59; }
 .rcv.is-wipe .rcv-line { opacity: 1; }
 .rcv.is-old .rcv-old { clip-path: inset(0 0 0 0); }
 .rcv.is-old .rcv-line { left: 0; }
 .rcv .ra-cursor { transition: transform .9s cubic-bezier(.45,0,.2,1), opacity .4s; }
-.rcv .ra-cursor svg { width: 46px; height: 46px; }
+.rcv .ra-cursor svg { width: 26px; height: 26px; }
+.rcv .ra-cursor::before { left: -9px; top: -9px; width: 28px; height: 28px; }
 @media (prefers-reduced-motion: reduce) {
   .rcv .ra-cursor, .rcv .rcv-line { display: none; }
 }
