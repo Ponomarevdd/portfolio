@@ -1,14 +1,14 @@
 ---
-// Обложка «Совета ректоров»: один фрейм, окно браузера на спокойном синем фоне.
-// Старая главная шторкой сменяется новой, курсор листает слайдер, открывает подменю, страница прокручивается,
-// затем снова старая. Текст макета в кривых (integrations/curves.mjs), сценарий в scripts/rectors-cover.ts.
+// Обложка «Совета ректоров»: один фрейм, окно браузера на светлом серо-голубом фоне.
+// Сначала новая страница новости: курсор пролистывает её до похожих новостей и обратно, затем шторка
+// показывает старую страницу и возвращает новую. Внутри только картинки макетов, сценарий в scripts/rectors-cover.ts.
 import { siteUrl } from '../utils/url';
 import Iconsax from './Iconsax.astro';
-import RectorsDesk from './RectorsDesk.astro';
 import '../styles/rectors-art.css';
 interface Props { href?: string; label: string }
 const { href, label } = Astro.props;
 const Tile = href ? 'a' : 'div';
+const img = (name: string) => siteUrl(`/images/rectors/${name}`);
 const cursor = '<svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 3.2v15.4c0 .5.6.8 1 .4l3.6-3.4 2.4 5.5c.2.4.6.5 1 .4l2-.9c.4-.2.5-.6.4-1l-2.4-5.4 4.9-.3c.5 0 .8-.6.4-1L6 2.8c-.4-.3-1-.1-1 .4Z" fill="#1e1e1e" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>';
 ---
 <Tile href={siteUrl(href)} class="project__cover rcv" aria-label={label} data-rcv>
@@ -16,8 +16,8 @@ const cursor = '<svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 3.2v
     <div class="rcv-win">
       <div class="rcv-bar"><i></i><i></i><i></i><span></span></div>
       <div class="rcv-view"><div class="rcv-fit">
-        <div class="rcv-old"><img src={siteUrl('/images/rectors/old-home.webp')} alt="" width="1107" height="1163" loading="lazy" decoding="async"></div>
-        <div class="rcv-new"><div class="rcv-scroll"><RectorsDesk sub lazy/></div></div>
+        <div class="rcv-new"><img src={img('new-article.webp')} alt="" width="1560" height="2975" loading="lazy" decoding="async"></div>
+        <div class="rcv-old"><img src={img('old-article.webp')} alt="" width="1067" height="836" loading="lazy" decoding="async"></div>
         <span class="rcv-line"><b><Iconsax name="arrow-left2-linear" size={22}/><Iconsax name="arrow-right2-linear" size={22}/></b></span>
         <span class="ra-cursor" set:html={cursor}></span>
       </div></div>
@@ -25,31 +25,30 @@ const cursor = '<svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 3.2v
   </div>
 </Tile>
 <style is:global>
-.rcv { display: block; background: linear-gradient(160deg, #8697b1 0%, #96a6be 45%, #b5c3d9 100%); }
+.rcv { display: block; background: linear-gradient(160deg, #cdd3dc 0%, #d8dde4 50%, #e6e9ee 100%); }
 /* Сцена шириной 1312 подгоняется под ширину плитки, высота — под её пропорции */
 .rcv-stage { position: absolute; left: 0; top: 0; width: 1312px; height: 540px; transform-origin: 0 0; transform: scale(var(--s, 1)); }
-.rcv-win { position: absolute; left: 156px; right: 156px; top: 52px; bottom: 0; display: flex; flex-direction: column; border-radius: 16px 16px 0 0; background: #fff; overflow: hidden; box-shadow: 0 30px 70px #1c2b4a40; }
+.rcv-win { position: absolute; left: 156px; right: 156px; top: 52px; bottom: 0; display: flex; flex-direction: column; border-radius: 16px 16px 0 0; background: #fff; overflow: hidden; box-shadow: 0 30px 70px #1c2b4a2e; }
 .rcv-bar { flex: none; height: 36px; display: flex; align-items: center; gap: 7px; padding: 0 16px; border-bottom: 1px solid #efeff2; }
 .rcv-bar i { width: 10px; height: 10px; border-radius: 50%; background: #e6e8ec; }
 .rcv-bar span { margin-left: 12px; width: 220px; height: 9px; border-radius: 5px; background: #efeff2; }
 .rcv-view { position: relative; flex: 1; overflow: hidden; background: #fafafa; }
-.rcv-fit { position: absolute; left: 0; top: 0; width: 1280px; height: 2000px; transform-origin: 0 0; transform: scale(.78125); } /* 1000 / 1280 */
-.rcv-old, .rcv-new { position: absolute; left: 0; top: 0; width: 1280px; }
-.rcv-old img { display: block; width: 1280px; height: auto; }
-.rcv-new { clip-path: inset(0 100% 0 0); transition: clip-path 1.6s cubic-bezier(.65,0,.35,1); }
-.rcv-scroll { transition: transform 1.4s cubic-bezier(.65,0,.35,1); }
-.rcv.is-down .rcv-scroll { transform: translateY(-420px); }
-.rcv-line { position: absolute; left: 0; top: 0; z-index: 3; width: 4px; height: 2000px; margin-left: -2px; background: #0066ff; opacity: 0; transition: left 1.6s cubic-bezier(.65,0,.35,1), opacity .3s; }
+.rcv-fit { position: absolute; left: 0; top: 0; width: 1280px; height: 2136px; transform-origin: 0 0; transform: scale(.78125); } /* 1000 / 1280 */
+.rcv-new, .rcv-old { position: absolute; left: 0; top: 0; width: 1280px; }
+.rcv-new img, .rcv-old img { display: block; width: 1120px; height: auto; margin: 0 auto; }
+/* Страница шире макета: шапка белая во всю ширину окна, по бокам поля */
+.rcv-new { background: linear-gradient(#fff 0 149px, #fafafa 149px 1737px, #fff 1737px); }
+.rcv-new::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 149px; box-shadow: 0 8px 16px #0000000a; pointer-events: none; }
+.rcv-new { transform: translateY(var(--y, 0px)); transition: transform 1.5s cubic-bezier(.65,0,.35,1); }
+.rcv-old { height: 100%; background: #fff; padding-top: 0; clip-path: inset(0 0 0 100%); transition: clip-path 1.6s cubic-bezier(.65,0,.35,1); }
+.rcv-line { position: absolute; left: 100%; top: 0; z-index: 3; width: 4px; height: 100%; margin-left: -2px; background: #0066ff; opacity: 0; transition: left 1.6s cubic-bezier(.65,0,.35,1), opacity .3s; }
 .rcv-line b { position: absolute; left: 50%; top: 330px; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: #0066ff; color: #fff; display: grid; grid-auto-flow: column; place-content: center; box-shadow: 0 6px 20px #0066ff59; }
 .rcv.is-wipe .rcv-line { opacity: 1; }
-.rcv.is-new .rcv-new { clip-path: inset(0 0 0 0); }
-.rcv.is-new .rcv-line { left: 100%; }
-.rcv .ra-sub { opacity: 0; transform: translateY(-14px); transition: opacity .35s, transform .45s cubic-bezier(.2,.7,.2,1); }
-.rcv.is-sub .ra-sub { opacity: 1; transform: none; }
+.rcv.is-old .rcv-old { clip-path: inset(0 0 0 0); }
+.rcv.is-old .rcv-line { left: 0; }
 .rcv .ra-cursor { transition: transform .9s cubic-bezier(.45,0,.2,1), opacity .4s; }
 .rcv .ra-cursor svg { width: 46px; height: 46px; }
 @media (prefers-reduced-motion: reduce) {
-  .rcv .rcv-new { clip-path: none; }
   .rcv .ra-cursor, .rcv .rcv-line { display: none; }
 }
 </style>
