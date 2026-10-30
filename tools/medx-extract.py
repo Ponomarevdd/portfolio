@@ -152,7 +152,11 @@ TIMELINE = ('<div style="position:relative;display:grid;grid-template-columns:re
                       for c in ('#3b876a', '#3b876a', '#c9744a'))
             + '</div>')
 out = re.sub(r'<svg width="864" height="34"[\s\S]*?</svg>', TIMELINE, o1[3], count=1)
-write('fig-outbreaks', fluid(out))
+# Классы для отзывчивой раскладки: на узком экране карточки идут столбиком, шкала становится вертикальной (medx-case.css)
+out = out.replace('<div style="position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;height:34px">', '<div class="mxo-line" style="position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;height:34px">', 1)
+out = out.replace('<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"><div style="background:#ffffff', '<div class="mxo-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"><div style="background:#ffffff', 1)
+assert 'mxo-line' in out and 'mxo-cards' in out, 'разметка хронологии вспышек изменилась'
+write('fig-outbreaks', fluid(out).replace('<figure style="', '<figure class="mxo" style="', 1))
 # Животные-хозяева: карточки промежуточных хозяев выше (у панголина подпись в две строки),
 # «Летучие мыши» компактнее; стрелки снизу укорочены под новые размеры
 hosts = o1[4].replace('font:400 28px/34px PT Serif;color:#c9744a', 'font:600 24px/32px Manrope;color:#c9744a').replace('top:150px;width:250px;height:134px;', 'top:150px;width:250px;height:146px;')
@@ -232,6 +236,14 @@ lr = lr.replace('rgba(247,244,238,0.97) 0%, rgba(247,244,238,0.93) 40%', '#f7f4e
 hr = '<hr style="margin: 0; border: 0; height: 1px; background: #d9e4dd;">'
 assert lr.count(hr) == 1, 'разделитель в конце лонгрида не найден'
 lr = lr.replace(hr, '')
+# Ветки содержания без наложения отрезков: в масштабе наложенные сглаженные линии темнели пятнами
+tree_old = 'd="M9 -6 V112 M9 4 V14 C9 19.33 11.67 22 17 22 H30 M9 56 V66 C9 71.33 11.67 74 17 74 H30 M9 108 V118 C9 123.33 11.67 126 17 126 H30"'
+assert lr.count(tree_old) == 2, 'ветки содержания в лонгриде изменились'
+lr = lr.replace(tree_old, 'd="M9 -6 V14 C9 19.33 11.67 22 17 22 H30 M9 14 V66 C9 71.33 11.67 74 17 74 H30 M9 66 V118 C9 123.33 11.67 126 17 126 H30"')
+# Опечатки макета
+for a, b, n in (('колличество', 'количество', 2), ('CART–клеточная терапии', 'CAR-T-клеточная терапия', 1)):
+    assert lr.count(a) == n, f'опечатка «{a}» в лонгриде не найдена'
+    lr = lr.replace(a, b)
 write('longread', lr)
 # В сайдбаре «Моё обучение» вместо набранного «MedX» настоящий логотип (векторная отрисовка с растра)
 lms = body('Main-v2-photo-kwjf.dc.html')

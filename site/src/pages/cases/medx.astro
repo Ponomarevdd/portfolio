@@ -21,6 +21,14 @@ const actLongread = art('longread')
   .replace('<div style="width: 72px; height: 8px; border-radius: 4px; background: #3b876a;"></div>', '<div class="mx-act__bar"></div>')
   .replace(' aria-current="true" style="background: #e8f3ee; color: #3b876a; font-weight: 500;"', '');
 if (!actLongread.includes('mx-act__bar') || !actLongread.includes('data-dyn=') || actLongread.includes('aria-current')) throw new Error('лонгрид в действии: разметка содержания изменилась');
+// Отзывчивая вёрстка: содержание берём из макета лонгрида как есть, текущий пункт — «Хирургическая терапия»
+const lr = art('longread');
+const respToc = lr.slice(lr.indexOf('<nav'), lr.indexOf('</nav>') + 6)
+  .replace('<nav aria-label="Содержание статьи" style="', '<nav class="mr-toc" style="')
+  .replace(' aria-current="true" style="background: #e8f3ee; color: #3b876a; font-weight: 500;"', '')
+  .replace('<span class="toc-it">Хирургическая терапия</span>', '<span class="toc-it" style="background: #e8f3ee; color: #3b876a; font-weight: 500;">Хирургическая терапия</span>')
+  .replace('Прочитано 3 из 8', 'Прочитано 5 из 8').replace('width: 72px; height: 8px;', 'width: 62.5%; height: 8px;');
+if (!respToc.includes('mr-toc') || !respToc.includes('Прочитано 5 из 8') || !respToc.includes('62.5%') || respToc.includes('aria-current')) throw new Error('отзывчивая вёрстка: разметка содержания в макете изменилась');
 // Схемы идут парами примерно одинаковой высоты: в ряду по две, фреймы в паре выравниваются по более высокой
 const schemes = [
   ['fig-spike', 'Как вирус проникает в клетку'],
@@ -59,7 +67,7 @@ const complex = [
       <dl class="sc-meta">
         <div><dt>Роль</dt><dd>Лид-дизайнер</dd></div>
         <div><dt>Период</dt><dd>Июль — сентябрь 2021</dd></div>
-        <div><dt>Команда</dt><dd>2&nbsp;дизайнера под моим руководством, 2&nbsp;методиста, редактор, проджект‑менеджер, консультант от&nbsp;medx.pro</dd></div>
+        <div><dt>Команда</dt><dd>2&nbsp;дизайнера под моим руководством, 2&nbsp;методиста, редактор, проджект‑менеджер, консультанты medx.pro</dd></div>
         <div><dt>Аудитория</dt><dd>Врачи и медицинский персонал</dd></div>
       </dl>
     </header>
@@ -69,7 +77,7 @@ const complex = [
         <div class="sc-head"><h2 id="h-context">Контекст</h2></div>
         <div class="sc-main">
           <p class="sc-lead">Второй год пандемии COVID-19. Вакцины только вошли в практику, клинических данных о них было немного. Медицинскому персоналу требовалось в короткие сроки освоить, каким пациентам показана вакцинация, в какие сроки её проводить и при каких состояниях она противопоказана. Для системы профессионального развития medx.pro был разработан курс по этой теме.</p>
-          <div class="mx-fig mx-fig--fluid"><div class="sc-scale" style="--base:944px"><div class="mx-art" role="img" aria-label="Хронология вспышек коронавирусов: 2002, 2012 и 2019 годы" set:html={art('fig-outbreaks')}></div></div></div>
+          <div class="mx-fig mx-fig--fluid"><div class="mx-art" role="img" aria-label="Хронология вспышек коронавирусов: 2002, 2012 и 2019 годы" set:html={art('fig-outbreaks')}></div></div>
         </div>
       </section>
 
@@ -162,6 +170,49 @@ const complex = [
             <li><strong data-count="22">22</strong><span>лонгрида в едином стиле</span></li>
             <li><strong data-count="50" data-suffix="+">50+</strong><span>сложных схем</span></li>
           </ul>
+        </div>
+      </section>
+
+      <section class="sc-sec sc-sec--wide" aria-labelledby="h-resp">
+        <div class="sc-head"><h2 id="h-resp">Отзывчивая вёрстка</h2></div>
+        <div class="sc-main">
+          <p class="sc-lead">Лонгрид подстраивается под любую ширину экрана: от монитора до телефона.</p>
+          <div class="sc-scale" style="--base:1488px"><figure class="sc-resp mx-resp" data-anim>
+            <div class="sc-resp__stage">
+              <div class="sc-resp__frame" role="img" aria-label="Раздел лонгрида «Хирургическая терапия» с содержанием сужается от широкого экрана до телефона">
+                <div class="rs-bar"><i></i><i></i><i></i></div>
+                <div class="mr mx-art">
+                  <Fragment set:html={respToc}/>
+                  <div class="mr-art">
+                    <h3 class="h2">Хирургическая терапия</h3>
+                    <div class="mr-stages">
+                      <div class="mr-stage mr-stage--before">
+                        <p class="mr-stage__k">До операции</p>
+                        <p class="mr-stage__t">За 2 недели до операции</p>
+                        <p class="p">Чтобы во время и после операции не развились побочные реакции от вакцинации</p>
+                      </div>
+                      <div class="mr-op">
+                        <p>Оперативное вмешательство</p>
+                        <svg viewBox="0 0 144 24" aria-hidden="true"><path transform="translate(0 4)" d="M0 8 H140 M140 8 L132 0 M140 8 L132 16" fill="none" stroke="#3b876a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <svg class="mr-op__down" viewBox="0 0 24 40" aria-hidden="true"><path d="M12 2 V37 M12 37 L4 29 M12 37 L20 29" fill="none" stroke="#3b876a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      </div>
+                      <div class="mr-stage">
+                        <p class="mr-stage__k">После операции</p>
+                        <p class="mr-stage__t">После полного восстановления</p>
+                        <p class="p">Чтобы избежать наслоения побочных реакций от вакцинации и осложнений в постоперационный период</p>
+                      </div>
+                    </div>
+                    <h3 class="h2 mr-h2">Противоопухолевая терапия</h3>
+                    <ol class="mr-time">
+                      <li><h4>До начала терапии</h4><p class="p">За 2 недели до начала терапии вакцинация должна быть полностью завершена</p></li>
+                      <li><h4>Во время терапии</h4><p class="p">За 1 неделю до введения препарата при химиотерапии и таргетной терапии вакцинация должна быть завершена</p></li>
+                      <li><h4>После терапии</h4><p class="p">Вакцинация с учетом стандартных факторов риска</p></li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure></div>
         </div>
       </section>
 
