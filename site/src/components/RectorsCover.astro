@@ -1,5 +1,5 @@
 ---
-// Обложка «Совета ректоров»: один фрейм, окно браузера на светлом серо-голубом фоне.
+// Обложка «Совета ректоров»: один фрейм, окно браузера на светло-голубом фоне.
 // Сначала новая страница новости: курсор пролистывает её до похожих новостей и обратно, затем шторка
 // показывает старую страницу и возвращает новую. Внутри только картинки макетов, сценарий в scripts/rectors-cover.ts.
 import { siteUrl } from '../utils/url';
@@ -16,7 +16,7 @@ const cursor = '<svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 3.2v
     <div class="rcv-win">
       <div class="rcv-bar"><i></i><i></i><i></i><span></span></div>
       <div class="rcv-view"><div class="rcv-fit">
-        <div class="rcv-new"><img src={img('new-article-wide.webp')} alt="" width="1784" height="2975" loading="lazy" decoding="async"></div>
+        <div class="rcv-new"><img src={img('new-article-wide.webp')} alt="" width="2744" height="4576" loading="lazy" decoding="async"></div>
         <div class="rcv-old"><img src={img('old-article.webp')} alt="" width="1067" height="836" loading="lazy" decoding="async"></div>
         <span class="rcv-line"><b><Iconsax name="arrow-left2-linear" size={18}/><Iconsax name="arrow-right2-linear" size={18}/></b></span>
         <span class="ra-cursor" set:html={cursor}></span>
@@ -25,7 +25,7 @@ const cursor = '<svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 3.2v
   </div>
 </Tile>
 <style is:global>
-.rcv { display: block; background: linear-gradient(160deg, #cdd3dc 0%, #d8dde4 50%, #e6e9ee 100%); }
+.rcv { display: block; background: linear-gradient(160deg, #b7d4f4 0%, #cde1f8 50%, #e3eefb 100%); }
 /* Сцена шириной 1312 подгоняется под ширину плитки, высота — под её пропорции */
 .rcv-stage { position: absolute; left: 0; top: 0; width: 1312px; height: 540px; transform-origin: 0 0; transform: scale(var(--s, 1)); }
 .rcv-win { position: absolute; left: 156px; right: 156px; top: 52px; bottom: 0; display: flex; flex-direction: column; border-radius: 16px 16px 0 0; background: #fff; overflow: hidden; box-shadow: 0 30px 70px #1c2b4a2e; }
