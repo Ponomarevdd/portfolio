@@ -60,9 +60,9 @@
 .rc-tabs button:hover { background: #f0f0f3; }
 .rc-tabs button[aria-selected="true"] { background: var(--t); color: #fff; }
 .rc-tabs button:focus-visible { outline: 2px solid var(--p); outline-offset: 2px; }
-.rc-cmp__stage { padding: 48px; border-radius: 16px; background: #fff; box-shadow: 0 1px 2px #1e1e1e0d; touch-action: pan-y; user-select: none; }
-/* Скриншоты в рамке с полями вокруг; тонкая обводка отделяет серый фон страниц от карточки */
-.rc-cmp__frame { position: relative; aspect-ratio: 1 / 1; max-height: 1100px; width: 100%; border-radius: 8px; overflow: hidden; background: #fff; }
+.rc-cmp__stage { touch-action: pan-y; user-select: none; }
+/* Тонкая обводка отделяет серый фон страниц от фона кейса; у скриншотов редизайна поля по бокам в самих картинках */
+.rc-cmp__frame { position: relative; aspect-ratio: 1 / 1; max-height: 1100px; width: 100%; border-radius: 16px; overflow: hidden; background: #fff; }
 .rc-cmp__frame::after { content: ""; position: absolute; inset: 0; z-index: 4; border: 1px solid #e3e4ea; border-radius: inherit; pointer-events: none; }
 .rc-cmp__pair { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .4s, visibility 0s .4s; }
 .rc-cmp__pair.is-on { opacity: 1; visibility: visible; transition: opacity .4s; }
@@ -101,7 +101,6 @@
 
 @media (max-width: 899px) {
   .rc-goals { grid-template-columns: minmax(0, 1fr); }
-  .rc-cmp__stage { padding: 32px; }
   .rc-cmp__frame { aspect-ratio: 3 / 4; }
   .rc-old { aspect-ratio: 1320 / 760; }
   .rc-old img { width: 56%; }
@@ -110,8 +109,7 @@
 }
 @media (max-width: 699px) {
   .rc-hero .ra-cursor svg { width: 52px; height: 52px; }
-  .rc-cmp__stage { padding: 16px; }
-  .rc-cmp__frame { aspect-ratio: 2 / 3; border-radius: 6px; }
+  .rc-cmp__frame { aspect-ratio: 2 / 3; }
   .rc-cmp__tag { top: 12px; font-size: 12px; }
   .rc-cmp__tag--old { left: 12px; } .rc-cmp__tag--now { right: 12px; }
   .rc-tabs button { height: 36px; padding: 0 14px; font-size: 14px; }
