@@ -111,14 +111,14 @@ const tokens: [string, string, boolean?][] = [['Акцент', '#0066FF', true],
           <p class="sc-lead">Заголовки, подзаголовки, основной текст и второстепенная информация теперь разделены визуально. Старые страницы выглядели перегруженными и плоскими, и было сложно быстро понять, что главное. Новый дизайн направляет взгляд и ускоряет поиск нужной информации.</p>
           <div class="rc-cmp" data-cmp>
             <div class="rc-tabs" role="tablist" aria-label="Страница для сравнения">{hierarchy.map((p, i) => <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'}>{p.tab}</button>)}</div>
-            <div class="rc-cmp__stage" style="--pos:50%">
+            <div class="rc-cmp__stage" style="--pos:50%"><div class="rc-cmp__frame">
               {hierarchy.map((p, i) => <div class:list={['rc-cmp__pair', { 'is-on': i === 0 }]} role="tabpanel" aria-label={p.tab}>
                 <img class="rc-cmp__now" src={img(p.now + '.webp')} alt={`Новый сайт: ${p.alt}`} width="1560" height="2900" loading="lazy">
                 <div class="rc-cmp__old"><img src={img(p.old + '.webp')} alt={`Старый сайт: ${p.alt}`} width="1080" height="840" loading="lazy"></div>
               </div>)}
               <span class="rc-cmp__tag rc-cmp__tag--old" aria-hidden="true">Было</span><span class="rc-cmp__tag rc-cmp__tag--now" aria-hidden="true">Стало</span>
               <span class="rc-cmp__line" aria-hidden="true"><b><Iconsax name="arrow-left2-linear" size={16}/><Iconsax name="arrow-right2-linear" size={16}/></b></span>
-              <input class="rc-cmp__range" type="range" min="0" max="100" value="50" aria-label="Граница между старым и новым сайтом">
+              <input class="rc-cmp__range" type="range" min="0" max="100" value="50" aria-label="Граница между старым и новым сайтом"></div>
             </div>
           </div>
         </div>
@@ -130,14 +130,14 @@ const tokens: [string, string, boolean?][] = [['Акцент', '#0066FF', true],
           <p class="sc-lead">Новости, мероприятия и разделы показаны визуальными блоками: карточками, превью и фотографиями. Так сайт выглядит живее и быстрее передаёт содержание страницы. Старый сайт был почти полностью текстовым и выглядел устаревшим.</p>
           <div class="rc-cmp" data-cmp>
             <div class="rc-tabs" role="tablist" aria-label="Страница для сравнения">{visual.map((p, i) => <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'}>{p.tab}</button>)}</div>
-            <div class="rc-cmp__stage" style="--pos:50%">
+            <div class="rc-cmp__stage" style="--pos:50%"><div class="rc-cmp__frame">
               {visual.map((p, i) => <div class:list={['rc-cmp__pair', { 'is-on': i === 0 }]} role="tabpanel" aria-label={p.tab}>
                 <img class="rc-cmp__now" src={img(p.now + '.webp')} alt={`Новый сайт: ${p.alt}`} width="1560" height="2900" loading="lazy">
                 <div class="rc-cmp__old"><img src={img(p.old + '.webp')} alt={`Старый сайт: ${p.alt}`} width="1080" height="840" loading="lazy"></div>
               </div>)}
               <span class="rc-cmp__tag rc-cmp__tag--old" aria-hidden="true">Было</span><span class="rc-cmp__tag rc-cmp__tag--now" aria-hidden="true">Стало</span>
               <span class="rc-cmp__line" aria-hidden="true"><b><Iconsax name="arrow-left2-linear" size={16}/><Iconsax name="arrow-right2-linear" size={16}/></b></span>
-              <input class="rc-cmp__range" type="range" min="0" max="100" value="50" aria-label="Граница между старым и новым сайтом">
+              <input class="rc-cmp__range" type="range" min="0" max="100" value="50" aria-label="Граница между старым и новым сайтом"></div>
             </div>
           </div>
         </div>
