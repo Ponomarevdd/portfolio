@@ -113,7 +113,7 @@ const tokens: [string, string, boolean?][] = [['Акцент', '#0066FF', true],
             <div class="rc-tabs" role="tablist" aria-label="Страница для сравнения">{hierarchy.map((p, i) => <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'}>{p.tab}</button>)}</div>
             <div class="rc-cmp__stage" style="--pos:50%"><div class="rc-cmp__frame">
               {hierarchy.map((p, i) => <div class:list={['rc-cmp__pair', { 'is-on': i === 0 }]} role="tabpanel" aria-label={p.tab}>
-                <img class="rc-cmp__now" src={img(p.now + '-pad.webp')} alt={`Новый сайт: ${p.alt}`} width="1880" height="2900" loading="lazy">
+                <img class="rc-cmp__now" src={img(p.now + '-pad.webp')} alt={`Новый сайт: ${p.alt}`} width="3040" height="4600" loading="lazy">
                 <div class="rc-cmp__old"><img src={img(p.old + '.webp')} alt={`Старый сайт: ${p.alt}`} width="1080" height="840" loading="lazy"></div>
               </div>)}
               <span class="rc-cmp__tag rc-cmp__tag--old" aria-hidden="true">Было</span><span class="rc-cmp__tag rc-cmp__tag--now" aria-hidden="true">Стало</span>
@@ -132,7 +132,7 @@ const tokens: [string, string, boolean?][] = [['Акцент', '#0066FF', true],
             <div class="rc-tabs" role="tablist" aria-label="Страница для сравнения">{visual.map((p, i) => <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'}>{p.tab}</button>)}</div>
             <div class="rc-cmp__stage" style="--pos:50%"><div class="rc-cmp__frame">
               {visual.map((p, i) => <div class:list={['rc-cmp__pair', { 'is-on': i === 0 }]} role="tabpanel" aria-label={p.tab}>
-                <img class="rc-cmp__now" src={img(p.now + '-pad.webp')} alt={`Новый сайт: ${p.alt}`} width="1880" height="2900" loading="lazy">
+                <img class="rc-cmp__now" src={img(p.now + '-pad.webp')} alt={`Новый сайт: ${p.alt}`} width="3040" height="4600" loading="lazy">
                 <div class="rc-cmp__old"><img src={img(p.old + '.webp')} alt={`Старый сайт: ${p.alt}`} width="1080" height="840" loading="lazy"></div>
               </div>)}
               <span class="rc-cmp__tag rc-cmp__tag--old" aria-hidden="true">Было</span><span class="rc-cmp__tag rc-cmp__tag--now" aria-hidden="true">Стало</span>
@@ -148,7 +148,7 @@ const tokens: [string, string, boolean?][] = [['Акцент', '#0066FF', true],
         <div class="sc-main">
           <p class="sc-lead">Старый сайт был рассчитан только на десктоп. Новый подстраивается под любую ширину экрана: на телефоне и планшете им так же удобно пользоваться, как на компьютере.</p>
           <div class="sc-scale" style="--base:1320px"><div class="rc-devices" data-anim role="img" aria-label="Главная страница на компьютере, планшете и телефоне">
-            <div class="rc-win rc-devices__desk"><div class="rc-win__bar"><i></i><i></i><i></i><span></span></div><div class="rc-win__view"><img class="rc-scroll" src={img('new-home-pad.webp')} alt="" width="1880" height="2849" loading="lazy"></div></div>
+            <div class="rc-win rc-devices__desk"><div class="rc-win__bar"><i></i><i></i><i></i><span></span></div><div class="rc-win__view"><img class="rc-scroll" src={img('new-home-pad.webp')} alt="" width="3040" height="4382" loading="lazy"></div></div>
             <div class="rc-device rc-devices__tab"><div class="rc-device__screen"><img class="rc-scroll" src={img('new-tablet.webp')} alt="" width="999" height="1560" loading="lazy"></div></div>
             <div class="rc-device rc-devices__phone"><div class="rc-device__screen"><img class="rc-scroll" src={img('new-phone.webp')} alt="" width="416" height="1560" loading="lazy"></div></div>
           </div></div>
