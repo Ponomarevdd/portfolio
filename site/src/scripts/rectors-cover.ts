@@ -1,6 +1,6 @@
-// Обложка «Совета ректоров» (components/RectorsCover.astro): новая страница новости прокручивается до похожих
-// новостей, курсор кликает по карточкам, страница возвращается наверх, затем шторка показывает старую страницу
-// и снова новую. Координаты курсора — в пикселях окна шириной 1000 (макет в нём 875 по центру).
+// Обложка «Совета ректоров» (components/RectorsCover.astro): сначала старая страница новости, шторка сразу
+// открывает новую, она прокручивается до похожих новостей, курсор кликает по карточкам, страница возвращается
+// наверх, и шторка снова закрывает её старой. Координаты курсора — в пикселях окна шириной 1000 (макет в нём 875 по центру).
 import { cursorOf, gate, reduced } from './rectors-live';
 
 export function initRectorsCover(tile: HTMLElement) {
@@ -13,7 +13,7 @@ export function initRectorsCover(tile: HTMLElement) {
   };
   new ResizeObserver(fitStage).observe(tile);
   fitStage();
-  if (reduced()) return;
+  if (reduced()) { tile.classList.remove('is-old'); return; }
 
   const page = tile.querySelector<HTMLElement>('.rcv-new')!;
   const wait = gate(tile);
@@ -22,8 +22,14 @@ export function initRectorsCover(tile: HTMLElement) {
   const off: [number, number] = [906, 594];
   (async () => {
     for (;;) {
+      // старая страница видна сразу, шторка почти без паузы открывает новую
       c.hide(...off);
-      await wait(900);
+      await wait(700);
+      tile.classList.add('is-wipe');
+      tile.classList.remove('is-old');
+      await wait(1700);
+      tile.classList.remove('is-wipe');
+      await wait(300);
       c.show();
       await c.move([418, 344]);
       await wait(400);
@@ -41,12 +47,6 @@ export function initRectorsCover(tile: HTMLElement) {
       tile.classList.add('is-wipe', 'is-old');
       await wait(1700);
       tile.classList.remove('is-wipe');
-      await wait(1800);
-      tile.classList.add('is-wipe');
-      tile.classList.remove('is-old');
-      await wait(1700);
-      tile.classList.remove('is-wipe');
-      await wait(500);
     }
   })();
 }
