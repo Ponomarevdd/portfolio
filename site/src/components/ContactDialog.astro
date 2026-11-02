@@ -9,10 +9,10 @@ import '../styles/contact.css';
     <section class="contact-intro">
       <h2 id="contact-title">Хорошие идеи<br />начинаются<br />с разговора.</h2>
       <p class="contact-description">Расскажите, что задумали.<br />Будет интересно сделать это вместе.</p>
-      <ul class="contact-direct" aria-label="Контакты">
-        <li><a href={`mailto:${contacts.email}`}><span>Почта</span>{contacts.email} <Iconsax name="arrow" size={18} rotate={45} /></a></li>
-        <li><a href={`https://t.me/${contacts.telegram}`} target="_blank" rel="noopener"><span>Telegram</span>@{contacts.telegram} <Iconsax name="arrow" size={18} rotate={45} /></a></li>
-      </ul>
+      <div class="contact-direct" aria-label="Контакты">
+        <a href={`mailto:${contacts.email}`} title={contacts.email}>Почта <Iconsax name="arrow" size={18} rotate={45} /></a>
+        <a href={`https://t.me/${contacts.telegram}`} target="_blank" rel="noopener" title={`@${contacts.telegram}`}>Telegram <Iconsax name="arrow" size={18} rotate={45} /></a>
+      </div>
     </section>
   </div>
 </dialog>

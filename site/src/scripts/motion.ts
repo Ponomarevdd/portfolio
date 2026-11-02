@@ -93,6 +93,16 @@ function setupMenu(animated: boolean) {
   };
 }
 
+// Карточки проектов появляются сразу, не дожидаясь шрифтов. Меню между страницами не анимируем: оно стоит на месте
+media.add('(prefers-reduced-motion: no-preference)', () => {
+  gsap.utils.toArray<HTMLElement>('.project').forEach((project) => {
+    gsap.fromTo(project, { y: 32, opacity: 0 }, {
+      y: 0, opacity: 1, duration: .9, ease: 'power3.out', clearProps: 'transform',
+      scrollTrigger: { trigger: project, start: 'top 96%', once: true },
+    });
+  });
+});
+
 // Content remains visible if JS is disabled; motion is only an enhancement.
 document.fonts.ready.then(() => {
   if (disposed) return;
@@ -163,6 +173,7 @@ document.fonts.ready.then(() => {
         chars = self.chars as HTMLElement[];
         textReady = false;
         letterCenters = [];
+        gsap.set(title, { visibility: 'visible' });
         return gsap.from(self.words, {
           yPercent: 110, opacity: 0, duration: letterMotion.revealDuration,
           stagger: letterMotion.revealStagger, ease: 'power3.out', delay: letterMotion.revealDelay,
@@ -170,14 +181,6 @@ document.fonts.ready.then(() => {
         });
       },
     }) : null;
-    gsap.from('.header', { y: -12, opacity: 0, duration: .7, ease: 'power2.out', clearProps: 'transform,opacity' });
-    gsap.utils.toArray<HTMLElement>('.project').forEach((project) => {
-      gsap.from(project, {
-        y: 32, opacity: 0, duration: .9, ease: 'power3.out',
-        clearProps: 'transform,opacity',
-        scrollTrigger: { trigger: project, start: 'top 96%', once: true },
-      });
-    });
     const pointerEnabled = matchMedia('(hover: hover) and (pointer: fine)').matches;
     const enterTitle = () => { if (textReady) measureLetters(); };
     const moveTitle = (event: PointerEvent) => {

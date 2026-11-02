@@ -118,3 +118,8 @@ main { position: relative; z-index: 1; padding-top: 94px; padding-bottom: 64px; 
 
 /* Обложка вне экрана: анимации на паузе (класс ставит motion.ts) */
 .project__gallery--live.is-off *, .project__gallery--live.is-off *::before, .project__gallery--live.is-off *::after { animation-play-state: paused !important; }
+
+/* Место под полосу прокрутки занято всегда: попап контактов прячет прокрутку, и без этого вёрстка сдвигалась вбок */
+html { scrollbar-gutter: stable; }
+.is-motion .project { opacity: 0; }
+.is-motion .intro h1 { visibility: hidden; }

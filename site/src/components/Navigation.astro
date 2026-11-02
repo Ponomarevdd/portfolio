@@ -9,3 +9,5 @@ import { siteUrl } from '../utils/url';
     <button type="button" data-contact-open aria-haspopup="dialog" aria-controls="contact-dialog">Контакты</button>
   </nav>
 </header>
+<!-- До первой отрисовки: карточки и заголовок главной стартуют скрытыми, чтобы не мелькнуть на месте и не прыгнуть в начало анимации. Без JS класса нет, и всё видно сразу -->
+<script is:inline>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.classList.add('is-motion'); setTimeout(() => document.documentElement.classList.remove('is-motion'), 4000); }</script>
