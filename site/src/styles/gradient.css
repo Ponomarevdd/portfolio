@@ -7,7 +7,6 @@
   --gradient-offset-y: -10%;       /* отрицательное значение = выше */
   --gradient-speed: 6s;             /* меньше секунд = быстрее */
   --gradient-opacity: 0.8;         /* 0 = невидим, 1 = насыщенный */
-  --gradient-blur: 52px;           /* размытие цветных пятен */
   --gradient-grain-opacity: 0;   /* 0 = без зерна */
 }
 
@@ -25,10 +24,11 @@
   mask-image: radial-gradient(ellipse 50% 60% at 50% 30%, #000 30%, transparent 100%);
 }
 
+/* Пятна мягкие за счёт самих радиальных градиентов, без filter: blur.
+   Живое размытие пересчитывалось на каждом кадре анимации и тормозило страницу. */
 .gradient__color {
   position: absolute;
   inset: -35px 0 0;
-  filter: blur(var(--gradient-blur));
 }
 
 .gradient__blob {
@@ -36,24 +36,23 @@
   width: calc(48% * var(--gradient-size));
   height: calc(75% * var(--gradient-size));
   top: 0;
-  border-radius: 50%;
 }
 
 .gradient__blob--turquoise {
   left: 7%;
-  background: radial-gradient(ellipse, var(--gradient-turquoise) 0% 12%, transparent 90%);
+  background: radial-gradient(closest-side, var(--gradient-turquoise) 0% 16%, color-mix(in srgb, var(--gradient-turquoise) 60%, transparent) 55%, transparent 100%);
 }
 
 .gradient__blob--orange {
   left: 27%;
   top: -2%;
-  background: radial-gradient(ellipse, var(--gradient-orange) 0% 30%, transparent 90%);
+  background: radial-gradient(closest-side, var(--gradient-orange) 0% 34%, color-mix(in srgb, var(--gradient-orange) 60%, transparent) 66%, transparent 100%);
 }
 
 .gradient__blob--pink {
   left: 47%;
   top: 2%;
-  background: radial-gradient(ellipse, var(--gradient-pink) 0% 27%, transparent 90%);
+  background: radial-gradient(closest-side, var(--gradient-pink) 0% 32%, color-mix(in srgb, var(--gradient-pink) 60%, transparent) 64%, transparent 100%);
 }
 
 .gradient__grain {
@@ -73,7 +72,6 @@
   }
   .gradient__color {
     inset: 30px -80px 0;
-    filter: blur(calc(var(--gradient-blur) * .8));
   }
 }
 

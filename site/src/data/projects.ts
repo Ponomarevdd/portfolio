@@ -39,7 +39,7 @@ const medx: Project = {
 };
 const rectors: Project = {
   slug: 'rectors', href: '/cases/rectors/', title: 'Совет ректоров вузов Москвы: редизайн сайта', year: 2022,
-  categories: ['UX/UI', 'Образование'],
+  categories: ['UX/UI', 'Редизайн'],
   description: 'Редизайн сайта Совета ректоров вузов Москвы и Московской области: современный облик, понятная навигация и отзывчивая вёрстка для любых устройств.',
   live: 'rectors',
   cover: '/images/rectors/new-home.webp', width: 1560, height: 2849,

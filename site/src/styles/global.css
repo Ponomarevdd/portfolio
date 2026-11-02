@@ -115,3 +115,6 @@ main { position: relative; z-index: 1; padding-top: 94px; padding-bottom: 64px; 
 .work--home { gap: 70px; }
 @media(max-width: 899px) { .work--home { gap: 56px; } }
 @media(max-width: 599px) { .work--home { gap: 45px; } }
+
+/* Обложка вне экрана: анимации на паузе (класс ставит motion.ts) */
+.project__gallery--live.is-off *, .project__gallery--live.is-off *::before, .project__gallery--live.is-off *::after { animation-play-state: paused !important; }

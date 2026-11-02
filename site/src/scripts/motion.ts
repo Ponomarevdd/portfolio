@@ -202,6 +202,10 @@ document.fonts.ready.then(() => {
   });
 });
 
+// Живые обложки работают, только пока видны: вне экрана их анимации стоят и не отнимают кадры у прокрутки
+const covers = new IntersectionObserver((entries) => entries.forEach((entry) => entry.target.classList.toggle('is-off', !entry.isIntersecting)), { rootMargin: '100px 0px' });
+document.querySelectorAll('.project__gallery--live').forEach((cover) => covers.observe(cover));
+
 const gradient = document.querySelector<HTMLElement>('.gradient');
 let inView = true;
 const updateBackground = () => gradient?.classList.toggle('is-paused', document.hidden || !inView);
@@ -216,5 +220,6 @@ if (import.meta.hot) import.meta.hot.dispose(() => {
   disposed = true;
   media.revert();
   observer.disconnect();
+  covers.disconnect();
   document.removeEventListener('visibilitychange', updateBackground);
 });

@@ -3,8 +3,6 @@ import { gsap } from 'gsap';
 const dialog = document.querySelector<HTMLDialogElement>('#contact-dialog')!;
 const opener = document.querySelector<HTMLButtonElement>('[data-contact-open]')!;
 const closer = dialog.querySelector<HTMLButtonElement>('.contact-close')!;
-const form = dialog.querySelector<HTMLFormElement>('form')!;
-const status = dialog.querySelector<HTMLElement>('.contact-status')!;
 let closing = false;
 let previousOverflow = '';
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -31,19 +29,13 @@ const close = () => {
   } });
 };
 const cancel = (event: Event) => { event.preventDefault(); close(); };
-const submit = (event: SubmitEvent) => {
-  event.preventDefault();
-  status.textContent = 'Форма пока работает в деморежиме. Сообщение не отправлено.';
-};
 opener.addEventListener('click', open);
 closer.addEventListener('click', close);
 dialog.addEventListener('cancel', cancel);
-form.addEventListener('submit', submit);
 if (import.meta.hot) import.meta.hot.dispose(() => {
   opener.removeEventListener('click', open);
   closer.removeEventListener('click', close);
   dialog.removeEventListener('cancel', cancel);
-  form.removeEventListener('submit', submit);
   gsap.killTweensOf([dialog, dialog.querySelector('.contact-layout')]);
   if (dialog.open) { dialog.close(); document.documentElement.style.overflow = previousOverflow; }
 });
