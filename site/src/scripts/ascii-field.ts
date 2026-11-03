@@ -1,12 +1,12 @@
-// Фон из символов (components/AsciiField.astro): сетка моноширинных символов. Каждый кадр скрипт считает
-// для каждой клетки символ, яркость и свечение, кладёт их в маленькую текстуру, а WebGL рисует символы из
-// атласа одним проходом, поэтому даже тысячи клеток не грузят видеокарту. Шум гонит по сетке «облака»,
-// символы в них мерцают и сменяются. Клик пускает волну: кольцо расходится, замедляясь, символы на гребне
-// вспыхивают оранжевым и перемешиваются. Под заголовком и меню символы гаснут. Без WebGL канвас не
-// включается и остаётся обычный градиент.
+// Фон из символов (components/AsciiField.astro) в духе ASCII-арта: символ в клетке зависит от яркости,
+// от точки до «@». Курсор оставляет «чернила», они текут по полю шума, растекаются протоками, как
+// река в дельте, и тают. Клик пускает волну, на гребне символы вспыхивают оранжевым. Без курсора по фону
+// медленно плывут бледные облака. Каждый кадр скрипт считает для клетки символ, яркость и свечение,
+// кладёт их в маленькую текстуру, а WebGL рисует символы из атласа одним проходом. Под заголовком и
+// меню символы гаснут. Без WebGL канвас не включается и остаётся обычный градиент.
 import { asciiField as cfg } from './motion-settings';
 
-const GLYPHS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const GLYPHS = '.,:;-~=+*xo#%@'; // от светлого к тёмному
 const MAX_RIPPLES = 8;
 
 const VERTEX = `
@@ -57,8 +57,9 @@ function hex(color: string) {
 }
 
 export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element[]) {
-  const gl = canvas.getContext('webgl', { premultipliedAlpha: true, antialias: false });
-  if (!gl) return () => {};
+  const context = canvas.getContext('webgl', { premultipliedAlpha: true, antialias: false });
+  if (!context) return () => {};
+  const gl: WebGLRenderingContext = context;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const compile = (type: number, source: string) => {
@@ -104,7 +105,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
   const cellsTexture = texture(1, gl.NEAREST);
 
   let dpr = 1, width = 0, height = 0, cellW = 0, cellH = 0, cols = 0, rows = 0;
-  let cells = new Uint8Array(0), seeds = new Float32Array(0);
+  let cells = new Uint8Array(0), ink = new Float32Array(0), heat = new Float32Array(0), next = new Float32Array(0);
 
   // Атлас: все символы в одну строку, белым по прозрачному
   const buildAtlas = () => {
@@ -139,7 +140,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
     buildAtlas();
     cols = Math.ceil(width / cellW); rows = Math.ceil(height / cellH);
     cells = new Uint8Array(cols * rows * 4);
-    seeds = new Float32Array(cols * rows).map((_, i) => hash(i % cols, Math.floor(i / cols) + 911) * 10);
+    ink = new Float32Array(cols * rows); heat = new Float32Array(cols * rows); next = new Float32Array(cols * rows);
     gl.uniform2f(u('u_grid'), cols, rows);
     if (reduced) draw(performance.now());
   };
@@ -147,7 +148,55 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
   const ripples: { x: number; y: number; t: number }[] = [];
   const start = performance.now();
   const clock = (now: number) => (now - start) / 1000;
-  const mouse = { x: 0, y: 0, target: 0, value: 0 };
+  const pointer = { x: 0, y: 0, px: 0, py: 0, active: false, moved: false };
+  let last = 0;
+
+  // Курсор оставляет чернила вдоль пути от прошлого кадра
+  function deposit() {
+    if (!pointer.active || !pointer.moved) return;
+    pointer.moved = false;
+    const dist = Math.hypot(pointer.x - pointer.px, pointer.y - pointer.py);
+    const steps = Math.max(1, Math.ceil(dist / (cellW * 2)));
+    const r = cfg.trailRadius, rc = Math.ceil(r / cellW) + 1, rr = Math.ceil(r / cellH) + 1;
+    // Каждые две клетки пути добавляют одинаково, так что след ровный при любой скорости кадров
+    const amount = cfg.trailStrength * .45;
+    for (let s = 1; s <= steps; s++) {
+      const px = pointer.px + (pointer.x - pointer.px) * s / steps, py = pointer.py + (pointer.y - pointer.py) * s / steps;
+      const gx = Math.floor(px / cellW), gy = Math.floor(py / cellH);
+      for (let y = Math.max(0, gy - rr); y <= Math.min(rows - 1, gy + rr); y++) {
+        for (let x = Math.max(0, gx - rc); x <= Math.min(cols - 1, gx + rc); x++) {
+          const d = Math.hypot((x + .5) * cellW - px, (y + .5) * cellH - py) / r;
+          if (d >= 1) continue;
+          const k = (1 - d * d) * amount, i = y * cols + x;
+          ink[i] = Math.min(1.6, ink[i] + k);
+          heat[i] = Math.min(1, heat[i] + k * 1.5);
+        }
+      }
+    }
+    pointer.px = pointer.x; pointer.py = pointer.y;
+  }
+
+  // Чернила текут по полю шума (без вихрей и стоков, поэтому расходятся протоками) и тают
+  function flow(t: number, dt: number) {
+    const scale = cfg.channelSize, speed = cfg.flowSpeed * dt, e = .01;
+    const fade = Math.exp(-dt / cfg.fadeTime), cool = Math.exp(-dt / .6);
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        const nx = (x + .5) * cellW / scale, ny = (y + .5) * cellH / scale, nt = t * .05;
+        const dx = (noise(nx + e, ny + nt) - noise(nx - e, ny + nt)) / (2 * e);
+        const dy = (noise(nx, ny + e + nt) - noise(nx, ny - e + nt)) / (2 * e);
+        // Поворот градиента даёт течение вдоль линий шума
+        const sx = x - dy * speed / cellW, sy = y + dx * speed / cellH;
+        const x0 = Math.max(0, Math.min(cols - 2, Math.floor(sx))), y0 = Math.max(0, Math.min(rows - 2, Math.floor(sy)));
+        const fx = Math.min(1, Math.max(0, sx - x0)), fy = Math.min(1, Math.max(0, sy - y0));
+        const i0 = y0 * cols + x0;
+        const v = ink[i0] * (1 - fx) * (1 - fy) + ink[i0 + 1] * fx * (1 - fy) + ink[i0 + cols] * (1 - fx) * fy + ink[i0 + cols + 1] * fx * fy;
+        next[y * cols + x] = v * fade;
+      }
+    }
+    [ink, next] = [next, ink];
+    for (let i = 0; i < heat.length; i++) heat[i] *= cool;
+  }
 
   function fill(t: number) {
     const box = canvas.getBoundingClientRect();
@@ -157,9 +206,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
       return [r.left - box.left - cfg.quietPadding, r.top - box.top - cfg.quietPadding, r.right - box.left + cfg.quietPadding, r.bottom - box.top + cfg.quietPadding];
     });
     const live = ripples.filter((r) => t - r.t < 4);
-    const driftX = -cfg.windSpeed * t, driftY = cfg.windSpeed * .25 * t;
-    const edge = 1 - cfg.density;
-    const rr = cfg.cursorRadius * cfg.cursorRadius;
+    const driftX = -cfg.windSpeed * t, driftY = cfg.windSpeed * .3 * t;
     for (let y = 0; y < rows; y++) {
       const cy = (y + .5) * cellH;
       // Снизу фон растворяется
@@ -174,45 +221,39 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
         const fade = quietK * bottom;
         if (fade <= 0) { cells[i * 4 + 1] = 0; continue; }
 
-        // Облака: шум дрейфует по ветру, плотность задаёт порог
-        const n = fbm((cx + driftX) / cfg.cloudSize, (cy + driftY) / cfg.cloudSize + t * .03);
-        let a = smoothstep(edge - .08, edge + .22, n) * cfg.opacity;
-        // Символ меняется тем чаще, чем гуще облако
-        let pick = hash(x * 7 + Math.floor(t * (.15 + 2.5 * n * n) + seeds[i]), y);
+        // Протоки: узкие гребни шума, по ним след видно ярче всего
+        const ridge = 1 - Math.abs(2 * noise(cx / cfg.channelSize * 2.2, cy / cfg.channelSize * 1.4 + t * .04) - 1);
+        let level = ink[i] * (.25 + .75 * ridge ** 3);
+        // Бледные облака без курсора
+        level += smoothstep(.55, .85, fbm((cx + driftX) / cfg.cloudSize, (cy + driftY) / cfg.cloudSize)) * cfg.cloudOpacity;
 
-        let glow = 0;
-        for (let k = 0; k < live.length; k++) {
-          const r = live[k], el = t - r.t;
-          const wd = cfg.rippleReach * (1 - Math.exp(-el / 1.5)) - Math.hypot(cx - r.x, cy - r.y);
+        let glow = heat[i];
+        for (const r of live) {
+          const el = t - r.t;
+          const wd = cfg.rippleReach * (1 - Math.exp(-el / 1.4)) - Math.hypot(cx - r.x, cy - r.y);
           if (wd < -60) continue;
-          const band = Math.exp(-wd * wd / (cfg.rippleWidth * cfg.rippleWidth)) * smoothstep(-40, 10, wd)
-            * (.35 + .65 * (.5 + .5 * Math.cos(wd * Math.PI * 2 / 150)));
-          const after = smoothstep(0, 90, wd) * Math.exp(-Math.max(wd, 0) / 280) * Math.exp(-el / 1.45);
-          const s = band * Math.exp(-el / 1.15);
+          const s = Math.exp(-wd * wd / (cfg.rippleWidth * cfg.rippleWidth)) * smoothstep(-40, 10, wd) * Math.exp(-el / 1.1);
+          level += s * (.5 + .5 * ridge);
           glow += s;
-          a += s * .9 + after * .22;
-          if (s > .08) pick = hash(x + Math.floor(t * 18) * 131 + k, y);
+          // Волна оставляет немного чернил, и после неё тоже текут протоки
+          ink[i] = Math.min(1.6, ink[i] + s * .04);
         }
 
-        // Курсор оживляет символы рядом
-        if (mouse.value > .01) {
-          const d2 = (cx - mouse.x) ** 2 + (cy - mouse.y) ** 2;
-          const m = Math.exp(-d2 / rr) * mouse.value;
-          a += m * .3;
-          if (m > .25) pick = hash(x + Math.floor(t * 9) * 57, y + 3);
-        }
-
-        cells[i * 4] = Math.floor(pick * GLYPHS.length);
-        cells[i * 4 + 1] = Math.min(255, a * fade * 255);
-        cells[i * 4 + 2] = Math.min(255, glow * 1.6 * 255);
+        if (level < .03) { cells[i * 4 + 1] = 0; continue; }
+        cells[i * 4] = Math.min(GLYPHS.length - 1, Math.floor(Math.min(1, level) * GLYPHS.length));
+        cells[i * 4 + 1] = Math.min(255, Math.min(1, level * 1.5) * fade * 255);
+        cells[i * 4 + 2] = Math.min(255, glow * 1.4 * 255);
       }
     }
     while (ripples.length && t - ripples[0].t > 4) ripples.shift();
   }
 
   function draw(now: number) {
-    mouse.value += (mouse.target - mouse.value) * .08;
-    fill(reduced ? 12 : clock(now));
+    const t = reduced ? 12 : clock(now), dt = Math.min(.05, Math.max(0, t - last));
+    last = t;
+    deposit();
+    flow(t, dt);
+    fill(t);
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, cellsTexture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, cols, rows, 0, gl.RGBA, gl.UNSIGNED_BYTE, cells);
@@ -240,11 +281,12 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
     if (ripples.length > MAX_RIPPLES) ripples.shift();
   };
   const onMove = (e: PointerEvent) => {
-    if (e.pointerType !== 'mouse') return;
+    if (reduced) return;
     const p = local(e);
-    mouse.x = p.x; mouse.y = p.y; mouse.target = p.inside ? 1 : 0;
+    if (!pointer.active) { pointer.px = p.x; pointer.py = p.y; }
+    pointer.x = p.x; pointer.y = p.y; pointer.active = p.inside; pointer.moved = true;
   };
-  const onLeave = () => { mouse.target = 0; };
+  const onLeave = () => { pointer.active = false; };
 
   const ro = new ResizeObserver(resize);
   ro.observe(canvas);
