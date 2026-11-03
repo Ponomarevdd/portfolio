@@ -39,7 +39,7 @@ const medx: Project = {
 };
 const rectors: Project = {
   slug: 'rectors', href: '/cases/rectors/', title: 'Совет ректоров вузов Москвы: редизайн сайта', year: 2022,
-  categories: ['UX/UI', 'Редизайн'],
+  categories: ['Веб-дизайн', 'Редизайн'],
   description: 'Редизайн сайта Совета ректоров вузов Москвы и Московской области: современный облик, понятная навигация и отзывчивая вёрстка для любых устройств.',
   live: 'rectors',
   cover: '/images/rectors/new-home.webp', width: 1560, height: 2849,
@@ -48,7 +48,7 @@ const rectors: Project = {
 };
 const joyDivision: Project = {
   slug: 'joy-division', href: '/cases/joy-division/', title: 'Joy Division: концепт сайта', year: 2019,
-  categories: ['UX/UI', 'Музыка'],
+  categories: ['Веб-дизайн', 'Музыка'],
   description: 'Концепт сайта о группе Joy Division: тёмная визуальная система, контрастная типографика и чёрно-белые портреты передают атмосферу пост-панка.',
   live: 'joy-division',
   cover: '/images/joy-division/unknown.webp', width: 2227, height: 1251,
