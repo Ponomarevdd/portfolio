@@ -1,0 +1,106 @@
+---
+import { siteUrl } from '../../utils/url';
+import BackLink from '../../components/BackLink.astro';
+import Page from '../../layouts/Page.astro';
+import ActionButton from '../../components/ActionButton.astro';
+import Iconsax from '../../components/Iconsax.astro';
+import '../../styles/school-case.css';
+import '../../styles/jd-case.css';
+
+// Концепт сайта о Joy Division. Экраны вырезаны из презентации концепта (Notion Дмитрия): шрифты макета
+// (Portrait, Graphik, GT Pressura) коммерческие, поэтому экраны остаются картинками. Пока статика, анимация после одобрения.
+const img = (n: string) => siteUrl(`/images/joy-division/${n}.webp`);
+const members = [
+  { n: 'curtis', alt: 'Ян Кёртис' },
+  { n: 'sumner', alt: 'Бернард Самнер' },
+  { n: 'hook', alt: 'Питер Хук' },
+  { n: 'morris', alt: 'Стивен Моррис' },
+];
+const style = [
+  { n: 'sound', alt: 'Звучание' },
+  { n: 'lyrics', alt: 'Тексты песен' },
+  { n: 'live', alt: 'Концерты' },
+];
+---
+<Page title="Joy Division: концепт сайта">
+  <article class="sc jd">
+    <header class="page-heading sc-cover">
+      <BackLink href={siteUrl('/work/')} label="Все работы"/>
+      <div class="sc-cover__grid">
+        <div class="sc-cover__text">
+          <h1>Joy Division: концепт сайта</h1>
+          <p class="sc-cover__lead">Концепт сайта о группе Joy Division: тёмная визуальная система, контрастная типографика и чёрно-белые портреты передают атмосферу пост-панка.</p>
+        </div>
+        <div class="jd-hero">
+          <img class="jd-shot" src={img('about')} alt="Раздел «О группе»: заголовок Joy Division, история группы и фотография Яна Кёртиса на сцене" width="2060" height="1163">
+        </div>
+      </div>
+      <dl class="sc-meta">
+        <div><dt>Роль</dt><dd>UX/UI-дизайнер</dd></div>
+        <div><dt>Период</dt><dd>2019</dd></div>
+        <div><dt>Команда</dt><dd>Личный проект</dd></div>
+        <div><dt>Аудитория</dt><dd>Поклонники пост-панка и те, кто только знакомится с группой</dd></div>
+      </dl>
+    </header>
+
+    <div class="sc-body">
+      <section class="sc-sec" aria-labelledby="h-context">
+        <div class="sc-head"><h2 id="h-context">Контекст</h2></div>
+        <div class="sc-main">
+          <p class="sc-lead">Концепт сайта о Joy Division, который передаёт атмосферу и эстетику пост-панка. В центре — эмоциональное восприятие: тёмная визуальная система, контрастная типографика и крупные чёрно-белые портреты.</p>
+          <img class="jd-mosaic" src={img('mosaic')} alt="Экраны концепта: главная, разделы о группе, участниках и звучании" width="2214" height="1662" loading="lazy">
+        </div>
+      </section>
+
+      <section class="sc-sec" aria-labelledby="h-problem">
+        <div class="sc-head"><h2 id="h-problem">Задача</h2></div>
+        <div class="sc-main">
+          <p class="sc-lead">Сайт должен погружать в атмосферу группы и при этом оставаться понятным. Нужно было найти баланс между выразительным арт-подходом и функциональной навигацией.</p>
+          <ul class="sc-duties" data-anim="once">
+            <li style="--i:0"><span class="sc-role__icon"><Iconsax name="music-bold" size={28}/></span><h3>Атмосфера</h3><p>Тёмная палитра, чёрно-белые фотографии и выразительные заголовки.</p></li>
+            <li style="--i:1"><span class="sc-role__icon"><Iconsax name="hierarchy-bold" size={28}/></span><h3>Навигация</h3><p>Чёткая модульная сетка и продуманная иерархия. Все разделы сайта всегда в шапке.</p></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="sc-sec" aria-labelledby="h-type">
+        <div class="sc-head"><h2 id="h-type">Мультишрифтовой дизайн</h2></div>
+        <div class="sc-main">
+          <p class="sc-lead">На таком сайте важно передать атмосферу, и одного шрифта для этого не хватало. Я подобрал три гарнитуры под разные роли: сжатую в меню, акцидентную в заголовках и спокойный неогротеск в тексте, который удобно читать.</p>
+          <div class="jd-stack">
+            <img class="jd-shot" src={img('specimen')} alt="Шрифты концепта: Portrait для заголовков, Graphik для текста, GT Pressura для навигации" width="2266" height="1260" loading="lazy">
+            <ul class="jd-grid jd-grid--3">
+              {style.map((s) => <li><img class="jd-shot" src={img(s.n)} alt={`Раздел «Музыкальный стиль»: ${s.alt}`} width="1113" height="624" loading="lazy"></li>)}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="sc-sec" aria-labelledby="h-bw">
+        <div class="sc-head"><h2 id="h-bw">Чёрно-белая композиция</h2></div>
+        <div class="sc-main">
+          <p class="sc-lead">Главная сложность — задать одинаковый тон на всём сайте. Исходные фотографии сильно отличались: плёнка везде разная, а некоторые снимки и вовсе цветные. Gradient Map привёл их к одному стилю независимо от исходного цвета, а текстура шума связала фотографии с фоном.</p>
+          <div class="jd-stack">
+            <img class="jd-shot" src={img('gallery')} alt="Галерея: фотографии группы в едином чёрно-белом тоне" width="2223" height="1252" loading="lazy">
+            <ul class="jd-grid jd-grid--2">
+              {members.map((m) => <li><img class="jd-shot" src={img(m.n)} alt={`Участники группы: ${m.alt}`} width="1076" height="606" loading="lazy"></li>)}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="sc-sec" aria-labelledby="h-player">
+        <div class="sc-head"><h2 id="h-player">Не просто сайт-визитка</h2></div>
+        <div class="sc-main">
+          <p class="sc-lead">Странно знакомиться с группой, не слушая её музыку. Поэтому в дискографию встроен небольшой минималистичный плеер.</p>
+          <div class="jd-stack">
+            <img class="jd-shot" src={img('unknown')} alt="Дискография: альбом Unknown Pleasures и плеер с треклистом" width="2227" height="1251" loading="lazy">
+            <img class="jd-shot" src={img('closer')} alt="Дискография: альбом Closer и треклист" width="2227" height="1253" loading="lazy">
+          </div>
+        </div>
+      </section>
+    </div>
+  </article>
+  <div class="action-row"><ActionButton href={siteUrl('/work/')} label="Посмотреть все работы"/></div>
+</Page>
+<script>import '../../scripts/case-reveal';</script>

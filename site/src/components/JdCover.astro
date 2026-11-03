@@ -1,0 +1,16 @@
+---
+// Обложка «Joy Division»: экран дискографии (Unknown Pleasures с плеером) на тёмном фоне.
+// Пока статика: анимацию (плеер, переключение альбомов) добавим после одобрения.
+import { siteUrl } from '../utils/url';
+interface Props { href?: string; label: string }
+const { href, label } = Astro.props;
+const Tile = href ? 'a' : 'div';
+---
+<Tile href={siteUrl(href)} class="project__cover jdv" aria-label={label}>
+  <img src={siteUrl('/images/joy-division/unknown.webp')} alt="" width="2227" height="1251" loading="lazy" decoding="async">
+</Tile>
+<style is:global>
+.jdv { display: block; position: relative; overflow: hidden; background: radial-gradient(90% 120% at 50% 0%, #3a3a3a 0%, #222 60%, #1a1a1a 100%); }
+.jdv img { position: absolute; left: 50%; top: 9.6%; width: 76%; height: auto; transform: translateX(-50%); border-radius: 12px 12px 0 0; box-shadow: 0 30px 70px #0000008c; }
+@media (max-width: 599px) { .jdv img { width: 86%; top: 12%; border-radius: 8px 8px 0 0; } }
+</style>

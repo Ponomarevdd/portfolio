@@ -10,7 +10,7 @@ export interface Project {
   featured?: boolean;
   href?: string;
   previews?: { src: string; alt: string; width: number; height: number }[];
-  live?: 'school' | 'medx' | 'rectors';
+  live?: 'school' | 'medx' | 'rectors' | 'joy-division';
   description: string;
   identity: { name: string; tagline: string; background: string; color: string };
 }
@@ -46,5 +46,14 @@ const rectors: Project = {
   alt: 'Старая главная страница сайта Совета ректоров сменяется новой',
   identity: { name: 'Совет ректоров', tagline: 'Редизайн сайта', background: '#e5efff', color: '#0066ff' },
 };
-export const projects: Project[] = [school, medx, rectors];
+const joyDivision: Project = {
+  slug: 'joy-division', href: '/cases/joy-division/', title: 'Joy Division: концепт сайта', year: 2019,
+  categories: ['UX/UI', 'Музыка'],
+  description: 'Концепт сайта о группе Joy Division: тёмная визуальная система, контрастная типографика и чёрно-белые портреты передают атмосферу пост-панка.',
+  live: 'joy-division',
+  cover: '/images/joy-division/unknown.webp', width: 2227, height: 1251,
+  alt: 'Раздел «Дискография»: альбом Unknown Pleasures и плеер',
+  identity: { name: 'Joy Division', tagline: 'Концепт сайта', background: '#222222', color: '#ffffff' },
+};
+export const projects: Project[] = [school, medx, rectors, joyDivision];
 export const allProjects = projects;
