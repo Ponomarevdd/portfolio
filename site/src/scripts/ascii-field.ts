@@ -12,6 +12,7 @@ import { asciiField as cfg } from './motion-settings';
 
 const GLYPHS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 const MAX_RIPPLES = 8;
+const CAPILLARY_LEVELS = 6; // сколько линий уровня шума становятся капиллярами
 
 const VERTEX = `
 attribute vec2 a_pos;
@@ -110,7 +111,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
   let dpr = 1, width = 0, height = 0, cellW = 0, cellH = 0, cols = 0, rows = 0;
   let cells = new Uint8Array(0), seed = new Float32Array(0), ink = new Float32Array(0), next = new Float32Array(0);
   // field — живое поле режима, line — где проходят капилляры, vx/vy — течение следа
-  let field = new Float32Array(0), raw = new Float32Array(0), line = new Float32Array(0), vx = new Float32Array(0), vy = new Float32Array(0);
+  let field = new Float32Array(0), raw = new Float32Array(0), lineWidth = new Float32Array(0), line = new Float32Array(0), vx = new Float32Array(0), vy = new Float32Array(0);
 
   // Атлас: все символы в одну строку, белым по прозрачному
   const buildAtlas = () => {
@@ -147,7 +148,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
     cells = new Uint8Array(cols * rows * 4);
     const n = cols * rows;
     ink = new Float32Array(n); next = new Float32Array(n);
-    field = new Float32Array(n); raw = new Float32Array(n); line = new Float32Array(n); vx = new Float32Array(n); vy = new Float32Array(n);
+    field = new Float32Array(n); raw = new Float32Array(n); lineWidth = new Float32Array(n); line = new Float32Array(n); vx = new Float32Array(n); vy = new Float32Array(n);
     seed = new Float32Array(n).map(() => Math.random());
     gl.uniform2f(u('u_grid'), cols, rows);
     if (reduced) draw(performance.now());
@@ -199,13 +200,11 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
           vx[i] = 70 + (w - .5) * 40; vy[i] = (w - .5) * 24;
         } else if (mode === 'capillary') {
           // Линии уровня гладкого, медленно текущего шума: извилистые, то тоньше, то толще
-          const X = cx / 340, Y = cy / 340, w = noise(X * .6 + ft * .02, Y * .6 - ft * .015);
+          const X = cx / 320, Y = cy / 320, w = noise(X * .6 + ft * .02, Y * .6 - ft * .015);
           const n = noise(X + w * 1.1 + ft * .01, Y - w * .7) * .75 + noise(X * 2.1 + 3, Y * 2.1 - ft * .02) * .25;
-          const f = (n * 5) % 1, dl = Math.min(f, 1 - f);
-          const th = .06 + .08 * w;
-          line[i] = 1 - smoothstep(th * .35, th, dl);
           raw[i] = n;
-          field[i] = line[i] * .3;
+          // Толщину линии считаем ниже, когда известен наклон шума; пока запоминаем, какой она будет здесь
+          lineWidth[i] = 4 + 10 * w;
         } else {
           // Крупные медленные пятна
           const X = cx / 380 + ft * .012, Y = cy / 380 - ft * .008;
@@ -221,10 +220,19 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
       for (let x = 0; x < cols; x++) {
         const i = y * cols + x;
         const xl = x > 0 ? i - 1 : i, xr = x < cols - 1 ? i + 1 : i, yu = y > 0 ? i - cols : i, yd = y < rows - 1 ? i + cols : i;
-        const gx = (raw[xr] - raw[xl]) / cellW, gy = (raw[yd] - raw[yu]) / cellH;
+        const gx = (raw[xr] - raw[xl]) / (2 * cellW), gy = (raw[yd] - raw[yu]) / (2 * cellH);
         const len = Math.hypot(gx, gy) + 1e-6;
-        const k = mode === 'estuary' ? Math.min(1, len * 240) : 1;
+        const k = mode === 'estuary' ? Math.min(1, len * 480) : 1;
         vx[i] = -gy / len * k; vy[i] = gx / len * k;
+        if (mode === 'capillary') {
+          // Расстояние до ближайшей линии уровня в пикселях: линии получаются сплошными и одной толщины
+          // независимо от крутизны шума, а толщина плавно гуляет вдоль линии
+          const f = (raw[i] * CAPILLARY_LEVELS) % 1, px = Math.min(f, 1 - f) / (CAPILLARY_LEVELS * len);
+          const half = lineWidth[i];
+          const l = 1 - smoothstep(half * .45, half, px);
+          line[i] = l;
+          field[i] = l * .3;
+        }
       }
     }
   }
@@ -299,7 +307,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
           s *= 1 - smoothstep(.4, 1, 1 - life);
           if (mode === 'capillary') s *= .35 + .65 * line[i];
           level += s;
-          if (mode === 'estuary') ink[i] = Math.min(1.5, ink[i] + s * .06);
+          if (mode === 'estuary') ink[i] = Math.min(1.5, ink[i] + s * .012);
         }
 
         // Символ меняется, когда клетка переходит на новую ступень яркости, и изредка сам
