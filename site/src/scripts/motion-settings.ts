@@ -52,7 +52,7 @@ export const gradientAscii = {
   characters: ' .:-=+*#%@',
   cellSize: 18,      // размер клетки с символом, px
   density: 0.9,      // сколько клеток заполнено символами, 0…1
-  glyphOpacity: 0.5,
+  glyphOpacity: 0.85,
   glow: 1.5,         // свечение вокруг символов, 0…2
   depthOfField: 0.1, // доля размытых символов, 0…1
   flicker: 0.3,      // мерцание символов, 0…1
@@ -66,6 +66,6 @@ export const gradientAscii = {
   scrambleRadius: 0.1,  // радиус перемешивания символов под курсором
   clickEffect: 'wave' as 'wave' | 'burst' | 'none',
   lightMode: false,
-  glyphColor: '#ffffff', // белые символы поверх градиента на светлой странице; '' — исходный цвет из градиента
+  glyphColor: '',    // пусто: символы подсвечивают фон цветом градиента, как в оригинале; '#ffffff' сделает их белыми
   background: 'transparent',
 };
