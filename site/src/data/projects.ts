@@ -51,8 +51,8 @@ const joyDivision: Project = {
   categories: ['Веб-дизайн', 'Музыка'],
   description: 'Концепт сайта о группе Joy Division: тёмная визуальная система, контрастная типографика и чёрно-белые портреты передают атмосферу пост-панка.',
   live: 'joy-division',
-  cover: '/images/joy-division/unknown.webp', width: 2227, height: 1251,
-  alt: 'Раздел «Дискография»: альбом Unknown Pleasures и плеер',
+  cover: '/images/joy-division/mosaic.webp', width: 2214, height: 1662,
+  alt: 'Экраны концепта: главная страница с фотографией группы и разделы сайта',
   identity: { name: 'Joy Division', tagline: 'Концепт сайта', background: '#222222', color: '#ffffff' },
 };
 export const projects: Project[] = [school, medx, rectors, joyDivision];
