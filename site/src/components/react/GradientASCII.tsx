@@ -399,8 +399,13 @@ void main() {
   // Правка для сайта: на светлой странице градиент рисуется так, будто под ним тёмный фон,
   // и плотно перекрывает страницу; белый проступает только в самом растворе по краю
   if (uBackdrop > 0.5 && uLight < 0.5) {
-    float cover = smoothstep(0.0, 0.45, base.a);
-    outColor = vec4(min(max(color.rgb, 0.0), vec3(cover)), cover);
+    // Там, где градиент плотный, берём «тёмный» вид; к краю переходим на чистый цвет без затемнения,
+    // иначе на переходе к белому появляется коричневая кромка
+    float cover = smoothstep(0.0, 0.6, base.a);
+    vec3 dark = clamp(color.rgb, 0.0, 1.0);
+    vec3 lit = clamp(color.rgb / max(base.a, 0.02), 0.0, 1.0);
+    vec3 tone = mix(lit, dark, smoothstep(0.35, 0.8, base.a));
+    outColor = vec4(tone * cover, cover);
     return;
   }
   color.rgb = clamp(color.rgb, 0.0, color.a);
