@@ -36,7 +36,7 @@ def rel(path, depth):
 for html in out.rglob('*.html'):
     depth = len(html.relative_to(out).parts) - 1
     s = re.sub(r"src:\s*url\(/_astro/[^;]+;", font_src, html.read_text())
-    s = re.sub(r'(href|src|poster|content)="(/(?!/)[^"#]*)"', lambda m: f'{m.group(1)}="{rel(m.group(2), depth)}"', s)
+    s = re.sub(r'(href|src|poster|content|component-url|renderer-url|before-hydration-url)="(/(?!/)[^"#]*)"', lambda m: f'{m.group(1)}="{rel(m.group(2), depth)}"', s)
     s = re.sub(r'url\((/(?!/)[^)]*)\)', lambda m: f'url({rel(m.group(1), depth)})', s)
     html.write_text(s)
 print('ok')
