@@ -35,6 +35,8 @@ export interface GradientASCIIProps extends Omit<HTMLAttributes<HTMLDivElement>,
   clickEffect?: GradientASCIIClickEffect;
   intro?: boolean;
   lightMode?: boolean;
+  /** Правка для сайта: цвет символов (например '#ffffff'); без него цвет берётся из градиента */
+  glyphColor?: string;
   fontFamily?: string;
   dpr?: number;
   style?: CSSProperties;
@@ -62,6 +64,7 @@ type Settings = {
   clickEffect: number;
   intro: boolean;
   lightMode: boolean;
+  glyphColor?: string;
   fontFamily: string;
   dpr?: number;
 };
@@ -287,6 +290,7 @@ uniform float uDepth;
 uniform float uGlyphTime;
 uniform float uSeedValue;
 uniform float uLight;
+uniform vec4 uTint;
 ${COMMON}
 float sampleGlyph(float index, vec2 local, vec2 coord, float soft) {
   float column = mod(index, uAtlasGrid.x);
@@ -325,6 +329,8 @@ vec4 glyphAt(vec2 px) {
   float alpha = uOpacity * present * cutoff * coverage * mix(1.0, 0.35 + 0.65 * level, 0.55) * (1.0 - focus * 0.5);
   if (uLight < 0.5) {
     vec3 light = field.rgb * 0.55 + vec3(0.03) * field.a;
+    // Правка для сайта: символы заданного цвета (белые) поверх градиента на светлой странице
+    if (uTint.a > 0.0) return vec4(uTint.rgb * alpha * field.a, alpha * field.a);
     return vec4(light * alpha, 0.6 * field.a * alpha);
   }
   vec3 ink = visible * 0.8;
@@ -372,7 +378,9 @@ void main() {
   vec4 glyph = glyphAt(gl_FragCoord.xy);
   vec4 halo = texture(uHalo, vUv) * uGlow;
   vec4 color;
-  if (uLight < 0.5) {
+  if (uLight < 0.5 && uTint.a > 0.0) {
+    color = glyph + (base + halo) * (1.0 - glyph.a);
+  } else if (uLight < 0.5) {
     color = base + glyph + halo;
   } else {
     color = glyph + base * (1.0 - glyph.a);
@@ -520,6 +528,7 @@ const GradientASCII = ({
   clickEffect = 'wave',
   intro = true,
   lightMode = false,
+  glyphColor,
   fontFamily = DEFAULT_FONT,
   dpr,
   className = '',
@@ -552,6 +561,7 @@ const GradientASCII = ({
     clickEffect: CLICK_EFFECTS[clickEffect] ?? 1,
     intro,
     lightMode,
+    glyphColor,
     fontFamily: fontFamily || DEFAULT_FONT,
     dpr
   };
@@ -646,7 +656,7 @@ const GradientASCII = ({
       s.colors.forEach((color, i) => ramp.set(toLab(parse(color)), i * 3));
     };
 
-    const bindGlyphs = (program: Program, width: number, height: number) => {
+    const bindGlyphs = (program: Program, width: number, height: number, tinted = false) => {
       if (!atlas) return;
       const s = settingsRef.current;
       const u = program.uniforms;
@@ -677,6 +687,9 @@ const GradientASCII = ({
       gl.uniform1f(u.uGlyphTime, glyphTime);
       gl.uniform1f(u.uSeedValue, s.variation);
       gl.uniform1f(u.uLight, s.lightMode ? 1 : 0);
+      // Свечение считается от исходного цвета, белыми становятся только сами символы
+      const tint = tinted && s.glyphColor ? parse(s.glyphColor) : null;
+      gl.uniform4f(u.uTint, tint ? tint[0] : 0, tint ? tint[1] : 0, tint ? tint[2] : 0, tint ? 1 : 0);
     };
 
     const draw = () => {
@@ -735,7 +748,7 @@ const GradientASCII = ({
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.useProgram(composite.program);
-      bindGlyphs(composite, canvas.width, canvas.height);
+      bindGlyphs(composite, canvas.width, canvas.height, true);
       const cu = composite.uniforms;
       gl.activeTexture(gl.TEXTURE3);
       gl.bindTexture(gl.TEXTURE_2D, haloA.textures[0]);
