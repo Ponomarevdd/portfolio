@@ -199,13 +199,17 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
         for (let x = Math.max(0, gx - rc); x <= Math.min(cols - 1, gx + rc); x++) {
           const ox = (x + .5) * cellW - px, oy = (y + .5) * cellH - py, d = Math.hypot(ox, oy) / radius;
           if (d >= 1) continue;
-          // Вдоль движения и немного в стороны от пути, как воздух за рукой
-          const k = (1 - d * d) * per, side = d > .05 ? .5 : 0;
+          // Облака расходятся в стороны от пути и чуть тянутся за курсором, как воздух за рукой.
+          // Сдвиг плавно сходит на нет к краю, поэтому у следа нет резкой границы
+          const k = (1 - d * d) ** 2 * per;
           const i = y * cols + x;
-          pushX[i] += k * (ux + side * ox / (d * radius));
-          pushY[i] += k * (uy + side * oy / (d * radius));
+          // Чем дальше клетка от линии движения, тем сильнее её уносит вбок; на самой линии облака
+          // тянутся за курсором. Сдвиг меняется плавно, поэтому разрыва посередине нет
+          const across = (-uy * ox + ux * oy) / radius;
+          pushX[i] += k * (.55 * ux + .7 * across * -uy);
+          pushY[i] += k * (.55 * uy + .7 * across * ux);
           const m = Math.hypot(pushX[i], pushY[i]);
-          if (m > 160) { pushX[i] *= 160 / m; pushY[i] *= 160 / m; }
+          if (m > 90) { pushX[i] *= 90 / m; pushY[i] *= 90 / m; }
         }
       }
     }
@@ -224,12 +228,12 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
       for (let x = 0; x < cols; x++) {
         const i = y * cols + x, cx = (x + .5) * cellW;
         if (mode === 'wind') {
-          // Вытянутые по ветру облака, слегка завихрённые; курсор сдвигает их и прореживает
-          const px = pushX[i], py = pushY[i], pm = Math.hypot(px, py);
+          // Вытянутые по ветру облака, слегка завихрённые; курсор раздвигает их, ничего не стирая
+          const px = pushX[i], py = pushY[i];
           const X = (cx - px - ft * 38) / (cfg.cloudSize * cfg.cloudStretch), Y = (cy - py) / cfg.cloudSize;
           const w = noise(X * .8 + 3.1, Y * .8 - ft * .05);
           const lo = 1 - cfg.cloudCover;
-          field[i] = smoothstep(lo, lo + .35, fbm(X + w * .9, Y + w * .5)) * cfg.cloudOpacity * (1 - .65 * smoothstep(10, 110, pm));
+          field[i] = smoothstep(lo, lo + .35, fbm(X + w * .9, Y + w * .5)) * cfg.cloudOpacity;
           vx[i] = 70 + (w - .5) * 40; vy[i] = (w - .5) * 24;
         } else if (mode === 'capillary') {
           // Линии уровня гладкого, медленно текущего шума: извилистые, то тоньше, то толще
@@ -389,11 +393,13 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
   }
 
   let frame = 0, visible = true;
+  // Цикл не останавливается совсем: вне экрана кадры просто пропускаются. Браузер сам не крутит его в
+  // скрытой вкладке, а если остановить цикл и ждать события, он иногда так и не просыпается
   const loop = (now: number) => {
-    draw(now);
-    frame = visible && !document.hidden ? requestAnimationFrame(loop) : 0;
+    if (visible && !document.hidden) draw(now);
+    frame = requestAnimationFrame(loop);
   };
-  const kick = () => { if (!frame && !reduced && visible && !document.hidden) frame = requestAnimationFrame(loop); };
+  const kick = () => { if (!frame && !reduced) frame = requestAnimationFrame(loop); };
 
   const local = (e: PointerEvent) => {
     const box = canvas.getBoundingClientRect();
