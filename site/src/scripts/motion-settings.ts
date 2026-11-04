@@ -64,6 +64,6 @@ export const gradientAscii = {
   grain: 0.08,
   scrambleRadius: 0.02, // радиус перемешивания символов под курсором
   clickEffect: 'wave' as 'wave' | 'burst' | 'none',
-  lightMode: true,  // светлый режим компонента: символы-чернила на белом
+  lightMode: false, // false: светлые символы поверх градиента (фон страницы всё равно белый)
   background: '#ffffff',
 };
