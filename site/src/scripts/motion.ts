@@ -95,12 +95,15 @@ function setupMenu(animated: boolean) {
 
 // На главной с фоном GradientASCII всё ждёт градиент: сначала он, потом приветствие, меню и кейсы первого экрана.
 // Очередь стартует, когда градиент запустился и все анимации в неё уже добавлены
-const gradientIntro = document.documentElement.classList.contains('has-gradient-ascii');
+// После первого показа за сессию (класс intro-seen) вступление не играет: анимации сразу стоят в конечном виде
+const introSeen = document.documentElement.classList.contains('intro-seen');
+const gradientIntro = document.documentElement.classList.contains('has-gradient-ascii') && !introSeen;
 const introQueue: [gsap.core.Tween, number][] = [];
 let introStarted = !gradientIntro;
 let gradientReady = false;
 let queueReady = false;
 const startAt = (tween: gsap.core.Tween, at: number) => {
+  if (introSeen) return tween.progress(1);
   if (!introStarted) { tween.pause(); introQueue.push([tween, at]); }
   return tween;
 };
@@ -124,6 +127,7 @@ media.add('(prefers-reduced-motion: no-preference)', () => {
     startAt(gsap.from('.header', { y: -12, opacity: 0, duration: .7, ease: 'power2.out', clearProps: 'transform,opacity' }), introOrder.menu);
   }
   gsap.utils.toArray<HTMLElement>('.project').forEach((project, index) => {
+    if (introSeen && project.getBoundingClientRect().top < innerHeight) return;
     if (gradientIntro && project.getBoundingClientRect().top < innerHeight) {
       startAt(gsap.fromTo(project, { y: 32, opacity: 0 }, {
         y: 0, opacity: 1, duration: .9, ease: 'power3.out', clearProps: 'transform',

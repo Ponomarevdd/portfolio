@@ -18,5 +18,7 @@ export default function GradientHero() {
     return () => window.removeEventListener('gradient-ascii:settings', onChange);
   }, []);
   const { background, ...props } = settings;
-  return <GradientASCII {...props} style={{ background }} />;
+  // Повторный заход на главную за сессию: градиент сразу полностью проявлен
+  const seen = document.documentElement.classList.contains('intro-seen');
+  return <GradientASCII {...props} intro={seen ? false : props.intro} style={{ background }} />;
 }

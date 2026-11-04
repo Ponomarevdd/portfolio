@@ -123,3 +123,6 @@ main { position: relative; z-index: 1; padding-top: 94px; padding-bottom: 64px; 
 html { scrollbar-gutter: stable; }
 .is-motion .project { opacity: 0; }
 .is-motion .intro h1 { visibility: hidden; }
+/* Повторный заход на главную за сессию: всё сразу на месте (components/GradientAsciiHero.astro) */
+.is-motion.intro-seen .project { opacity: 1; }
+.is-motion.intro-seen .intro h1 { visibility: visible; }
