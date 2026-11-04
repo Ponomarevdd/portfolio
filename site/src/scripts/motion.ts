@@ -168,11 +168,6 @@ document.fonts.ready.then(() => {
       introStarted = true;
       introQueue.forEach(([tween, at]) => gsap.delayedCall(at, () => tween.play()));
     };
-    const introTimer = gradientIntro ? window.setTimeout(beginIntro, 2500) : 0;
-    if (gradientIntro) {
-      if ((window as Window & { gradientAsciiReady?: boolean }).gradientAsciiReady) beginIntro();
-      else window.addEventListener('gradient-ascii:ready', beginIntro, { once: true });
-    }
     const split = title ? SplitText.create('.intro h1', {
       type: 'lines,words,chars',
       autoSplit: true,
@@ -203,6 +198,12 @@ document.fonts.ready.then(() => {
         scrollTrigger: { trigger: project, start: 'top 96%', once: true },
       });
     });
+    // Очередь собрана, теперь ждём градиент (или он уже стартовал, пока грузились шрифты)
+    const introTimer = gradientIntro ? window.setTimeout(beginIntro, 2500) : 0;
+    if (gradientIntro) {
+      if ((window as Window & { gradientAsciiReady?: boolean }).gradientAsciiReady) beginIntro();
+      else window.addEventListener('gradient-ascii:ready', beginIntro, { once: true });
+    }
     const pointerEnabled = matchMedia('(hover: hover) and (pointer: fine)').matches;
     const enterTitle = () => { if (textReady) measureLetters(); };
     const moveTitle = (event: PointerEvent) => {
