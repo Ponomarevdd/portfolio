@@ -1,0 +1,33 @@
+---
+import GradientHero from './react/GradientHero';
+---
+<div class="gradient-ascii-hero" aria-hidden="true"><GradientHero client:only="react" /></div>
+<style>
+  .gradient-ascii-hero { position: absolute; z-index: 0; inset: 0 0 auto; height: 100vh; overflow: hidden; pointer-events: none; }
+  :global(.has-gradient-ascii .gradient) { display: none; }
+  :global(.has-gradient-ascii .intro) { position: relative; min-height: clamp(340px, 50vh, 500px); padding: 48px 32px 96px; display: flex; align-items: center; justify-content: center; }
+  /* Приветствие на градиенте: 36px на широких экранах, плавно меньше на узких; тёплое свечение,
+     чтобы белый текст «светился» вместе с солнцем */
+  :global(.has-gradient-ascii #intro-title) {
+    color: #fff; font-size: clamp(24px, 3vw, 36px); line-height: 1.3; letter-spacing: 0; max-width: none;
+    text-shadow: 0 0 8px rgb(255 240 215 / .4), 0 0 22px rgb(255 190 110 / .32), 0 0 44px rgb(255 120 30 / .2);
+  }
+</style>
+<script>
+  document.documentElement.classList.add('has-gradient-ascii');
+  const hero = document.querySelector<HTMLElement>('.gradient-ascii-hero');
+  const intro = document.querySelector<HTMLElement>('#intro');
+  if (hero && intro) {
+    // Высота фона подбирается так, чтобы приветствие стояло в оранжевой полосе (~38% высоты).
+    // Низ градиента может заходить на кейсы
+    const title = document.querySelector<HTMLElement>('#intro-title');
+    const fit = () => {
+      const bottom = intro.offsetTop + intro.offsetHeight;
+      const box = title?.getBoundingClientRect();
+      const center = box ? box.top + scrollY + box.height / 2 : bottom / 2;
+      hero.style.height = `${Math.max(bottom, Math.round(center / 0.38))}px`;
+    };
+    new ResizeObserver(fit).observe(intro);
+    fit();
+  }
+</script>

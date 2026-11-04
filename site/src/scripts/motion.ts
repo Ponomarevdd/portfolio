@@ -1,7 +1,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { letterMotion, menuMotion } from './motion-settings';
+import { introOrder, letterMotion, menuMotion } from './motion-settings';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 const media = gsap.matchMedia();
@@ -93,9 +93,43 @@ function setupMenu(animated: boolean) {
   };
 }
 
-// Карточки проектов появляются сразу, не дожидаясь шрифтов. Меню между страницами не анимируем: оно стоит на месте
+// На главной с фоном GradientASCII всё ждёт градиент: сначала он, потом приветствие, меню и кейсы первого экрана.
+// Очередь стартует, когда градиент запустился и все анимации в неё уже добавлены
+const gradientIntro = document.documentElement.classList.contains('has-gradient-ascii');
+const introQueue: [gsap.core.Tween, number][] = [];
+let introStarted = !gradientIntro;
+let gradientReady = false;
+let queueReady = false;
+const startAt = (tween: gsap.core.Tween, at: number) => {
+  if (!introStarted) { tween.pause(); introQueue.push([tween, at]); }
+  return tween;
+};
+const maybeBeginIntro = () => {
+  if (introStarted || !gradientReady || !queueReady) return;
+  introStarted = true;
+  introQueue.forEach(([tween, at]) => gsap.delayedCall(at, () => tween.play()));
+};
+const markGradientReady = () => { gradientReady = true; maybeBeginIntro(); };
+const introTimer = gradientIntro ? window.setTimeout(markGradientReady, 2500) : 0;
+if (gradientIntro) {
+  if ((window as Window & { gradientAsciiReady?: boolean }).gradientAsciiReady) gradientReady = true;
+  else window.addEventListener('gradient-ascii:ready', markGradientReady, { once: true });
+}
+// Меню между страницами не анимируем: оно стоит на месте. Исключение — первый заход на главную с градиентом
+const cameFromSite = (() => { try { return new URL(document.referrer).origin === location.origin; } catch { return false; } })();
+
+// Карточки проектов появляются сразу, не дожидаясь шрифтов
 media.add('(prefers-reduced-motion: no-preference)', () => {
-  gsap.utils.toArray<HTMLElement>('.project').forEach((project) => {
+  if (gradientIntro && !cameFromSite) {
+    startAt(gsap.from('.header', { y: -12, opacity: 0, duration: .7, ease: 'power2.out', clearProps: 'transform,opacity' }), introOrder.menu);
+  }
+  gsap.utils.toArray<HTMLElement>('.project').forEach((project, index) => {
+    if (gradientIntro && project.getBoundingClientRect().top < innerHeight) {
+      startAt(gsap.fromTo(project, { y: 32, opacity: 0 }, {
+        y: 0, opacity: 1, duration: .9, ease: 'power3.out', clearProps: 'transform',
+      }), introOrder.cases + index * .12);
+      return;
+    }
     gsap.fromTo(project, { y: 32, opacity: 0 }, {
       y: 0, opacity: 1, duration: .9, ease: 'power3.out', clearProps: 'transform',
       scrollTrigger: { trigger: project, start: 'top 96%', once: true },
@@ -174,11 +208,11 @@ document.fonts.ready.then(() => {
         textReady = false;
         letterCenters = [];
         gsap.set(title, { visibility: 'visible' });
-        return gsap.from(self.words, {
+        return startAt(gsap.from(self.words, {
           yPercent: 110, opacity: 0, duration: letterMotion.revealDuration,
           stagger: letterMotion.revealStagger, ease: 'power3.out', delay: letterMotion.revealDelay,
           onComplete() { textReady = true; },
-        });
+        }), introOrder.title);
       },
     }) : null;
     const pointerEnabled = matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -203,6 +237,8 @@ document.fonts.ready.then(() => {
       split?.revert();
     };
   });
+  queueReady = true;
+  maybeBeginIntro();
 });
 
 // Живые обложки работают, только пока видны: вне экрана их анимации стоят и не отнимают кадры у прокрутки
@@ -224,5 +260,7 @@ if (import.meta.hot) import.meta.hot.dispose(() => {
   media.revert();
   observer.disconnect();
   covers.disconnect();
+  window.clearTimeout(introTimer);
+  window.removeEventListener('gradient-ascii:ready', markGradientReady);
   document.removeEventListener('visibilitychange', updateBackground);
 });

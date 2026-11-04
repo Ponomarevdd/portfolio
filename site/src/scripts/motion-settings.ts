@@ -20,3 +20,36 @@ export const menuMotion = {
   magnetY: 8,             // максимальное смещение по вертикали, px
   magnetDuration: .5,     // плавность движения меню, секунды
 };
+
+// Фон GradientASCII из React Bits на главной. Значения с reactbits.dev, которые прислал Дмитрий
+export const gradientAscii = {
+  colors: ['#ff6100', '#fff8e8', '#ffd245', '#ff8a39'],
+  shape: 'horizon' as 'horizon' | 'pinch' | 'rise' | 'eclipse',
+  characters: ' .:-=+*#%@',
+  cellSize: 18,      // размер клетки с символом, px
+  density: 0.9,      // сколько клеток заполнено символами, 0…1
+  glyphOpacity: 0.5,
+  glow: 1.5,         // свечение вокруг символов, 0…2
+  depthOfField: 0.1, // доля размытых символов, 0…1
+  flicker: 0.3,      // мерцание символов, 0…1
+  softness: 1,       // мягкость края горизонта, 0…1
+  scale: 1,
+  flow: 0,           // волнистость поля, 0…2
+  speed: 0.2,
+  gradientOpacity: 0.9,
+  grain: 0.08,
+  variation: 20,     // другой случайный узор символов
+  scrambleRadius: 0.1,  // радиус перемешивания символов под курсором
+  clickEffect: 'wave' as 'wave' | 'burst' | 'none',
+  lightMode: true,
+  glyphColor: '',    // пусто: символы подсвечивают фон цветом градиента, как в оригинале; '#ffffff' сделает их белыми
+  lightBackdrop: false,// градиент выглядит как на тёмном фоне и перекрывает светлую страницу (наша правка)
+  background: 'transparent',
+};
+
+// Очередь появления на главной с градиентом: секунды от старта градиента
+export const introOrder = {
+  title: 0.8,  // приветствие
+  menu: 1.5,   // меню
+  cases: 2.0,  // кейсы первого экрана (каждый следующий +0.12 с)
+};

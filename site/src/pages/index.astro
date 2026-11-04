@@ -7,13 +7,14 @@ import '../styles/pages.css';
 import ActionButton from '../components/ActionButton.astro';
 import '../styles/gradient.css';
 import Gradient from '../components/Gradient.astro';
+import GradientAsciiHero from '../components/GradientAsciiHero.astro';
 import Navigation from '../components/Navigation.astro';
 import ContactDialog from '../components/ContactDialog.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { projects } from '../data/projects';
 ---
 <!doctype html>
-<html lang="ru">
+<html lang="ru" class="has-gradient-ascii">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,6 +25,7 @@ import { projects } from '../data/projects';
   </head>
   <body>
     <Gradient />
+    <GradientAsciiHero />
     <Navigation />
     <ContactDialog />
     <main>
