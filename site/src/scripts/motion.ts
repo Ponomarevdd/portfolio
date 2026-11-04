@@ -1,7 +1,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { letterMotion, menuMotion } from './motion-settings';
+import { introOrder, letterMotion, menuMotion } from './motion-settings';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 const media = gsap.matchMedia();
@@ -155,6 +155,24 @@ document.fonts.ready.then(() => {
       });
       activeLetters = next;
     };
+    // На главной с фоном GradientASCII всё ждёт градиент: сначала он, потом приветствие, меню и кейсы
+    const gradientIntro = document.documentElement.classList.contains('has-gradient-ascii');
+    let introStarted = !gradientIntro;
+    const introQueue: [gsap.core.Tween, number][] = [];
+    const startAt = (tween: gsap.core.Tween, at: number) => {
+      if (!introStarted) { tween.pause(); introQueue.push([tween, at]); }
+      return tween;
+    };
+    const beginIntro = () => {
+      if (introStarted) return;
+      introStarted = true;
+      introQueue.forEach(([tween, at]) => gsap.delayedCall(at, () => tween.play()));
+    };
+    const introTimer = gradientIntro ? window.setTimeout(beginIntro, 2500) : 0;
+    if (gradientIntro) {
+      if ((window as Window & { gradientAsciiReady?: boolean }).gradientAsciiReady) beginIntro();
+      else window.addEventListener('gradient-ascii:ready', beginIntro, { once: true });
+    }
     const split = title ? SplitText.create('.intro h1', {
       type: 'lines,words,chars',
       autoSplit: true,
@@ -163,15 +181,22 @@ document.fonts.ready.then(() => {
         chars = self.chars as HTMLElement[];
         textReady = false;
         letterCenters = [];
-        return gsap.from(self.words, {
+        return startAt(gsap.from(self.words, {
           yPercent: 110, opacity: 0, duration: letterMotion.revealDuration,
           stagger: letterMotion.revealStagger, ease: 'power3.out', delay: letterMotion.revealDelay,
           onComplete() { textReady = true; },
-        });
+        }), introOrder.title);
       },
     }) : null;
-    gsap.from('.header', { y: -12, opacity: 0, duration: .7, ease: 'power2.out', clearProps: 'transform,opacity' });
-    gsap.utils.toArray<HTMLElement>('.project').forEach((project) => {
+    startAt(gsap.from('.header', { y: -12, opacity: 0, duration: .7, ease: 'power2.out', clearProps: 'transform,opacity' }), introOrder.menu);
+    gsap.utils.toArray<HTMLElement>('.project').forEach((project, index) => {
+      // Кейсы первого экрана на главной с градиентом появляются последними в общей очереди
+      if (gradientIntro && project.getBoundingClientRect().top < innerHeight) {
+        startAt(gsap.from(project, {
+          y: 32, opacity: 0, duration: .9, ease: 'power3.out', clearProps: 'transform,opacity',
+        }), introOrder.cases + index * .12);
+        return;
+      }
       gsap.from(project, {
         y: 32, opacity: 0, duration: .9, ease: 'power3.out',
         clearProps: 'transform,opacity',
@@ -191,6 +216,8 @@ document.fonts.ready.then(() => {
       title?.addEventListener('pointerleave', releaseLetters);
     }
     return () => {
+      window.clearTimeout(introTimer);
+      window.removeEventListener('gradient-ascii:ready', beginIntro);
       cleanupMenu();
       title?.removeEventListener('pointerenter', enterTitle);
       title?.removeEventListener('pointermove', moveTitle);

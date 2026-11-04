@@ -8,6 +8,11 @@ type Settings = typeof gradientAscii;
 export default function GradientHero() {
   const [settings, setSettings] = useState<Settings>(gradientAscii);
   useEffect(() => {
+    // Сигнал анимации страницы: градиент запустился, можно показывать остальное
+    (window as Window & { gradientAsciiReady?: boolean }).gradientAsciiReady = true;
+    window.dispatchEvent(new Event('gradient-ascii:ready'));
+  }, []);
+  useEffect(() => {
     const onChange = (event: Event) => setSettings({ ...(event as CustomEvent<Settings>).detail });
     window.addEventListener('gradient-ascii:settings', onChange);
     return () => window.removeEventListener('gradient-ascii:settings', onChange);
