@@ -67,5 +67,6 @@ export const gradientAscii = {
   clickEffect: 'wave' as 'wave' | 'burst' | 'none',
   lightMode: false,
   glyphColor: '',    // пусто: символы подсвечивают фон цветом градиента, как в оригинале; '#ffffff' сделает их белыми
+  lightBackdrop: true, // градиент выглядит как на тёмном фоне и перекрывает светлую страницу (наша правка)
   background: 'transparent',
 };

@@ -37,6 +37,8 @@ export interface GradientASCIIProps extends Omit<HTMLAttributes<HTMLDivElement>,
   lightMode?: boolean;
   /** Правка для сайта: цвет символов (например '#ffffff'); без него цвет берётся из градиента */
   glyphColor?: string;
+  /** Правка для сайта: тёмный вид градиента поверх светлой страницы */
+  lightBackdrop?: boolean;
   fontFamily?: string;
   dpr?: number;
   style?: CSSProperties;
@@ -65,6 +67,7 @@ type Settings = {
   intro: boolean;
   lightMode: boolean;
   glyphColor?: string;
+  lightBackdrop: boolean;
   fontFamily: string;
   dpr?: number;
 };
@@ -372,6 +375,7 @@ uniform float uGlow;
 uniform float uGradient;
 uniform float uGrain;
 uniform float uFrame;
+uniform float uBackdrop;
 in vec2 vUv;
 out vec4 outColor;
 ${GLYPHS}
@@ -392,6 +396,13 @@ void main() {
   float body = clamp(color.a, 0.0, 1.0);
   color.rgb += grain * (0.25 + body) * 0.5;
   color.a = clamp(color.a, 0.0, 1.0);
+  // Правка для сайта: на светлой странице градиент рисуется так, будто под ним тёмный фон,
+  // и плотно перекрывает страницу; белый проступает только в самом растворе по краю
+  if (uBackdrop > 0.5 && uLight < 0.5) {
+    float cover = smoothstep(0.0, 0.45, base.a);
+    outColor = vec4(min(max(color.rgb, 0.0), vec3(cover)), cover);
+    return;
+  }
   color.rgb = clamp(color.rgb, 0.0, color.a);
   outColor = color;
 }`;
@@ -531,6 +542,7 @@ const GradientASCII = ({
   intro = true,
   lightMode = false,
   glyphColor,
+  lightBackdrop = false,
   fontFamily = DEFAULT_FONT,
   dpr,
   className = '',
@@ -564,6 +576,7 @@ const GradientASCII = ({
     intro,
     lightMode,
     glyphColor,
+    lightBackdrop,
     fontFamily: fontFamily || DEFAULT_FONT,
     dpr
   };
@@ -758,6 +771,7 @@ const GradientASCII = ({
       gl.uniform1f(cu.uGlow, glowing ? s.glow : 0);
       gl.uniform1f(cu.uGradient, s.gradientOpacity);
       gl.uniform1f(cu.uGrain, s.grain);
+      gl.uniform1f(cu.uBackdrop, s.lightBackdrop ? 1 : 0);
       gl.uniform1f(cu.uFrame, frameSeed);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
