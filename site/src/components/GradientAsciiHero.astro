@@ -3,8 +3,15 @@ import GradientHero from './react/GradientHero';
 ---
 <div class="gradient-ascii-hero" aria-hidden="true"><GradientHero client:only="react" /></div>
 <style>
-  .gradient-ascii-hero { position: absolute; z-index: 0; inset: 0 0 auto; height: 100vh; background: #fff; overflow: hidden; pointer-events: none; }
+  .gradient-ascii-hero { position: absolute; z-index: 0; inset: 0 0 auto; height: 100vh; background: var(--dark-page); overflow: hidden; pointer-events: none; }
   :global(.has-gradient-ascii .gradient) { display: none; }
+  /* Пробная тёмная главная: почти чёрный фон, светлый текст */
+  :global(:root.has-gradient-ascii) { --dark-page: #0e0d10; background: var(--dark-page); color: #f1f1f4; --text-secondary: #9a9ba6; --tag-background: #1b1a1f; }
+  :global(.has-gradient-ascii .project__categories li) { color: #a9aab4; border-color: #2a2930; }
+  :global(.has-gradient-ascii .navigation) { border-color: #ffffff24; background: #0e0d1099; box-shadow: inset 0 1px 0 #ffffff24, 0 4px 22px #00000040; }
+  :global(.has-gradient-ascii .navigation__indicator) { background: #ffffff26; box-shadow: inset 0 1px 0 #ffffff33; }
+  :global(.has-gradient-ascii .navigation a:hover), :global(.has-gradient-ascii .navigation button:hover) { background: #ffffff1f; }
+  :global(.has-gradient-ascii ::selection) { background: #ff610066; }
   :global(.has-gradient-ascii .intro) { position: relative; min-height: clamp(420px, 66vh, 680px); display: flex; align-items: center; justify-content: center; }
 </style>
 <script>

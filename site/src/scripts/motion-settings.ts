@@ -51,10 +51,10 @@ export const gradientAscii = {
   shape: 'horizon' as 'horizon' | 'pinch' | 'rise' | 'eclipse',
   characters: ' .:-=+*#%@',
   cellSize: 18,      // размер клетки с символом, px
-  density: 1,        // сколько клеток заполнено символами, 0…1
+  density: 0.9,      // сколько клеток заполнено символами, 0…1
   glyphOpacity: 0.85,
   glow: 1.5,         // свечение вокруг символов, 0…2
-  depthOfField: 0.11,// доля размытых символов, 0…1
+  depthOfField: 0.1, // доля размытых символов, 0…1
   flicker: 0.3,      // мерцание символов, 0…1
   softness: 1,       // мягкость края горизонта, 0…1
   scale: 1,
@@ -62,9 +62,10 @@ export const gradientAscii = {
   speed: 0.2,
   gradientOpacity: 0.9,
   grain: 0.08,
-  scrambleRadius: 0.02, // радиус перемешивания символов под курсором
+  variation: 20,     // другой случайный узор символов
+  scrambleRadius: 0.1,  // радиус перемешивания символов под курсором
   clickEffect: 'wave' as 'wave' | 'burst' | 'none',
   lightMode: false,
-  glyphColor: '#ffffff', // символы белые поверх градиента (наша правка компонента)
-  background: '#ffffff',
+  glyphColor: '',    // пусто: символы светятся цветом градиента, как в оригинале. '#ffffff' сделает их белыми
+  background: '#0e0d10',
 };
