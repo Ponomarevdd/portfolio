@@ -27,8 +27,15 @@ import GradientHero from './react/GradientHero';
   const hero = document.querySelector<HTMLElement>('.gradient-ascii-hero');
   const intro = document.querySelector<HTMLElement>('#intro');
   if (hero && intro) {
-    // Фон кончается вместе с вводкой
-    const fit = () => { hero.style.height = `${intro.offsetTop + intro.offsetHeight}px`; };
+    // Высота фона подбирается так, чтобы приветствие стояло в оранжевой полосе (~38% высоты).
+    // Низ градиента может заходить на кейсы
+    const title = document.querySelector<HTMLElement>('#intro-title');
+    const fit = () => {
+      const bottom = intro.offsetTop + intro.offsetHeight;
+      const box = title?.getBoundingClientRect();
+      const center = box ? box.top + scrollY + box.height / 2 : bottom / 2;
+      hero.style.height = `${Math.max(bottom, Math.round(center / 0.38))}px`;
+    };
     new ResizeObserver(fit).observe(intro);
     fit();
   }
