@@ -44,3 +44,25 @@ export const asciiField = {
   rippleLife: 2.3,      // сколько секунд живёт волна
   quietPadding: 28,     // пустое поле вокруг заголовка и меню, px
 };
+
+// Фон GradientASCII из React Bits на главной. Значения с reactbits.dev, которые прислал Дмитрий
+export const gradientAscii = {
+  colors: ['#ff6100', '#fff8e8', '#ffd245', '#ff8a39'],
+  shape: 'horizon' as 'horizon' | 'pinch' | 'rise' | 'eclipse',
+  characters: ' .:-=+*#%@',
+  cellSize: 18,      // размер клетки с символом, px
+  density: 1,        // сколько клеток заполнено символами, 0…1
+  glyphOpacity: 0.85,
+  glow: 1.5,         // свечение вокруг символов, 0…2
+  depthOfField: 0.11,// доля размытых символов, 0…1
+  flicker: 0.3,      // мерцание символов, 0…1
+  softness: 1,       // мягкость края горизонта, 0…1
+  scale: 1,
+  flow: 0,           // волнистость поля, 0…2
+  speed: 0.2,
+  gradientOpacity: 0.9,
+  grain: 0.08,
+  scrambleRadius: 0.02, // радиус перемешивания символов под курсором
+  clickEffect: 'wave' as 'wave' | 'burst' | 'none',
+  background: '#120f17',
+};

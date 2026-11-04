@@ -1,0 +1,21 @@
+---
+import GradientHero from './react/GradientHero';
+---
+<div class="gradient-ascii-hero" aria-hidden="true"><GradientHero client:only="react" /></div>
+<style>
+  .gradient-ascii-hero { position: absolute; z-index: 0; inset: 0 0 auto; height: 100vh; background: #120f17; overflow: hidden; pointer-events: none; }
+  :global(.has-gradient-ascii .gradient) { display: none; }
+  :global(.has-gradient-ascii .intro) { position: relative; min-height: clamp(420px, 66vh, 680px); display: flex; align-items: center; justify-content: center; }
+  :global(.has-gradient-ascii #intro-title) { color: #fff; }
+</style>
+<script>
+  document.documentElement.classList.add('has-gradient-ascii');
+  const hero = document.querySelector<HTMLElement>('.gradient-ascii-hero');
+  const intro = document.querySelector<HTMLElement>('#intro');
+  if (hero && intro) {
+    // Фон кончается вместе с вводкой
+    const fit = () => { hero.style.height = `${intro.offsetTop + intro.offsetHeight}px`; };
+    new ResizeObserver(fit).observe(intro);
+    fit();
+  }
+</script>
