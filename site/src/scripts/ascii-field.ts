@@ -1,20 +1,17 @@
-// Фон из символов (components/AsciiField.astro). Каждая клетка сетки — буква или цифра, видно их по всему
-// фону, но бледно; яркость клетки задаёт живое поле, и в тёмных местах символы проступают. Три режима:
-// Wind — по фону тянутся вытянутые облака, будто ветер; след курсора сносит ветром, клик пускает
-// кривую рваную волну. Capillary — фон прорезан тонкими извилистыми линиями, как капилляры; курсор
-// подсвечивает линии рядом, и свет бежит по ним. Estuary — крупные пятна, курсор оставляет чернила,
-// они текут протоками и тают. Символ в клетке меняется, когда клетка заметно темнеет или светлеет,
-// и изредка сам по себе, поэтому смена идёт волнами вслед за движением, а не мельтешит.
-// Каждый кадр скрипт считает для клеток символ и яркость, кладёт их в маленькую текстуру, а WebGL
-// рисует символы из атласа одним проходом. Под заголовком и меню символы гаснут. Без WebGL канвас
-// не включается и остаётся обычный градиент.
-import { asciiField as cfg, asciiFieldModes } from './motion-settings';
+// Фон из символов (components/AsciiField.astro), режим Wind. Каждая клетка сетки — буква или цифра;
+// ветер гонит по фону вытянутые облака, и где облако, там символы проступают. Курсор разгоняет облака:
+// сдвигает их по ходу своего движения, ничего не рисуя и не стирая. Клик пускает кривую рваную волну.
+// Символ в клетке меняется, когда клетка заметно темнеет или светлеет, и изредка сам по себе, поэтому
+// смена идёт вслед за движением, а не мельтешит. Каждый кадр скрипт считает для клеток символ и яркость,
+// кладёт их в маленькую текстуру, а WebGL рисует символы из атласа одним проходом. Под заголовком и меню
+// символы гаснут. Без WebGL канвас не включается и остаётся обычный градиент.
+import { asciiField as cfg } from './motion-settings';
 
 const GLYPHS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 // Строчных букв больше всего, цифр меньше, заглавных совсем немного
 const GLYPH_PICK = [...GLYPHS].flatMap((ch, i) => Array(/[a-z]/.test(ch) ? 6 : /[0-9]/.test(ch) ? 3 : 1).fill(i));
 const MAX_RIPPLES = 8;
-const CAPILLARY_LEVELS = 6; // сколько линий уровня шума становятся капиллярами
+const WIND_SPEED = 38; // скорость ветра при fieldSpeed = 1, px/с
 
 const VERTEX = `
 attribute vec2 a_pos;
@@ -111,9 +108,9 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
   const cellsTexture = texture(1, gl.NEAREST);
 
   let dpr = 1, width = 0, height = 0, cellW = 0, cellH = 0, cols = 0, rows = 0;
-  let cells = new Uint8Array(0), seed = new Float32Array(0), ink = new Float32Array(0), next = new Float32Array(0);
-  // field — живое поле режима, line — где проходят капилляры, vx/vy — течение следа
-  let pushX = new Float32Array(0), pushY = new Float32Array(0), field = new Float32Array(0), raw = new Float32Array(0), lineWidth = new Float32Array(0), line = new Float32Array(0), vx = new Float32Array(0), vy = new Float32Array(0);
+  let cells = new Uint8Array(0), seed = new Float32Array(0), field = new Float32Array(0);
+  // Насколько курсор сдвинул облака в каждой клетке, px
+  let pushX = new Float32Array(0), pushY = new Float32Array(0), tmpX = new Float32Array(0), tmpY = new Float32Array(0);
 
   // Атлас: все символы в одну строку, белым по прозрачному
   const buildAtlas = () => {
@@ -149,8 +146,8 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
     cols = Math.ceil(width / cellW); rows = Math.ceil(height / cellH);
     cells = new Uint8Array(cols * rows * 4);
     const n = cols * rows;
-    ink = new Float32Array(n); next = new Float32Array(n);
-    pushX = new Float32Array(n); pushY = new Float32Array(n); field = new Float32Array(n); raw = new Float32Array(n); lineWidth = new Float32Array(n); line = new Float32Array(n); vx = new Float32Array(n); vy = new Float32Array(n);
+    field = new Float32Array(n);
+    pushX = new Float32Array(n); pushY = new Float32Array(n); tmpX = new Float32Array(n); tmpY = new Float32Array(n);
     seed = new Float32Array(n).map(() => Math.random());
     gl.uniform2f(u('u_grid'), cols, rows);
     if (reduced) draw(performance.now());
@@ -162,135 +159,59 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
   const pointer = { x: 0, y: 0, px: 0, py: 0, active: false, moved: false };
   let last = 0;
 
-  // Курсор оставляет чернила вдоль пути от прошлого кадра, поровну на каждый пиксель пути
-  function deposit(x0: number, y0: number, x1: number, y1: number, radius: number, amount: number) {
-    const dist = Math.hypot(x1 - x0, y1 - y0);
-    const steps = Math.max(1, Math.ceil(dist / (cellW * 1.5)));
-    const per = amount * Math.min(1, dist / (cellW * 1.5) / steps + .05);
-    const rc = Math.ceil(radius / cellW) + 1, rr = Math.ceil(radius / cellH) + 1;
-    for (let s = 1; s <= steps; s++) {
-      const px = x0 + (x1 - x0) * s / steps, py = y0 + (y1 - y0) * s / steps;
-      const gx = Math.floor(px / cellW), gy = Math.floor(py / cellH);
-      for (let y = Math.max(0, gy - rr); y <= Math.min(rows - 1, gy + rr); y++) {
-        for (let x = Math.max(0, gx - rc); x <= Math.min(cols - 1, gx + rc); x++) {
-          const cx = (x + .5) * cellW, cy = (y + .5) * cellH;
-          // Рваный край пятна
-          const d = Math.hypot(cx - px, cy - py) / (radius * (.7 + .6 * noise(cx / 34, cy / 34)));
-          if (d >= 1) continue;
-          const i = y * cols + x;
-          ink[i] = Math.min(1.5, ink[i] + (1 - d * d) * per);
-        }
-      }
-    }
-  }
-
-  // Wind: курсор не рисует, а разгоняет облака — сдвигает их в сторону своего движения
-  function push(x0: number, y0: number, x1: number, y1: number, radius: number, strength: number) {
+  // Курсор разгоняет облака: клетки рядом с его путём сдвигаются по ходу движения. Сдвиг не растёт
+  // бесконечно, а подтягивается к пределу, и спадает к краю плавно; предел меньше половины радиуса, поэтому
+  // облака только растягиваются и не рвутся, у следа нет ни резкой границы, ни пустых дыр
+  function push(x0: number, y0: number, x1: number, y1: number) {
     const dist = Math.hypot(x1 - x0, y1 - y0);
     if (dist < .5) return;
-    const ux = (x1 - x0) / dist, uy = (y1 - y0) / dist;
+    const radius = cfg.trailRadius, ux = (x1 - x0) / dist, uy = (y1 - y0) / dist;
+    const reach = Math.min(.45, cfg.trailStrength * .3) * radius;
     const steps = Math.max(1, Math.ceil(dist / (cellW * 1.5)));
-    const per = strength * 120 * Math.min(1, dist / steps / (cellW * 1.5));
+    const rate = Math.min(1, dist / steps / 20) * .35;
     const rc = Math.ceil(radius / cellW) + 1, rr = Math.ceil(radius / cellH) + 1;
     for (let s = 1; s <= steps; s++) {
       const px = x0 + (x1 - x0) * s / steps, py = y0 + (y1 - y0) * s / steps;
       const gx = Math.floor(px / cellW), gy = Math.floor(py / cellH);
       for (let y = Math.max(0, gy - rr); y <= Math.min(rows - 1, gy + rr); y++) {
         for (let x = Math.max(0, gx - rc); x <= Math.min(cols - 1, gx + rc); x++) {
-          const ox = (x + .5) * cellW - px, oy = (y + .5) * cellH - py, d = Math.hypot(ox, oy) / radius;
+          const d = Math.hypot((x + .5) * cellW - px, (y + .5) * cellH - py) / radius;
           if (d >= 1) continue;
-          // Облака расходятся в стороны от пути и чуть тянутся за курсором, как воздух за рукой.
-          // Сдвиг плавно сходит на нет к краю, поэтому у следа нет резкой границы
-          const k = (1 - d * d) ** 2 * per;
-          const i = y * cols + x;
-          // Чем дальше клетка от линии движения, тем сильнее её уносит вбок; на самой линии облака
-          // тянутся за курсором. Сдвиг меняется плавно, поэтому разрыва посередине нет
-          const across = (-uy * ox + ux * oy) / radius;
-          pushX[i] += k * (.55 * ux + .7 * across * -uy);
-          pushY[i] += k * (.55 * uy + .7 * across * ux);
-          const m = Math.hypot(pushX[i], pushY[i]);
-          if (m > 90) { pushX[i] *= 90 / m; pushY[i] *= 90 / m; }
+          const k = (1 - d * d) ** 2 * rate, i = y * cols + x;
+          pushX[i] += (ux * reach - pushX[i]) * k;
+          pushY[i] += (uy * reach - pushY[i]) * k;
         }
       }
     }
   }
 
-  // Живое поле режима и течение, по которому плывут чернила. Поле меняется медленно, поэтому за кадр
-  // пересчитываем только половину строк, через одну
-  let parity = 0;
+  // Сдвиг облаков тает и немного размывается, чтобы соседние клетки не расходились рывками
+  function relax(dt: number) {
+    const fade = Math.exp(-dt / cfg.fadeTime);
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        const i = y * cols + x;
+        const l = x > 0 ? i - 1 : i, r = x < cols - 1 ? i + 1 : i, t = y > 0 ? i - cols : i, b = y < rows - 1 ? i + cols : i;
+        tmpX[i] = (pushX[i] * 4 + pushX[l] + pushX[r] + pushX[t] + pushX[b]) / 8 * fade;
+        tmpY[i] = (pushY[i] * 4 + pushY[l] + pushY[r] + pushY[t] + pushY[b]) / 8 * fade;
+      }
+    }
+    [pushX, tmpX] = [tmpX, pushX];
+    [pushY, tmpY] = [tmpY, pushY];
+  }
+
+  // Вытянутые по ветру облака, слегка завихрённые, сдвинутые курсором
   function computeField(t: number) {
-    const mode = cfg.mode, ft = t * cfg.fieldSpeed;
-    parity ^= 1;
-    // Облака Wind пересчитываем целиком каждый кадр: курсор сдвигает их, и это должно быть плавно
-    const stepY = mode === 'wind' ? 1 : 2;
-    for (let y = mode === 'wind' ? 0 : parity; y < rows; y += stepY) {
+    const ft = t * cfg.fieldSpeed, sx = cfg.cloudSize * cfg.cloudStretch, sy = cfg.cloudSize, lo = 1 - cfg.cloudCover;
+    for (let y = 0; y < rows; y++) {
       const cy = (y + .5) * cellH;
       for (let x = 0; x < cols; x++) {
         const i = y * cols + x, cx = (x + .5) * cellW;
-        if (mode === 'wind') {
-          // Вытянутые по ветру облака, слегка завихрённые; курсор раздвигает их, ничего не стирая
-          const px = pushX[i], py = pushY[i];
-          const X = (cx - px - ft * 38) / (cfg.cloudSize * cfg.cloudStretch), Y = (cy - py) / cfg.cloudSize;
-          const w = noise(X * .8 + 3.1, Y * .8 - ft * .05);
-          const lo = 1 - cfg.cloudCover;
-          field[i] = smoothstep(lo, lo + .35, fbm(X + w * .9, Y + w * .5)) * cfg.cloudOpacity;
-          vx[i] = 70 + (w - .5) * 40; vy[i] = (w - .5) * 24;
-        } else if (mode === 'capillary') {
-          // Линии уровня гладкого, медленно текущего шума: извилистые, то тоньше, то толще
-          const X = cx / 320, Y = cy / 320, w = noise(X * .6 + ft * .02, Y * .6 - ft * .015);
-          const n = noise(X + w * 1.1 + ft * .01, Y - w * .7) * .75 + noise(X * 2.1 + 3, Y * 2.1 - ft * .02) * .25;
-          raw[i] = n;
-          // Толщину линии считаем ниже, когда известен наклон шума; пока запоминаем, какой она будет здесь
-          lineWidth[i] = 4 + 10 * w;
-        } else {
-          // Крупные медленные пятна
-          const X = cx / 380 + ft * .012, Y = cy / 380 - ft * .008;
-          const w = noise(X * .9 - ft * .02, Y * .9 + 4);
-          field[i] = smoothstep(.45, .85, fbm(X + w * .8, Y + w * .6)) * .3;
-          raw[i] = noise(cx / 240, cy / 240 + ft * .04);
-        }
+        const X = (cx - pushX[i] - ft * WIND_SPEED) / sx, Y = (cy - pushY[i]) / sy;
+        const w = noise(X * .8 + 3.1, Y * .8 - ft * .05);
+        field[i] = smoothstep(lo, lo + .35, fbm(X + w * .9, Y + w * .5)) * cfg.cloudOpacity;
       }
     }
-    if (mode === 'wind') return;
-    // Течение вдоль линий уровня шума: в капиллярах свет бежит по линиям, в дельте чернила расходятся протоками
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        const i = y * cols + x;
-        const xl = x > 0 ? i - 1 : i, xr = x < cols - 1 ? i + 1 : i, yu = y > 0 ? i - cols : i, yd = y < rows - 1 ? i + cols : i;
-        const gx = (raw[xr] - raw[xl]) / (2 * cellW), gy = (raw[yd] - raw[yu]) / (2 * cellH);
-        const len = Math.hypot(gx, gy) + 1e-6;
-        const k = mode === 'estuary' ? Math.min(1, len * 480) : 1;
-        vx[i] = -gy / len * k; vy[i] = gx / len * k;
-        if (mode === 'capillary') {
-          // Расстояние до ближайшей линии уровня в пикселях: линии получаются сплошными и одной толщины
-          // независимо от крутизны шума, а толщина плавно гуляет вдоль линии
-          const f = (raw[i] * CAPILLARY_LEVELS) % 1, px = Math.min(f, 1 - f) / (CAPILLARY_LEVELS * len);
-          const half = lineWidth[i];
-          const l = 1 - smoothstep(half * .45, half, px);
-          line[i] = l;
-          field[i] = l * .3;
-        }
-      }
-    }
-  }
-
-  // Чернила плывут по течению и тают
-  function flow(dt: number) {
-    const fade = Math.exp(-dt / cfg.fadeTime);
-    const sp = cfg.mode === 'wind' ? dt : cfg.flowSpeed * dt;
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        const i = y * cols + x;
-        const sx = x - vx[i] * sp / cellW, sy = y - vy[i] * sp / cellH;
-        const x0 = Math.max(0, Math.min(cols - 2, Math.floor(sx))), y0 = Math.max(0, Math.min(rows - 2, Math.floor(sy)));
-        const fx = Math.min(1, Math.max(0, sx - x0)), fy = Math.min(1, Math.max(0, sy - y0));
-        const i0 = y0 * cols + x0;
-        const v = ink[i0] * (1 - fx) * (1 - fy) + ink[i0 + 1] * fx * (1 - fy) + ink[i0 + cols] * (1 - fx) * fy + ink[i0 + cols + 1] * fx * fy;
-        next[i] = v * fade;
-      }
-    }
-    [ink, next] = [next, ink];
-    if (cfg.mode === 'wind') for (let i = 0; i < pushX.length; i++) { pushX[i] *= fade; pushY[i] *= fade; }
   }
 
   function fill(t: number) {
@@ -301,7 +222,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
       return [r.left - box.left - cfg.quietPadding, r.top - box.top - cfg.quietPadding, r.right - box.left + cfg.quietPadding, r.bottom - box.top + cfg.quietPadding];
     });
     const live = ripples.filter((r) => t - r.t < cfg.rippleLife);
-    const mode = cfg.mode, steps = cfg.swapSteps;
+    const steps = cfg.swapSteps;
     for (let y = 0; y < rows; y++) {
       const cy = (y + .5) * cellH;
       // Снизу фон растворяется
@@ -317,11 +238,6 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
         if (fade <= 0) { cells[i * 4 + 1] = 0; continue; }
 
         let level = field[i];
-        const v = ink[i];
-        if (mode === 'wind') { /* в Wind курсор только разгоняет облака */ }
-        else if (mode === 'capillary') level += Math.min(1, v * 1.4) * (.12 + .88 * line[i]);
-        // Пятна дельты с рваными краями и плотной серединой
-        else if (v > .05) level += smoothstep(.12, .55, v * (.65 + .7 * noise(cx / 22, cy / 22))) * .95;
 
         // Волна от клика: кривое рваное кольцо, за ним второе потише
         for (const r of live) {
@@ -343,9 +259,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
           if (d < R) s += (noise(cx / 30 + el * 1.5, cy / 30 - el) > .7 ? .18 : 0) * smoothstep(R * .2, R * .8, d);
           // Кольцо держится ярким, а под конец быстро тает
           s *= 1 - smoothstep(.4, 1, 1 - life);
-          if (mode === 'capillary') s *= .35 + .65 * line[i];
           level += s;
-          if (mode === 'estuary') ink[i] = Math.min(1.5, ink[i] + s * .012);
         }
 
         // Символ меняется, когда клетка переходит на новую ступень яркости, и изредка сам
@@ -359,30 +273,17 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
     while (ripples.length && t - ripples[0].t > cfg.rippleLife) ripples.shift();
   }
 
-  // При смене режима подставляем его настройки, а подкрученные значения прошлого режима запоминаем
-  let activeMode = cfg.mode;
-  const switchMode = () => {
-    const prev = asciiFieldModes[activeMode], conf = cfg as unknown as Record<string, number>;
-    for (const key in prev) prev[key] = conf[key];
-    Object.assign(cfg, asciiFieldModes[cfg.mode]);
-    activeMode = cfg.mode;
-    canvas.dispatchEvent(new CustomEvent('ascii-mode'));
-  };
-
   function draw(now: number) {
-    if (cfg.mode !== activeMode) switchMode();
     const t = reduced ? 12 : clock(now), dt = Math.min(.05, Math.max(0, t - last));
     last = t;
     if (inkColor !== cfg.ink) { inkColor = cfg.ink; gl.uniform3fv(u('u_ink'), hex(inkColor)); }
     if (pointer.active && pointer.moved) {
       pointer.moved = false;
-      const amount = cfg.trailStrength * (cfg.mode === 'capillary' ? .18 : .22);
-      if (cfg.mode === 'wind') push(pointer.px, pointer.py, pointer.x, pointer.y, cfg.trailRadius, cfg.trailStrength);
-      else deposit(pointer.px, pointer.py, pointer.x, pointer.y, cfg.trailRadius * (cfg.mode === 'capillary' ? 1.6 : 1), amount);
+      push(pointer.px, pointer.py, pointer.x, pointer.y);
       pointer.px = pointer.x; pointer.py = pointer.y;
     }
+    relax(dt);
     computeField(t);
-    flow(dt);
     fill(t);
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, cellsTexture);
@@ -410,8 +311,6 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
     const p = local(e);
     if (!p.inside) return;
     ripples.push({ x: p.x, y: p.y, t: clock(performance.now()), s: Math.random() * 50 });
-    // В дельте клик ещё и выплёскивает чернила, они потом утекают протоками
-    if (cfg.mode === 'estuary') deposit(p.x, p.y, p.x + 1, p.y, cfg.trailRadius * 1.8, .9);
     if (ripples.length > MAX_RIPPLES) ripples.shift();
   };
   const onMove = (e: PointerEvent) => {
