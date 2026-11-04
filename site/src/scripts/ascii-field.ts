@@ -1,12 +1,13 @@
-// Фон из символов (components/AsciiField.astro) в духе ASCII-арта: символ в клетке зависит от яркости,
-// от точки до «@». Курсор оставляет «чернила», они текут по полю шума, растекаются протоками, как
-// река в дельте, и тают. Клик пускает волну, на гребне символы вспыхивают оранжевым. Без курсора по фону
+// Фон из символов (components/AsciiField.astro): в каждой клетке своя буква или цифра, она изредка
+// сменяется на другую. Курсор оставляет «чернила», они текут по полю шума, растекаются протоками, как
+// река в дельте, и тают; где чернил больше, символы ярче. Клик пускает волну. Без курсора по фону
 // медленно плывут бледные облака. Каждый кадр скрипт считает для клетки символ, яркость и свечение,
 // кладёт их в маленькую текстуру, а WebGL рисует символы из атласа одним проходом. Под заголовком и
 // меню символы гаснут. Без WebGL канвас не включается и остаётся обычный градиент.
 import { asciiField as cfg } from './motion-settings';
 
-const GLYPHS = '.,:;-~=+*xo#%@'; // от светлого к тёмному
+const GLYPHS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const SWAP_RATE = .12; // как часто символ в клетке сменяется, раз в секунду
 const MAX_RIPPLES = 8;
 
 const VERTEX = `
@@ -23,7 +24,6 @@ uniform sampler2D u_atlas;
 uniform sampler2D u_cells;
 uniform float u_glyphs;
 uniform vec3 u_ink;
-uniform vec3 u_glow;
 void main() {
   vec2 p = vec2(gl_FragCoord.x, u_res.y * u_dpr - gl_FragCoord.y) / u_dpr;
   vec2 cell = floor(p / u_cell);
@@ -33,7 +33,7 @@ void main() {
   float id = floor(c.r * 255.0 + 0.5);
   float ink = texture2D(u_atlas, vec2((id + local.x) / u_glyphs, local.y)).a;
   float alpha = ink * c.g;
-  gl_FragColor = vec4(mix(u_ink, u_glow, c.b) * alpha, alpha);
+  gl_FragColor = vec4(u_ink * alpha, alpha);
 }`;
 
 function hash(x: number, y: number) {
@@ -86,7 +86,6 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   gl.uniform3fv(u('u_ink'), hex('#23242b'));
-  gl.uniform3fv(u('u_glow'), hex('#fe8c00'));
   gl.uniform1f(u('u_glyphs'), GLYPHS.length);
   gl.uniform1i(u('u_atlas'), 0);
   gl.uniform1i(u('u_cells'), 1);
@@ -105,7 +104,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
   const cellsTexture = texture(1, gl.NEAREST);
 
   let dpr = 1, width = 0, height = 0, cellW = 0, cellH = 0, cols = 0, rows = 0;
-  let cells = new Uint8Array(0), ink = new Float32Array(0), heat = new Float32Array(0), next = new Float32Array(0);
+  let cells = new Uint8Array(0), glyphs = new Uint8Array(0), ink = new Float32Array(0), next = new Float32Array(0);
 
   // Атлас: все символы в одну строку, белым по прозрачному
   const buildAtlas = () => {
@@ -140,7 +139,8 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
     buildAtlas();
     cols = Math.ceil(width / cellW); rows = Math.ceil(height / cellH);
     cells = new Uint8Array(cols * rows * 4);
-    ink = new Float32Array(cols * rows); heat = new Float32Array(cols * rows); next = new Float32Array(cols * rows);
+    ink = new Float32Array(cols * rows); next = new Float32Array(cols * rows);
+    glyphs = new Uint8Array(cols * rows).map(() => Math.floor(Math.random() * GLYPHS.length));
     gl.uniform2f(u('u_grid'), cols, rows);
     if (reduced) draw(performance.now());
   };
@@ -169,7 +169,6 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
           if (d >= 1) continue;
           const k = (1 - d * d) * amount, i = y * cols + x;
           ink[i] = Math.min(1.6, ink[i] + k);
-          heat[i] = Math.min(1, heat[i] + k * 1.5);
         }
       }
     }
@@ -179,7 +178,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
   // Чернила текут по полю шума (без вихрей и стоков, поэтому расходятся протоками) и тают
   function flow(t: number, dt: number) {
     const scale = cfg.channelSize, speed = cfg.flowSpeed * dt, e = .01;
-    const fade = Math.exp(-dt / cfg.fadeTime), cool = Math.exp(-dt / .6);
+    const fade = Math.exp(-dt / cfg.fadeTime);
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
         const nx = (x + .5) * cellW / scale, ny = (y + .5) * cellH / scale, nt = t * .05;
@@ -195,7 +194,9 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
       }
     }
     [ink, next] = [next, ink];
-    for (let i = 0; i < heat.length; i++) heat[i] *= cool;
+    // Символы меняются редко и по одному, без ряби
+    const swap = SWAP_RATE * dt;
+    for (let i = 0; i < glyphs.length; i++) if (Math.random() < swap) glyphs[i] = Math.floor(Math.random() * GLYPHS.length);
   }
 
   function fill(t: number) {
@@ -227,22 +228,19 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
         // Бледные облака без курсора
         level += smoothstep(.55, .85, fbm((cx + driftX) / cfg.cloudSize, (cy + driftY) / cfg.cloudSize)) * cfg.cloudOpacity;
 
-        let glow = heat[i];
         for (const r of live) {
           const el = t - r.t;
           const wd = cfg.rippleReach * (1 - Math.exp(-el / 1.4)) - Math.hypot(cx - r.x, cy - r.y);
           if (wd < -60) continue;
           const s = Math.exp(-wd * wd / (cfg.rippleWidth * cfg.rippleWidth)) * smoothstep(-40, 10, wd) * Math.exp(-el / 1.1);
           level += s * (.5 + .5 * ridge);
-          glow += s;
           // Волна оставляет немного чернил, и после неё тоже текут протоки
           ink[i] = Math.min(1.6, ink[i] + s * .04);
         }
 
         if (level < .03) { cells[i * 4 + 1] = 0; continue; }
-        cells[i * 4] = Math.min(GLYPHS.length - 1, Math.floor(Math.min(1, level) * GLYPHS.length));
+        cells[i * 4] = glyphs[i];
         cells[i * 4 + 1] = Math.min(255, Math.min(1, level * 1.5) * fade * 255);
-        cells[i * 4 + 2] = Math.min(255, glow * 1.4 * 255);
       }
     }
     while (ripples.length && t - ripples[0].t > 4) ripples.shift();
