@@ -1,13 +1,13 @@
-// Фон из символов (components/AsciiField.astro): в каждой клетке своя буква или цифра, она изредка
+// Фон из символов (components/AsciiField.astro): в каждой клетке своя буква или цифра, она плавно
 // сменяется на другую. Курсор оставляет «чернила», они текут по полю шума, растекаются протоками, как
 // река в дельте, и тают; где чернил больше, символы ярче. Клик пускает волну. Без курсора по фону
-// медленно плывут бледные облака. Каждый кадр скрипт считает для клетки символ, яркость и свечение,
+// медленно плывут бледные облака. Каждый кадр скрипт считает для клетки символ, и яркость,
 // кладёт их в маленькую текстуру, а WebGL рисует символы из атласа одним проходом. Под заголовком и
 // меню символы гаснут. Без WebGL канвас не включается и остаётся обычный градиент.
 import { asciiField as cfg } from './motion-settings';
 
 const GLYPHS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-const SWAP_RATE = .12; // как часто символ в клетке сменяется, раз в секунду
+const SWAP_TIME = .22; // за сколько секунд символ плавно гаснет и проявляется другим
 const MAX_RIPPLES = 8;
 
 const VERTEX = `
@@ -105,6 +105,8 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
 
   let dpr = 1, width = 0, height = 0, cellW = 0, cellH = 0, cols = 0, rows = 0;
   let cells = new Uint8Array(0), glyphs = new Uint8Array(0), ink = new Float32Array(0), next = new Float32Array(0);
+  // Фаза смены символа: 0 — покой, иначе идёт от 1 к 0, на середине символ меняется
+  let swapPhase = new Float32Array(0), activity = new Float32Array(0);
 
   // Атлас: все символы в одну строку, белым по прозрачному
   const buildAtlas = () => {
@@ -140,6 +142,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
     cols = Math.ceil(width / cellW); rows = Math.ceil(height / cellH);
     cells = new Uint8Array(cols * rows * 4);
     ink = new Float32Array(cols * rows); next = new Float32Array(cols * rows);
+    swapPhase = new Float32Array(cols * rows); activity = new Float32Array(cols * rows);
     glyphs = new Uint8Array(cols * rows).map(() => Math.floor(Math.random() * GLYPHS.length));
     gl.uniform2f(u('u_grid'), cols, rows);
     if (reduced) draw(performance.now());
@@ -168,7 +171,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
           const d = Math.hypot((x + .5) * cellW - px, (y + .5) * cellH - py) / r;
           if (d >= 1) continue;
           const k = (1 - d * d) * amount, i = y * cols + x;
-          ink[i] = Math.min(1.6, ink[i] + k);
+          ink[i] = Math.min(1.2, ink[i] + k);
         }
       }
     }
@@ -194,9 +197,16 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
       }
     }
     [ink, next] = [next, ink];
-    // Символы меняются редко и по одному, без ряби
-    const swap = SWAP_RATE * dt;
-    for (let i = 0; i < glyphs.length; i++) if (Math.random() < swap) glyphs[i] = Math.floor(Math.random() * GLYPHS.length);
+    // Символы меняются плавно: гаснут, сменяются и проявляются. В следе и волне чаще
+    const step = dt / SWAP_TIME;
+    for (let i = 0; i < glyphs.length; i++) {
+      const p = swapPhase[i];
+      if (p > 0) {
+        const n = p - step;
+        if (p >= .5 && n < .5) glyphs[i] = Math.floor(Math.random() * GLYPHS.length);
+        swapPhase[i] = Math.max(0, n);
+      } else if (Math.random() < cfg.swapRate * (1 + cfg.swapActive * Math.min(1, activity[i] * 3)) * dt) swapPhase[i] = 1;
+    }
   }
 
   function fill(t: number) {
@@ -206,7 +216,7 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
       const r = el.getBoundingClientRect();
       return [r.left - box.left - cfg.quietPadding, r.top - box.top - cfg.quietPadding, r.right - box.left + cfg.quietPadding, r.bottom - box.top + cfg.quietPadding];
     });
-    const live = ripples.filter((r) => t - r.t < 4);
+    const live = ripples.filter((r) => t - r.t < cfg.rippleLife);
     const driftX = -cfg.windSpeed * t, driftY = cfg.windSpeed * .3 * t;
     for (let y = 0; y < rows; y++) {
       const cy = (y + .5) * cellH;
@@ -224,26 +234,38 @@ export function initAsciiField(canvas: HTMLCanvasElement, quietElements: Element
 
         // Протоки: узкие гребни шума, по ним след видно ярче всего
         const ridge = 1 - Math.abs(2 * noise(cx / cfg.channelSize * 2.2, cy / cfg.channelSize * 1.4 + t * .04) - 1);
-        let level = ink[i] * (.25 + .75 * ridge ** 3);
+        let level = ink[i] * (.45 + .55 * ridge * ridge);
+        activity[i] = ink[i];
         // Бледные облака без курсора
         level += smoothstep(.55, .85, fbm((cx + driftX) / cfg.cloudSize, (cy + driftY) / cfg.cloudSize)) * cfg.cloudOpacity;
 
+        // Клик: сперва пятно символов, потом оно расходится несколькими широкими кольцами и тает
         for (const r of live) {
-          const el = t - r.t;
-          const wd = cfg.rippleReach * (1 - Math.exp(-el / 1.4)) - Math.hypot(cx - r.x, cy - r.y);
-          if (wd < -60) continue;
-          const s = Math.exp(-wd * wd / (cfg.rippleWidth * cfg.rippleWidth)) * smoothstep(-40, 10, wd) * Math.exp(-el / 1.1);
-          level += s * (.5 + .5 * ridge);
-          // Волна оставляет немного чернил, и после неё тоже текут протоки
-          ink[i] = Math.min(1.6, ink[i] + s * .04);
+          const el = t - r.t, life = 1 - el / cfg.rippleLife;
+          const d = Math.hypot(cx - r.x, cy - r.y);
+          const front = cfg.rippleReach * (1 - Math.exp(-el / .7));
+          if (d > front + cfg.rippleWidth * 2) continue;
+          let s = 0;
+          for (let k = 0; k < cfg.rippleRings; k++) {
+            const rk = front * (1 - k * .32), w = cfg.rippleWidth * (.6 + el * .8);
+            if (rk <= 0) break;
+            const wd = d - rk;
+            s += Math.exp(-wd * wd / (w * w)) * (1 - k * .3);
+          }
+          // Рваные края, как у воды
+          s *= (.55 + .45 * noise(cx / 40 + r.x, cy / 40 + el * 2)) * life * life * .7;
+          level += s;
+          activity[i] += s;
         }
 
         if (level < .03) { cells[i * 4 + 1] = 0; continue; }
+        const p = swapPhase[i], blink = p > 0 ? Math.abs(2 * p - 1) : 1;
         cells[i * 4] = glyphs[i];
-        cells[i * 4 + 1] = Math.min(255, Math.min(1, level * 1.5) * fade * 255);
+        // Мягкое насыщение: чем больше чернил, тем медленнее темнеет, до потолка maxOpacity
+        cells[i * 4 + 1] = (1 - Math.exp(-level * 2.2)) * cfg.maxOpacity * blink * fade * 255;
       }
     }
-    while (ripples.length && t - ripples[0].t > 4) ripples.shift();
+    while (ripples.length && t - ripples[0].t > cfg.rippleLife) ripples.shift();
   }
 
   function draw(now: number) {
