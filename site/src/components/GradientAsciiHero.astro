@@ -6,7 +6,12 @@ import GradientHero from './react/GradientHero';
   .gradient-ascii-hero { position: absolute; z-index: 0; inset: 0 0 auto; height: 100vh; overflow: hidden; pointer-events: none; }
   :global(.has-gradient-ascii .gradient) { display: none; }
   :global(.has-gradient-ascii .intro) { position: relative; min-height: clamp(340px, 50vh, 500px); padding: 48px 32px 96px; display: flex; align-items: center; justify-content: center; }
-  :global(.has-gradient-ascii #intro-title) { color: #fff; }
+  /* Приветствие на градиенте: 40px на широких экранах, плавно меньше на узких; тёплое свечение,
+     чтобы белый текст «светился» вместе с солнцем */
+  :global(.has-gradient-ascii #intro-title) {
+    color: #fff; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.3; letter-spacing: -.03em; max-width: none;
+    text-shadow: 0 0 10px rgb(255 240 215 / .55), 0 0 28px rgb(255 190 110 / .5), 0 0 56px rgb(255 120 30 / .35);
+  }
 </style>
 <script>
   document.documentElement.classList.add('has-gradient-ascii');
