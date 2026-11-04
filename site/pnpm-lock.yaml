@@ -17,9 +17,6 @@ importers:
       '@fontsource/golos-text':
         specifier: 5.3.0
         version: 5.3.0
-      '@fontsource/google-sans':
-        specifier: ^5.3.2
-        version: 5.3.2
       '@fontsource/manrope':
         specifier: ^5.3.0
         version: 5.3.0
@@ -461,9 +458,6 @@ packages:
 
   '@fontsource/golos-text@5.3.0':
     resolution: {integrity: sha512-R+gM4qOZSrge4TtEGps0zTpU8X4e7e32L+3yy0J/2LnVB/IERlidEpXPWSZVGzTaL5QnPRVmoebRXSuVtjUIVg==}
-
-  '@fontsource/google-sans@5.3.2':
-    resolution: {integrity: sha512-IwR9hZgU1LUi0RAkhlqb+mCflPi/dU3ZJRUfznUW9TwgGXS2mEOeCptvVKVy/jRqhCJgwHYWvKHM9DU3/N4xsQ==}
 
   '@fontsource/manrope@5.3.0':
     resolution: {integrity: sha512-obJ1Dv3+uCA6HlHgW8u4BGYxJR9In2HW7gjJhlflEvkrj1X1iSEwu0fToL+JYGC/FEKFfIz1sBuPduvcL2gIAA==}
@@ -2410,8 +2404,6 @@ snapshots:
   '@fontsource/geologica@5.3.0': {}
 
   '@fontsource/golos-text@5.3.0': {}
-
-  '@fontsource/google-sans@5.3.2': {}
 
   '@fontsource/manrope@5.3.0': {}
 
