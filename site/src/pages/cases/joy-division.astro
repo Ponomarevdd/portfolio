@@ -20,6 +20,7 @@ const style = [
   { n: 'sound', alt: 'Звучание' },
   { n: 'lyrics', alt: 'Тексты песен' },
   { n: 'live', alt: 'Концерты' },
+  { n: 'legacy', alt: 'Наследие', section: 'Наследие' },
 ];
 ---
 <Page title="Joy Division: концепт сайта">
@@ -32,7 +33,7 @@ const style = [
           <p class="sc-cover__lead">Концепт сайта о группе Joy Division: тёмная визуальная система, контрастная типографика и чёрно-белые портреты передают атмосферу пост-панка.</p>
         </div>
         <div class="jd-hero">
-          <img class="jd-shot" src={img('about')} alt="Раздел «О группе»: заголовок Joy Division, история группы и фотография Яна Кёртиса на сцене" width="2060" height="1163">
+          <img class="jd-shot" src={img('about')} alt="Раздел «О группе»: заголовок Joy Division, история группы и фотография Яна Кёртиса на сцене" width="1684" height="948">
         </div>
       </div>
       <dl class="sc-meta">
@@ -68,9 +69,9 @@ const style = [
         <div class="sc-main">
           <p class="sc-lead">На таком сайте важно передать атмосферу, и одного шрифта для этого не хватало. Я подобрал три гарнитуры под разные роли: сжатую в меню, акцидентную в заголовках и спокойный неогротеск в тексте, который удобно читать.</p>
           <div class="jd-stack">
-            <img class="jd-shot" src={img('specimen')} alt="Шрифты концепта: Portrait для заголовков, Graphik для текста, GT Pressura для навигации" width="2266" height="1260" loading="lazy">
-            <ul class="jd-grid jd-grid--3">
-              {style.map((s) => <li><img class="jd-shot" src={img(s.n)} alt={`Раздел «Музыкальный стиль»: ${s.alt}`} width="1113" height="624" loading="lazy"></li>)}
+            <img class="jd-shot" src={img('specimen')} alt="Шрифты концепта: Portrait для заголовков, Graphik для текста, GT Pressura для навигации" width="1920" height="1110" loading="lazy">
+            <ul class="jd-grid jd-grid--2">
+              {style.map((s) => <li><img class="jd-shot" src={img(s.n)} alt={s.section ? `Раздел «${s.section}»` : `Раздел «Музыкальный стиль»: ${s.alt}`} width="1687" height="948" loading="lazy"></li>)}
             </ul>
           </div>
         </div>
@@ -83,7 +84,7 @@ const style = [
           <div class="jd-stack">
             <img class="jd-shot" src={img('gallery')} alt="Галерея: фотографии группы в едином чёрно-белом тоне" width="2223" height="1252" loading="lazy">
             <ul class="jd-grid jd-grid--2">
-              {members.map((m) => <li><img class="jd-shot" src={img(m.n)} alt={`Участники группы: ${m.alt}`} width="1076" height="606" loading="lazy"></li>)}
+              {members.map((m) => <li><img class="jd-shot" src={img(m.n)} alt={`Участники группы: ${m.alt}`} width="814" height="457" loading="lazy"></li>)}
             </ul>
           </div>
         </div>
@@ -94,8 +95,8 @@ const style = [
         <div class="sc-main">
           <p class="sc-lead">Странно знакомиться с группой, не слушая её музыку. Поэтому в дискографию встроен небольшой минималистичный плеер.</p>
           <div class="jd-stack">
-            <img class="jd-shot" src={img('unknown')} alt="Дискография: альбом Unknown Pleasures и плеер с треклистом" width="2227" height="1251" loading="lazy">
-            <img class="jd-shot" src={img('closer')} alt="Дискография: альбом Closer и треклист" width="2227" height="1253" loading="lazy">
+            <img class="jd-shot" src={img('unknown')} alt="Дискография: альбом Unknown Pleasures и плеер с треклистом" width="1686" height="948" loading="lazy">
+            <img class="jd-shot" src={img('closer')} alt="Дискография: альбом Closer и треклист" width="1687" height="948" loading="lazy">
           </div>
         </div>
       </section>
