@@ -1,0 +1,16 @@
+---
+// Обложка «Terra Arthropoda»: главная атласа на светлом фоне палитры «Мох», низ экрана уходит за край плитки.
+import { siteUrl } from '../utils/url';
+interface Props { href?: string; label: string }
+const { href, label } = Astro.props;
+const Tile = href ? 'a' : 'div';
+---
+<Tile href={siteUrl(href)} class="project__cover tav" aria-label={label}>
+  <span class="tav-win"><img src={siteUrl('/images/terra/home.webp')} alt="" width="2304" height="2130" loading="lazy" decoding="async"></span>
+</Tile>
+<style is:global>
+.tav { display: block; position: relative; overflow: hidden; background: linear-gradient(160deg, #cfe3c6 0%, #dcecd6 50%, #edf3e9 100%); }
+.tav-win { position: absolute; left: 12%; right: 12%; top: 9.6%; bottom: 0; border-radius: 16px 16px 0 0; background: #fff; overflow: hidden; box-shadow: 0 30px 70px #1c3a1c2e; }
+.project__cover .tav-win img { width: 100%; height: auto; object-fit: initial; }
+@media (max-width: 599px) { .tav-win { left: 6%; right: 6%; border-radius: 10px 10px 0 0; } }
+</style>

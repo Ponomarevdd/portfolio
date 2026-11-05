@@ -1,0 +1,19 @@
+/* Кейс «Terra Arthropoda». Оболочка общая с кейсом школ (school-case.css), палитра «Мох» из макетов проекта.
+   Нестандартный кейс: без секций с заголовками, короткая информация и подборка экранов картинками. */
+.sc.ta { --p: #387f39; --pl: #dcecd6; --t: #1c211b; --cap: #737573; --bg: #f3f5f0; --line: #e4e7e0; }
+
+/* Экран макета: белая страница на светлом фоне сайта, поэтому мягкая тень вместо рамки */
+.ta-shot { display: block; width: 100%; height: auto; border-radius: 12px; background: #fff; box-shadow: var(--shadow-card); }
+/* В шапке — верх карточки вида в рамке с фиксированными пропорциями */
+.ta-hero { aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 1px 2px #1c211b14, 0 24px 48px -24px #1c211b40; }
+.ta-hero .ta-shot { height: 100%; object-fit: cover; object-position: 50% 0; border-radius: 0; box-shadow: none; }
+
+.ta-note { display: flex; align-items: flex-start; gap: 12px; margin: 0; padding: 16px 20px; border-radius: 12px; background: var(--pl); color: var(--t); font-size: 16px; line-height: 1.5; max-width: 720px; }
+.ta-note svg:not(.cv) { flex: none; color: var(--p); margin-top: 0; }
+
+.ta-screens { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 32px; }
+
+@media (max-width: 599px) {
+  .ta-shot, .ta-hero { border-radius: 10px; }
+  .ta-screens { gap: 16px; }
+}

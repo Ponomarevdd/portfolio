@@ -1,0 +1,57 @@
+---
+import { siteUrl } from '../../utils/url';
+import BackLink from '../../components/BackLink.astro';
+import Page from '../../layouts/Page.astro';
+import ActionButton from '../../components/ActionButton.astro';
+import Iconsax from '../../components/Iconsax.astro';
+import '../../styles/school-case.css';
+import '../../styles/terra-case.css';
+
+// Пэт-проект Terra Arthropoda: атлас членистоногих. Нестандартный кейс без секций с заголовками:
+// коротко о проекте и подборка экранов. Экраны — снимки контентной зоны десктопных макетов
+// со страницы «Для кейса» канваса проекта (картинки, без исходников и анимации).
+const img = (n: string) => siteUrl(`/images/terra/${n}.webp`);
+const screens = [
+  { n: 'home', alt: 'Главная атласа: четыре подтипа в боковом меню, вид дня — жук-голиаф, новые группы и термины из глоссария', w: 2304, h: 2130 },
+  { n: 'genus', alt: 'Страница рода Graphosoma: иллюстрация, краткие факты и список видов с алфавитным фильтром', w: 2304, h: 2006 },
+  { n: 'species', alt: 'Карточка вида Graphosoma italicum: описание с нумерованной схемой признаков, источники и похожие виды', w: 2304, h: 3446 },
+  { n: 'collection', alt: 'Коллекция: сохранённые виды и роды', w: 2304, h: 1674 },
+];
+const lead = 'Атлас членистоногих, по которому можно разобраться, как узнать тот или иной вид: систематика от подтипа до вида, карточки видов и глоссарий терминов морфологии.';
+---
+<Page title="Terra Arthropoda: атлас членистоногих">
+  <article class="sc ta">
+    <header class="page-heading sc-cover">
+      <BackLink href={siteUrl('/work/')} label="Все работы"/>
+      <div class="sc-cover__grid">
+        <div class="sc-cover__text">
+          <h1>Terra Arthropoda: атлас членистоногих</h1>
+          <p class="sc-cover__lead">{lead}</p>
+        </div>
+        <div class="ta-hero">
+          <img class="ta-shot" src={img('species')} alt="Карточка вида Graphosoma italicum" width="2304" height="3446">
+        </div>
+      </div>
+      <dl class="sc-meta">
+        <div><dt>Роль</dt><dd>UX/UI-дизайнер</dd></div>
+        <div><dt>Период</dt><dd>С октября 2026</dd></div>
+        <div><dt>Команда</dt><dd>Личный проект</dd></div>
+        <div><dt>Аудитория</dt><dd>Увлечённые любители насекомых и пауков, которые хотят разобраться глубже</dd></div>
+      </dl>
+    </header>
+
+    <div class="sc-body">
+      <section class="sc-sec" aria-label="О проекте и экраны">
+        <div class="sc-main">
+          <p class="sc-lead">Пэт-проект: научный справочник насекомых и пауков. Сейчас такую информацию найти трудно: в Википедии большинства видов нет, а в iNaturalist признаки не объясняют. Здесь у каждого вида есть понятное описание «как узнать» со схемой и источниками. Все иллюстрации авторские.</p>
+          <p class="ta-note"><Iconsax name="info-circle-linear" size={22}/><span>Проект в активной разработке. Релиз запланирован на декабрь 2026 — январь 2027.</span></p>
+          <ul class="ta-screens">
+            {screens.map((s) => <li><img class="ta-shot" src={img(s.n)} alt={s.alt} width={s.w} height={s.h} loading="lazy"></li>)}
+          </ul>
+        </div>
+      </section>
+    </div>
+  </article>
+  <div class="action-row"><ActionButton href={siteUrl('/work/')} label="Посмотреть все работы"/></div>
+</Page>
+<script>import '../../scripts/case-reveal';</script>

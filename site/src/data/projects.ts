@@ -10,7 +10,7 @@ export interface Project {
   featured?: boolean;
   href?: string;
   previews?: { src: string; alt: string; width: number; height: number }[];
-  live?: 'school' | 'medx' | 'rectors' | 'joy-division';
+  live?: 'school' | 'medx' | 'rectors' | 'joy-division' | 'terra';
   description: string;
   identity: { name: string; tagline: string; background: string; color: string };
 }
@@ -55,5 +55,14 @@ const joyDivision: Project = {
   alt: 'Экраны концепта: главная страница с фотографией группы и разделы сайта',
   identity: { name: 'Joy Division', tagline: 'Концепт сайта', background: '#222222', color: '#ffffff' },
 };
-export const projects: Project[] = [school, medx, rectors, joyDivision];
+const terra: Project = {
+  slug: 'terra-arthropoda', href: '/cases/terra-arthropoda/', title: 'Terra Arthropoda: атлас членистоногих', year: 2026,
+  categories: ['UX/UI', 'Наука'],
+  description: 'Атлас членистоногих, по которому можно разобраться, как узнать тот или иной вид: систематика от подтипа до вида, карточки видов и глоссарий терминов морфологии.',
+  live: 'terra',
+  cover: '/images/terra/home.webp', width: 2304, height: 2130,
+  alt: 'Главная атласа Terra Arthropoda',
+  identity: { name: 'Terra Arthropoda', tagline: 'Атлас членистоногих', background: '#dcecd6', color: '#387f39' },
+};
+export const projects: Project[] = [school, medx, rectors, joyDivision, terra];
 export const allProjects = projects;
