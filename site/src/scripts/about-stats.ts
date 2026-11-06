@@ -94,14 +94,43 @@ media.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-pr
   const cleanups = [...document.querySelectorAll<HTMLElement>('.stat-card')].map((card) => {
     const surface = card.querySelector<HTMLElement>('.stat-surface')!;
     const stopPixels = pixels(card);
+    // Обводка: волна от точки входа (--ox/--oy, --wave), яркое пятно у курсора (--mx/--my)
+    const edge = { wave: 0, edge: 0 };
+    const paint = () => { surface.style.setProperty('--wave', `${edge.wave}px`); surface.style.setProperty('--edge', `${edge.edge}`); };
+    const point = (event: PointerEvent) => {
+      const r = surface.getBoundingClientRect();
+      return [event.clientX - r.left, event.clientY - r.top, r.width, r.height];
+    };
+    const spot = (event: PointerEvent) => { const [x, y] = point(event); surface.style.setProperty('--mx', `${x}px`); surface.style.setProperty('--my', `${y}px`); };
+    const enter = (event: PointerEvent) => {
+      const [x, y, w, h] = point(event);
+      spot(event);
+      if (edge.edge < .05) {
+        surface.style.setProperty('--ox', `${x}px`); surface.style.setProperty('--oy', `${y}px`);
+        edge.wave = 0;
+        const far = Math.max(Math.hypot(x, y), Math.hypot(w - x, y), Math.hypot(x, h - y), Math.hypot(w - x, h - y));
+        gsap.to(edge, { wave: far * 1.5, duration: .6, ease: 'power2.out', onUpdate: paint, overwrite: 'auto' });
+      }
+      gsap.to(edge, { edge: 1, duration: .25, ease: 'power1.out', onUpdate: paint, overwrite: 'auto' });
+    };
     const move = (event: PointerEvent) => {
+      spot(event);
       const rect = card.getBoundingClientRect();
       gsap.to(surface, { rotationY: ((event.clientX - rect.left) / rect.width - .5) * 10, rotationX: -((event.clientY - rect.top) / rect.height - .5) * 8, y: -4, duration: .45, overwrite: true, ease: 'power2.out' });
     };
-    const leave = () => gsap.to(surface, { rotationX: 0, rotationY: 0, y: 0, duration: .7, overwrite: true, ease: 'elastic.out(1,.6)' });
+    const leave = () => {
+      gsap.to(surface, { rotationX: 0, rotationY: 0, y: 0, duration: .7, overwrite: true, ease: 'elastic.out(1,.6)' });
+      gsap.to(edge, { edge: 0, duration: .7, ease: 'power1.out', onUpdate: paint, overwrite: 'auto' });
+    };
+    card.addEventListener('pointerenter', enter);
     card.addEventListener('pointermove', move);
     card.addEventListener('pointerleave', leave);
-    return () => { stopPixels(); card.removeEventListener('pointermove', move); card.removeEventListener('pointerleave', leave); gsap.killTweensOf(surface); gsap.set(surface, { clearProps: 'transform' }); };
+    return () => {
+      stopPixels(); gsap.killTweensOf(edge);
+      card.removeEventListener('pointerenter', enter); card.removeEventListener('pointermove', move); card.removeEventListener('pointerleave', leave);
+      gsap.killTweensOf(surface); gsap.set(surface, { clearProps: 'transform' });
+      ['--wave', '--edge', '--ox', '--oy', '--mx', '--my'].forEach((name) => surface.style.removeProperty(name));
+    };
   });
   return () => cleanups.forEach((cleanup) => cleanup());
 });
