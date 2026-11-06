@@ -2,19 +2,18 @@ import { gsap } from 'gsap';
 import { gradientAscii } from './motion-settings';
 
 // Карточки «Немного в цифрах»: при наведении из-под курсора проступает сетка мерцающих точек
-// в цветах градиента главной, рядом с курсором точки ярче и под ними мягкое свечение
+// в цветах градиента главной, рядом с курсором точки ярче и крупнее
 const [orange, , yellow, peach] = gradientAscii.colors;
 const pixel = {
   colors: [orange, peach, yellow],
-  glow: peach,
   gap: 5,          // шаг сетки, px
   size: 2,         // диаметр точки, px
-  reveal: 600,     // за сколько мс волна доходит до дальнего угла
+  reveal: 800,     // за сколько мс волна доходит до дальнего угла
+  crest: 260,      // сколько мс точка вспыхивает, когда до неё дошла волна
   fade: 700,       // за сколько мс точки гаснут после ухода курсора
   opacity: .35,    // яркость точек вдали от курсора
   spotlight: .5,   // насколько ярче точки у курсора
-  spot: 180,       // радиус пятна у курсора, px
-  glowAlpha: .5,
+  spot: 120,       // радиус, в котором точки реагируют на курсор, px
 };
 
 type Dot = { x: number; y: number; color: string; delay: number; phase: number; speed: number };
@@ -52,18 +51,17 @@ function pixels(card: HTMLElement) {
     const out = inside ? 1 : Math.max(0, 1 - (now - leftAt) / pixel.fade);
     ctx.clearRect(0, 0, w, h);
     if (out <= 0) { frame = 0; return; }
-    const glow = ctx.createRadialGradient(px, py, 0, px, py, pixel.spot);
-    glow.addColorStop(0, `${pixel.glow}${Math.round(pixel.glowAlpha * 0x40 * out).toString(16).padStart(2, '0')}`);
-    glow.addColorStop(1, `${pixel.glow}00`);
-    ctx.fillStyle = glow; ctx.fillRect(0, 0, w, h);
     for (const d of dots) {
-      const grow = Math.min(1, Math.max(0, (t - d.delay) / 220));
-      if (!grow) continue;
+      const since = t - d.delay;
+      if (since <= 0) continue;
+      const grow = Math.min(1, since / 220);
+      // Гребень волны: точки, до которых она только что дошла, вспыхивают и крупнее
+      const crest = since < pixel.crest ? 1 - since / pixel.crest : 0;
       const shimmer = .65 + .35 * Math.sin(d.phase + now * d.speed);
       const near = Math.max(0, 1 - Math.hypot(d.x - px, d.y - py) / pixel.spot);
-      ctx.globalAlpha = Math.min(1, (pixel.opacity + pixel.spotlight * near) * out * grow);
+      ctx.globalAlpha = Math.min(1, (pixel.opacity + pixel.spotlight * near + .65 * crest) * out * grow);
       ctx.fillStyle = d.color;
-      ctx.beginPath(); ctx.arc(d.x, d.y, pixel.size / 2 * shimmer * (1 + near * .6), 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(d.x, d.y, pixel.size / 2 * shimmer * (1 + near * .5 + crest * 1.2), 0, Math.PI * 2); ctx.fill();
     }
     ctx.globalAlpha = 1;
     frame = requestAnimationFrame(draw);
@@ -94,24 +92,16 @@ media.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-pr
   const cleanups = [...document.querySelectorAll<HTMLElement>('.stat-card')].map((card) => {
     const surface = card.querySelector<HTMLElement>('.stat-surface')!;
     const stopPixels = pixels(card);
-    // Обводка: волна от точки входа (--ox/--oy, --wave), яркое пятно у курсора (--mx/--my)
-    const edge = { wave: 0, edge: 0 };
-    const paint = () => { surface.style.setProperty('--wave', `${edge.wave}px`); surface.style.setProperty('--edge', `${edge.edge}`); };
-    const point = (event: PointerEvent) => {
+    // Обводка: яркое пятно на рамке у курсора (--mx/--my), гаснет после ухода
+    const edge = { edge: 0 };
+    const paint = () => surface.style.setProperty('--edge', `${edge.edge}`);
+    const spot = (event: PointerEvent) => {
       const r = surface.getBoundingClientRect();
-      return [event.clientX - r.left, event.clientY - r.top, r.width, r.height];
+      surface.style.setProperty('--mx', `${event.clientX - r.left}px`); surface.style.setProperty('--my', `${event.clientY - r.top}px`);
     };
-    const spot = (event: PointerEvent) => { const [x, y] = point(event); surface.style.setProperty('--mx', `${x}px`); surface.style.setProperty('--my', `${y}px`); };
     const enter = (event: PointerEvent) => {
-      const [x, y, w, h] = point(event);
       spot(event);
-      if (edge.edge < .05) {
-        surface.style.setProperty('--ox', `${x}px`); surface.style.setProperty('--oy', `${y}px`);
-        edge.wave = 0;
-        const far = Math.max(Math.hypot(x, y), Math.hypot(w - x, y), Math.hypot(x, h - y), Math.hypot(w - x, h - y));
-        gsap.to(edge, { wave: far * 1.5, duration: .6, ease: 'power2.out', onUpdate: paint, overwrite: 'auto' });
-      }
-      gsap.to(edge, { edge: 1, duration: .25, ease: 'power1.out', onUpdate: paint, overwrite: 'auto' });
+      gsap.to(edge, { edge: 1, duration: .3, ease: 'power1.out', onUpdate: paint, overwrite: 'auto' });
     };
     const move = (event: PointerEvent) => {
       spot(event);
@@ -129,7 +119,7 @@ media.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-pr
       stopPixels(); gsap.killTweensOf(edge);
       card.removeEventListener('pointerenter', enter); card.removeEventListener('pointermove', move); card.removeEventListener('pointerleave', leave);
       gsap.killTweensOf(surface); gsap.set(surface, { clearProps: 'transform' });
-      ['--wave', '--edge', '--ox', '--oy', '--mx', '--my'].forEach((name) => surface.style.removeProperty(name));
+      ['--edge', '--mx', '--my'].forEach((name) => surface.style.removeProperty(name));
     };
   });
   return () => cleanups.forEach((cleanup) => cleanup());
