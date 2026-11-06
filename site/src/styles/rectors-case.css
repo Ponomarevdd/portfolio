@@ -1,17 +1,18 @@
+/* Тени в кейсе убраны, рамки и экраны отделены обводкой --line. Тень осталась только у страниц старого сайта (.rc-old) */
 /* Кейс «Совет ректоров вузов Москвы». Оболочка и раскладка секций общие с кейсом школ (school-case.css),
    здесь палитра и блоки кейса; фрагменты сайта (.ra) в rectors-art.css. */
 @import './rectors-art.css';
 .sc.rc { --p: #0066ff; --pl: #e5efff; --t: #1e1e1e; --cap: #a8a8a8; --bg: #f0f0f0; --line: #e4e4e4; }
 
 /* Окно браузера и устройство: общие рамки для живых фрагментов и скриншотов */
-.rc-win { position: relative; display: flex; flex-direction: column; border-radius: 16px; background: #fff; box-shadow: 0 1px 2px #1e1e1e0d, 0 24px 48px -28px #1e1e1e40; overflow: hidden; }
+.rc-win { position: relative; display: flex; flex-direction: column; border-radius: 16px; background: #fff; outline: 1px solid var(--line); overflow: hidden; }
 .rc-win__bar { flex: none; height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 16px; border-bottom: 1px solid #efeff2; background: #fff; }
 .rc-win__bar i { width: 9px; height: 9px; border-radius: 50%; background: #e6e8ec; }
 .rc-win__bar span { margin-left: 12px; width: 180px; max-width: 40%; height: 8px; border-radius: 4px; background: #efeff2; }
 .rc-win__view { position: relative; flex: 1; min-height: 0; overflow: hidden; }
 /* Фрагмент 1280px уменьшается под ширину окна: --k ставит скрипт (data-fit) или задаёт сам блок */
 .rc-fit { position: absolute; left: 0; top: 0; width: 1280px; transform-origin: 0 0; transform: scale(var(--k, .5)); }
-.rc-device { position: relative; box-sizing: border-box; padding: 6px; border-radius: 22px; background: #fff; box-shadow: 0 1px 2px #1e1e1e0d, 0 24px 48px -28px #1e1e1e40; }
+.rc-device { position: relative; box-sizing: border-box; padding: 6px; border-radius: 22px; background: #fff; outline: 1px solid var(--line); }
 .rc-device__screen { position: relative; height: 100%; border-radius: 16px; overflow: hidden; background: #fafafa; }
 
 /* Шапка кейса: старая главная сменяется новой */
@@ -21,7 +22,7 @@
 .rc-hero__old img { width: 1280px; height: auto; }
 .rc-hero__new { clip-path: inset(0 100% 0 0); transition: clip-path 1.6s cubic-bezier(.65,0,.35,1); }
 .rc-hero__line { position: absolute; left: 0; top: 0; z-index: 3; width: 4px; height: 1100px; margin-left: -2px; background: var(--p); opacity: 0; transition: left 1.6s cubic-bezier(.65,0,.35,1), opacity .3s; }
-.rc-hero__line b { position: absolute; left: 50%; top: 400px; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: var(--p); color: #fff; display: grid; grid-auto-flow: column; place-content: center; box-shadow: 0 6px 20px #0066ff59; }
+.rc-hero__line b { position: absolute; left: 50%; top: 400px; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: var(--p); color: #fff; display: grid; grid-auto-flow: column; place-content: center; }
 .rc-hero__line .iconsax { --icon-size: 22px !important; }
 .rc-hero.is-wipe .rc-hero__line { opacity: 1; }
 .rc-hero.is-new .rc-hero__new { clip-path: inset(0 0 0 0); }
@@ -70,7 +71,7 @@
 .rc-cmp__old { position: absolute; inset: 0; background: #fff; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
 .rc-cmp__old img { display: block; width: 100%; height: auto; }
 .rc-cmp__line { position: absolute; top: 0; bottom: 0; left: var(--pos); z-index: 2; width: 2px; margin-left: -1px; background: var(--p); pointer-events: none; }
-.rc-cmp__line b { position: absolute; left: 50%; top: 50%; width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 50%; background: var(--p); color: #fff; display: grid; grid-auto-flow: column; place-content: center; box-shadow: 0 6px 18px #0066ff4d; transition: transform .25s; }
+.rc-cmp__line b { position: absolute; left: 50%; top: 50%; width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 50%; background: var(--p); color: #fff; display: grid; grid-auto-flow: column; place-content: center; transition: transform .25s; }
 .rc-cmp__stage:hover .rc-cmp__line b, .rc-cmp__range:focus-visible ~ .rc-cmp__line b { transform: scale(1.1); }
 .rc-cmp__range:focus-visible ~ .rc-cmp__line b { outline: 2px solid #fff; outline-offset: -5px; }
 .rc-cmp__tag { position: absolute; top: 16px; z-index: 2; padding: 6px 12px; border-radius: 100px; background: #1e1e1ecc; color: #fff; font-size: 13px; pointer-events: none; transition: opacity .3s; }
