@@ -1,18 +1,18 @@
-/* Тени в кейсе убраны, рамки и экраны отделены обводкой --line. Тень осталась только у страниц старого сайта (.rc-old) */
+/* Тени в кейсе убраны, окна и устройства без обводки. Тень осталась только у страниц старого сайта (.rc-old) */
 /* Кейс «Совет ректоров вузов Москвы». Оболочка и раскладка секций общие с кейсом школ (school-case.css),
    здесь палитра и блоки кейса; фрагменты сайта (.ra) в rectors-art.css. */
 @import './rectors-art.css';
 .sc.rc { --p: #0066ff; --pl: #e5efff; --t: #1e1e1e; --cap: #a8a8a8; --bg: #f0f0f0; --line: #e4e4e4; }
 
 /* Окно браузера и устройство: общие рамки для живых фрагментов и скриншотов */
-.rc-win { position: relative; display: flex; flex-direction: column; border-radius: 16px; background: #fff; outline: 1px solid var(--line); overflow: hidden; }
+.rc-win { position: relative; display: flex; flex-direction: column; border-radius: 16px; background: #fff; overflow: hidden; }
 .rc-win__bar { flex: none; height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 16px; border-bottom: 1px solid #efeff2; background: #fff; }
 .rc-win__bar i { width: 9px; height: 9px; border-radius: 50%; background: #e6e8ec; }
 .rc-win__bar span { margin-left: 12px; width: 180px; max-width: 40%; height: 8px; border-radius: 4px; background: #efeff2; }
 .rc-win__view { position: relative; flex: 1; min-height: 0; overflow: hidden; }
 /* Фрагмент 1280px уменьшается под ширину окна: --k ставит скрипт (data-fit) или задаёт сам блок */
 .rc-fit { position: absolute; left: 0; top: 0; width: 1280px; transform-origin: 0 0; transform: scale(var(--k, .5)); }
-.rc-device { position: relative; box-sizing: border-box; padding: 6px; border-radius: 22px; background: #fff; outline: 1px solid var(--line); }
+.rc-device { position: relative; box-sizing: border-box; padding: 6px; border-radius: 22px; background: #fff; }
 .rc-device__screen { position: relative; height: 100%; border-radius: 16px; overflow: hidden; background: #fafafa; }
 
 /* Шапка кейса: старая главная сменяется новой */

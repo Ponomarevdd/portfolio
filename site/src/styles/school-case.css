@@ -36,7 +36,7 @@
 .sc-cover__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 48px; align-items: center; margin-top: 24px; }
 .sc-cover h1 { font-size: clamp(36px, 4.6vw, 64px); margin: 16px 0 24px; }
 .sc-cover__lead { font-size: 20px; line-height: 1.55; color: var(--text-secondary); max-width: 520px; }
-.sc-hl { --hh: 480px; position: relative; height: var(--hh); border-radius: 28px; background: #fff; box-shadow: var(--shadow-head); overflow: hidden; }
+.sc-hl { --hh: 480px; position: relative; height: var(--hh); border-radius: 28px; background: #fff; outline: 1px solid var(--line); overflow: hidden; }
 .sc-hl__bar { position: absolute; inset: 0 0 auto; z-index: 3; height: 48px; display: flex; align-items: center; gap: 7px; padding: 0 20px; border-bottom: 1px solid #efeff2; background: #fff; }
 .sc-hl__bar i { width: 9px; height: 9px; border-radius: 50%; background: #e6e8ec; }
 .sc-hl__bar span { margin-left: 14px; width: 160px; max-width: 40%; height: 8px; border-radius: 4px; background: #efeff2; }
