@@ -36,7 +36,7 @@ const Tile = href ? 'a' : 'div';
   <div class="project__details">
     <h2 id={`project-${project.slug}`}>{href ? <a href={siteUrl(href)}>{project.title}</a> : project.title}</h2>
     <ul class="project__categories" aria-label="Категории проекта">
-      {project.categories.slice(0, 2).map((category) => <li><CategoryIcon category={category} /><span>{category}</span></li>)}
+      {project.categories.slice(0, 3).map((category) => <li><CategoryIcon category={category} /><span>{category}</span></li>)}
     </ul>
   </div>
   <p class="project__description">{project.description}</p>

@@ -57,10 +57,10 @@ const joyDivision: Project = {
 };
 const terra: Project = {
   slug: 'terra-arthropoda', href: '/cases/terra-arthropoda/', title: 'Terra Arthropoda: атлас членистоногих', year: 2026,
-  categories: ['UX/UI', 'Наука'],
+  categories: ['UX/UI', 'Наука', 'Пет-проект'],
   description: 'Атлас членистоногих, по которому можно разобраться, как узнать тот или иной вид: систематика от подтипа до вида, карточки видов и глоссарий терминов морфологии.',
   live: 'terra',
-  cover: '/images/terra/home.webp', width: 2304, height: 2130,
+  cover: '/images/terra/home.webp', width: 2304, height: 2213,
   alt: 'Главная атласа Terra Arthropoda',
   identity: { name: 'Terra Arthropoda', tagline: 'Атлас членистоногих', background: '#dcecd6', color: '#387f39' },
 };
