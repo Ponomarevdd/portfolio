@@ -64,7 +64,6 @@
 .rc-cmp__stage { touch-action: pan-y; user-select: none; }
 /* Тонкая обводка отделяет серый фон страниц от фона кейса; у скриншотов редизайна поля по бокам в самих картинках */
 .rc-cmp__frame { position: relative; aspect-ratio: 1 / 1; max-height: 1100px; width: 100%; border-radius: 16px; overflow: hidden; background: #fff; }
-.rc-cmp__frame::after { content: ""; position: absolute; inset: 0; z-index: 4; border: 1px solid #e3e4ea; border-radius: inherit; pointer-events: none; }
 .rc-cmp__pair { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .4s, visibility 0s .4s; }
 .rc-cmp__pair.is-on { opacity: 1; visibility: visible; transition: opacity .4s; }
 .rc-cmp__now { position: absolute; left: 0; top: 0; width: 100%; height: auto; }
