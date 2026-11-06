@@ -17,7 +17,7 @@
 
 /* Шапка кейса: старая главная сменяется новой */
 .rc-hero { position: relative; aspect-ratio: 600 / 480; }
-.rc-hero .rc-win { position: absolute; inset: 0; }
+.rc-hero .rc-win { position: absolute; inset: 0; outline: 1px solid var(--line); }
 .rc-hero__old, .rc-hero__new { position: absolute; left: 0; top: 0; width: 1280px; }
 .rc-hero__old img { width: 1280px; height: auto; }
 .rc-hero__new { clip-path: inset(0 100% 0 0); transition: clip-path 1.6s cubic-bezier(.65,0,.35,1); }

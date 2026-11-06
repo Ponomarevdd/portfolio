@@ -1,7 +1,7 @@
 /* Фрагменты сайта Совета ректоров, пересобранные по макетам Дмитрия (Figma «Совет ректоров чистовой»).
    Шрифт макетов Golos Text: при сборке текст переводится в кривые (integrations/curves.mjs), сам шрифт страница не грузит.
    Десктоп собран в ширине 1280 (контент 1170, как в макете), телефон — 320. Масштаб задаёт обёртка. */
-.ra { --ra-p: #0066ff; --ra-p2: #0038ff; --ra-h: #1e1e1e; --ra-t: #404040; --ra-cap: #a8a8a8; --ra-logo: #5a7aaa; --ra-band: #f0f0f0; --ra-page: #fafafa; --ra-line: #dddddd;
+.ra { --ra-p: #0066ff; --ra-p2: #0038ff; --ra-h: #1e1e1e; --ra-t: #404040; --ra-cap: #a8a8a8; --ra-logo: #5a7aaa; --ra-band: #f0f0f0; --ra-page: #fff; --ra-line: #dddddd;
   font-family: 'Golos Text', sans-serif; font-weight: 400; color: var(--ra-t); letter-spacing: 0; text-align: left; }
 .ra p, .ra h3, .ra h4 { margin: 0; font-weight: inherit; }
 .ra ul { margin: 0; padding: 0; list-style: none; }
