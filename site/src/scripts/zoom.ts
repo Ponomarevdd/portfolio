@@ -15,7 +15,6 @@ if (images.length) {
   const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   let source: HTMLImageElement | null = null;
   let closing = false;
-  let previousOverflow = '';
 
   // Широкий экран вписываем целиком; высокий показываем по ширине и даём прокрутить
   const size = (img: HTMLImageElement) => {
@@ -34,26 +33,39 @@ if (images.length) {
     big.src = img.currentSrc || img.src;
     big.alt = img.alt;
     size(img);
-    previousOverflow = document.documentElement.style.overflow;
-    document.documentElement.style.overflow = 'hidden';
     dialog.showModal();
     dialog.scrollTop = 0;
-    const from = img.getBoundingClientRect(), to = big.getBoundingClientRect();
     const d = reduced() ? 0 : 1;
-    gsap.fromTo(dialog, { '--zoom-bg': 0 }, { '--zoom-bg': 1, duration: .35 * d, ease: 'power2.out' });
-    gsap.fromTo(big, { x: from.left - to.left, y: from.top - to.top, scale: from.width / to.width, opacity: .6 },
-      { x: 0, y: 0, scale: 1, opacity: 1, duration: .55 * d, ease: 'power3.out', transformOrigin: '0 0' });
+    gsap.fromTo(dialog, { '--zoom-bg': 0 }, { '--zoom-bg': 1, duration: .3 * d, ease: 'power2.out' });
+    gsap.fromTo(big, { ...offset(img) }, { x: 0, y: 0, scale: 1, duration: .32 * d, ease: 'power3.out' });
   };
+
+  // Сдвиг и масштаб, при которых большая картинка ложится ровно на маленькую: увеличение растёт из неё самой
+  const offset = (img: HTMLImageElement) => {
+    gsap.set(big, { x: 0, y: 0, scale: 1, transformOrigin: '50% 50%' });
+    const from = img.getBoundingClientRect(), to = big.getBoundingClientRect();
+    return {
+      x: from.left + from.width / 2 - (to.left + to.width / 2),
+      y: from.top + from.height / 2 - (to.top + to.height / 2),
+      scale: from.width / to.width,
+    };
+  };
+
+  // Страницу под увеличением не прокручиваем, но и прокрутку не прячем, чтобы вёрстка не сдвигалась
+  const block = (event: Event) => { if (dialog.scrollHeight <= dialog.clientHeight) event.preventDefault(); };
+  dialog.addEventListener('wheel', block, { passive: false });
+  dialog.addEventListener('touchmove', block, { passive: false });
 
   const close = () => {
     if (closing || !dialog.open) return;
     closing = true;
     const d = reduced() ? 0 : 1;
-    gsap.to(big, { opacity: 0, scale: .97, transformOrigin: '50% 50%', duration: .25 * d, ease: 'power2.in' });
-    gsap.to(dialog, { '--zoom-bg': 0, duration: .3 * d, ease: 'power2.in', onComplete() {
+    const back = source ? { ...offset(source) } : { scale: .96, opacity: 0 };
+    if (source) gsap.set(big, { y: -dialog.scrollTop });
+    gsap.to(big, { ...back, duration: .26 * d, ease: 'power3.inOut' });
+    gsap.to(dialog, { '--zoom-bg': 0, duration: .26 * d, ease: 'power2.in', onComplete() {
       dialog.close();
       gsap.set(big, { clearProps: 'all' });
-      document.documentElement.style.overflow = previousOverflow;
       closing = false;
       source?.focus({ preventScroll: true });
     } });

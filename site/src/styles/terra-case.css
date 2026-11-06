@@ -17,3 +17,7 @@
   .ta-shot, .ta-hero { border-radius: 10px; }
   .ta-screens { gap: 16px; }
 }
+
+/* Фон страницы — ботанический узор. Слой зафиксирован, текст и экраны прокручиваются поверх */
+body:has(.sc.ta) { background: transparent; }
+body:has(.sc.ta)::before { content: ''; position: fixed; inset: 0; z-index: -1; background: #f6f7f2 url('../assets/terra-pattern.webp') center / cover no-repeat; pointer-events: none; }

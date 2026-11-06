@@ -4,8 +4,6 @@
 .is-zoomable:focus-visible { outline: 2px solid var(--gradient-orange, #fe8c00); outline-offset: 4px; }
 .zoom { position: fixed; inset: 0; width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; overflow: auto; overscroll-behavior: contain; background: rgb(24 25 31 / calc(var(--zoom-bg) * .95)); cursor: zoom-out; }
 .zoom::backdrop { background: transparent; }
-/* Полоса под прокрутку, пока страница заблокирована, тоже тёмная */
-html:has(.zoom[open]) { background: #18191f; }
 .zoom__stage { min-height: 100%; display: flex; align-items: center; justify-content: center; padding: 48px; box-sizing: border-box; }
 .zoom.is-tall .zoom__stage { align-items: flex-start; }
 .zoom__img { display: block; height: auto; max-width: none; border-radius: 12px; will-change: transform; }
