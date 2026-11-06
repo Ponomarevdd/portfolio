@@ -8,7 +8,7 @@
 .ta-hero { aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 1px 2px #1c211b14, 0 24px 48px -24px #1c211b40; }
 .ta-hero .ta-shot { height: 100%; object-fit: cover; object-position: 50% 0; border-radius: 0; box-shadow: none; }
 
-.sc-main > p.ta-note { display: flex; align-items: flex-start; gap: 12px; margin: 0; padding: 16px 20px; border-radius: 12px; background: var(--pl); color: var(--p); font-size: 16px; line-height: 1.5; max-width: none; }
+.sc-main > p.ta-note { display: flex; align-items: flex-start; gap: 12px; margin: 0; padding: 16px 20px; border-radius: 12px; background: var(--pl); color: var(--p); font-size: 16px; line-height: 1.5; max-width: 100%; align-self: flex-start; width: fit-content; box-sizing: border-box; }
 .ta-note svg:not(.cv) { flex: none; color: var(--p); margin-top: 0; }
 
 .ta-screens { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 32px; }
