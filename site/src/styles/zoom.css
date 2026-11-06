@@ -8,14 +8,13 @@
 .zoom.is-tall .zoom__stage { align-items: flex-start; }
 .zoom__img { display: block; height: auto; max-width: none; border-radius: 12px; will-change: transform; }
 .zoom__close { position: fixed; z-index: 2; right: 40px; top: 32px; width: 52px; height: 52px; border-radius: 50%; background: #ffffff; border: 1px solid #e9e9e4; cursor: pointer; opacity: var(--zoom-bg); }
-.zoom__close span { position: absolute; left: 16px; top: 25px; width: 20px; height: 1.5px; background: #646570; transform: rotate(45deg); }
+.zoom__close span { position: absolute; left: calc(50% - 10px); top: calc(50% - .75px); width: 20px; height: 1.5px; background: #646570; transform: rotate(45deg); }
 .zoom__close span:last-child { transform: rotate(-45deg); }
 @media (max-width: 599px) {
   .zoom__stage { padding: 16px; }
   .zoom.is-tall .zoom__stage { padding-top: 84px; }
   .zoom__img { border-radius: 10px; }
   .zoom__close { right: 16px; top: 16px; width: 48px; height: 48px; }
-  .zoom__close span { left: 14px; top: 23px; }
 }
 /* Крестик поворачивается при наведении, как в контактах */
 @media (prefers-reduced-motion: no-preference) {
