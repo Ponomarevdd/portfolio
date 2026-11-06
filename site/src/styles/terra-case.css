@@ -2,11 +2,11 @@
    Нестандартный кейс: без секций с заголовками, короткая информация и подборка экранов картинками. */
 .sc.ta { --p: #387f39; --pl: #dcecd6; --t: #1c211b; --cap: #737573; --bg: #f3f5f0; --line: #e4e7e0; }
 
-/* Экран макета: белая страница на светлом фоне сайта, поэтому мягкая тень вместо рамки */
-.ta-shot { display: block; width: 100%; height: auto; border-radius: 12px; background: #fff; box-shadow: var(--shadow-card); }
+/* Экран макета: белая страница на светлом фоне сайта, отделена тонкой обводкой цвета --line, без теней */
+.ta-shot { display: block; width: 100%; height: auto; border-radius: 12px; background: #fff; border: 1px solid var(--line); }
 /* В шапке — верх карточки вида в рамке с фиксированными пропорциями */
-.ta-hero { aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 1px 2px #1c211b14, 0 24px 48px -24px #1c211b40; }
-.ta-hero .ta-shot { height: 100%; object-fit: cover; object-position: 50% 0; border-radius: 0; box-shadow: none; }
+.ta-hero { aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; background: #fff; border: 1px solid var(--line); }
+.ta-hero .ta-shot { height: 100%; object-fit: cover; object-position: 50% 0; border-radius: 0; border: 0; }
 
 .sc-main > p.ta-note { display: flex; align-items: flex-start; gap: 8px; margin: calc(var(--flow) * -.5) 0 calc(var(--flow) * .5); padding: 16px 24px 16px 20px; border-radius: 12px; background: var(--pl); color: var(--p); font-size: 16px; line-height: 1.5; max-width: 100%; align-self: flex-start; width: fit-content; box-sizing: border-box; }
 .ta-note svg:not(.cv) { flex: none; color: var(--p); margin-top: 0; }

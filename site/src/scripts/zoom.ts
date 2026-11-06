@@ -3,7 +3,8 @@ import '../styles/zoom.css';
 
 // Увеличение картинок по клику: статичные экраны кейсов открываются крупно поверх страницы
 const selector = '.jd-shot, .jd-mosaic, .ta-shot, .rc-old img';
-const images = [...document.querySelectorAll<HTMLImageElement>(selector)];
+// Картинку в шапке кейса не увеличиваем
+const images = [...document.querySelectorAll<HTMLImageElement>(selector)].filter((img) => !img.closest('.sc-cover'));
 
 if (images.length) {
   const dialog = document.createElement('dialog');
