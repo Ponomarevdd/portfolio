@@ -83,16 +83,16 @@
 .sc + .action-row { margin: 0 0 calc(var(--sec-pad) - 64px); } /* + 64px отступа main = отступ секции */
 .sc-sec--wide .sc-head { flex-direction: row; align-items: baseline; gap: 20px; }
 .sc-head { display: flex; flex-direction: column; gap: 12px; }
-.sc-head h2 { font-size: 34px; line-height: 1.15; letter-spacing: -.04em; }
+.sc-head h2 { font-size: 34px; line-height: 1.15; letter-spacing: 0; }
 .sc-main { min-width: 0; display: flex; flex-direction: column; gap: var(--flow); }
 .sc-main > p:not(.sc-lead) { color: var(--text-secondary); font-size: 18px; line-height: 1.65; max-width: 720px; }
-.sc-lead { font-size: 22px; line-height: 1.45; letter-spacing: -.025em; text-wrap: pretty; }
-.sc-sub { font-size: 22px; letter-spacing: -.03em; margin-top: 16px !important; }
+.sc-lead { font-size: 22px; line-height: 1.45; letter-spacing: 0; text-wrap: pretty; }
+.sc-sub { font-size: 22px; letter-spacing: 0; margin-top: 16px !important; }
 
 /* Цифры */
 .sc-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .sc-stats li { padding: 28px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 10px; }
-.sc-stats strong { font-size: clamp(36px, 4vw, 52px); font-weight: 400; letter-spacing: -.05em; line-height: 1; white-space: nowrap; }
+.sc-stats strong { font-size: clamp(36px, 4vw, 52px); font-weight: 400; letter-spacing: 0; line-height: 1; white-space: nowrap; }
 .sc-stats li > span { color: var(--text-secondary); font-size: 15px; line-height: 1.45; }
 .sc-stats--big { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .sc-stats--big strong { color: var(--p); }
@@ -157,7 +157,7 @@
 /* 03 Роли */
 .sc-duties { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .sc-duties li { padding: 28px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 10px; }
-.sc-duties h3 { font-size: 20px; letter-spacing: -.02em; }
+.sc-duties h3 { font-size: 20px; letter-spacing: 0; }
 .sc-duties p { color: var(--text-secondary); font-size: 15px; line-height: 1.55; }
 .sc-duties li { opacity: 0; transform: translateY(16px); }
 .sc-duties .sc-role__icon { margin-bottom: 12px; opacity: 0; transform: scale(.6); }
@@ -167,7 +167,7 @@
 .sc-role { padding: 32px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 14px; }
 .sc-role__icon { width: 56px; height: 56px; border-radius: 14px; display: grid; place-items: center; background: var(--pl); color: var(--p); }
 .sc-role > .sc-role__icon { margin-bottom: 11px; }
-.sc-role h3 { font-size: 24px; letter-spacing: -.03em; }
+.sc-role h3 { font-size: 24px; letter-spacing: 0; }
 .sc-role__goal { font-size: 16px; line-height: 1.55; }
 .sc-role ul { display: flex; flex-direction: column; gap: 8px; }
 .sc-role li { padding: 10px 14px; border-radius: 10px; background: #fafafa; font-size: 14px; color: var(--text-secondary); }
@@ -182,7 +182,7 @@
 .sc-principles { display: flex; flex-direction: column; gap: 16px; }
 .sc-pr { display: flex; flex-direction: column; gap: 28px; padding: 32px; border-radius: 16px; background: #fff; }
 .sc-pr__text { display: flex; flex-direction: column; gap: 10px; max-width: 640px; }
-.sc-pr h3 { font-size: 24px; letter-spacing: -.03em; line-height: 1.25; }
+.sc-pr h3 { font-size: 24px; letter-spacing: 0; line-height: 1.25; }
 .sc-pr__text p { color: var(--text-secondary); font-size: 16px; line-height: 1.55; }
 .sc-pr__stage { min-width: 0; }
 
@@ -252,7 +252,7 @@
 .sc-anatomy { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .sc-part { display: flex; flex-direction: column; gap: 14px; padding: 12px 12px 20px; border-radius: 20px; background: #fff; }
 .sc-part > h3 { padding: 0 12px; }
-.sc-part h3 { font-size: 20px; letter-spacing: -.03em; padding-top: 6px; }
+.sc-part h3 { font-size: 20px; letter-spacing: 0; padding-top: 6px; }
 .sc-pain { font-size: 15px; line-height: 1.5; color: #23242b; }
 .sc-pain span { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
 /* Сцена — единственная карточка: элементы интерфейса стоят прямо на ней, без своих подложек */
@@ -446,13 +446,13 @@
 .sc-ill__palette span:nth-child(2) b { color: var(--p); }
 .sc-ill__rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .sc-ill__rules li { padding: 24px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 8px; }
-.sc-ill__rules h3 { font-size: 20px; letter-spacing: -.03em; }
+.sc-ill__rules h3 { font-size: 20px; letter-spacing: 0; }
 .sc-ill__rules p { color: var(--text-secondary); font-size: 15px; line-height: 1.55; }
 
 /* 12 Дизайн-система */
 .sc-ds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .sc-ds__card { padding: 28px; border-radius: 12px; background: #fff; display: flex; flex-direction: column; gap: 24px; }
-.sc-ds__card h3 { font-size: 22px; letter-spacing: -.03em; }
+.sc-ds__card h3 { font-size: 22px; letter-spacing: 0; }
 .sc-ds__card > p { color: var(--text-secondary); font-size: 15px; line-height: 1.6; }
 .sc-ds__card > .sc-font { font-family: 'Geologica', sans-serif; font-weight: 600; font-size: 40px; line-height: 1; letter-spacing: -.02em; color: var(--p); }
 .sc-weights { font-family: 'Geologica', sans-serif; display: flex; flex-direction: column; gap: 8px; }
@@ -483,7 +483,7 @@
 
 /* 14 Результаты */
 .sc-quote { margin: 0; padding: 32px; border-radius: 12px; background: var(--pl); color: var(--p); display: flex; flex-direction: column; gap: 16px; }
-.sc-quote p { font-size: 24px; line-height: 1.45; letter-spacing: -.025em; color: var(--t); }
+.sc-quote p { font-size: 24px; line-height: 1.45; letter-spacing: 0; color: var(--t); }
 .sc-quote cite { font-style: normal; font-size: 14px; color: #33405a; }
 
 /* 15 Выводы */
@@ -966,11 +966,11 @@
 .sc-persona.is-in { opacity: 1; transform: none; }
 .sc-persona__head { display: flex; align-items: center; gap: 24px; }
 .sc-persona__ava { flex-shrink: 0; width: 72px; height: 72px; border-radius: 20px; background: var(--pl); object-fit: cover; }
-.sc-persona h3 { font-size: 24px; letter-spacing: -.03em; line-height: 1.2; }
+.sc-persona h3 { font-size: 24px; letter-spacing: 0; line-height: 1.2; }
 .sc-persona__head small { display: block; margin-top: 4px; font-size: 14px; line-height: 1.4; color: var(--text-secondary); }
 .sc-persona__quote { display: flex; gap: 12px; margin: 0; padding: 18px 20px; border-radius: 14px; background: var(--bg); }
 .sc-persona__quote .iconsax { flex-shrink: 0; color: var(--p); }
-.sc-persona__quote p { font-size: 18px; line-height: 1.45; letter-spacing: -.01em; }
+.sc-persona__quote p { font-size: 18px; line-height: 1.45; letter-spacing: 0; }
 .sc-persona__cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
 .sc-persona .sc-persona__cap { margin-bottom: 14px; font-size: 13px; color: var(--text-secondary); }
 .sc-persona ul { display: flex; flex-direction: column; gap: 14px; }

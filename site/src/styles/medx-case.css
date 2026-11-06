@@ -80,7 +80,7 @@
 .mx-aud { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; }
 .mx-aud__who { padding: 40px; border-radius: 12px; background: var(--pl); display: flex; flex-direction: column; gap: 14px; justify-content: flex-end; min-height: 320px; }
 .mx-aud__who .sc-role__icon { background: #fff; margin-bottom: auto; }
-.mx-aud__who h3 { font-size: 32px; line-height: 1.15; letter-spacing: -.03em; color: var(--t); }
+.mx-aud__who h3 { font-size: 32px; line-height: 1.15; letter-spacing: 0; color: var(--t); }
 .mx-aud__who p { font-size: 18px; line-height: 1.55; color: var(--t); max-width: 520px; }
 .mx-aud__facts { display: grid; grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .mx-aud__facts li { padding: 20px 24px; border-radius: 12px; background: #fff; display: flex; align-items: center; gap: 16px; }

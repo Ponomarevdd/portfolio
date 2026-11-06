@@ -56,7 +56,7 @@
 /* Сравнение «было — стало»: старый скриншот поверх нового, граница двигается */
 .rc-cmp { display: flex; flex-direction: column; gap: 16px; }
 .rc-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
-.rc-tabs button { height: 40px; padding: 0 18px; border-radius: 100px; background: #fff; color: var(--t); font-size: 15px; letter-spacing: -.02em; cursor: pointer; transition: background-color .25s, color .25s; }
+.rc-tabs button { height: 40px; padding: 0 18px; border-radius: 100px; background: #fff; color: var(--t); font-size: 15px; letter-spacing: 0; cursor: pointer; transition: background-color .25s, color .25s; }
 .rc-tabs button:hover { background: #f0f0f3; }
 .rc-tabs button[aria-selected="true"] { background: var(--t); color: #fff; }
 .rc-tabs button:focus-visible { outline: 2px solid var(--p); outline-offset: 2px; }

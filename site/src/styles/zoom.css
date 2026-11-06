@@ -17,3 +17,8 @@
   .zoom__close { right: 16px; top: 16px; width: 48px; height: 48px; }
   .zoom__close span { left: 14px; top: 23px; }
 }
+/* Крестик поворачивается при наведении, как в контактах */
+@media (prefers-reduced-motion: no-preference) {
+  .zoom__close { transition: transform .2s ease; }
+  .zoom__close:hover { transform: rotate(90deg); }
+}
