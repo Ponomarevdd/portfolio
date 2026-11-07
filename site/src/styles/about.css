@@ -1,3 +1,18 @@
-/* «Обо мне» собрана по структуре кейса (school-case.css): шапка текст слева, фото справа, ниже секции */
+.about-page { width: calc(100% - var(--page-gutter) * 2); max-width: 1120px; margin: 72px auto 0; }
+.about-back { margin-bottom: 28px; }
+/* Шапка: фото слева (4:3), справа имя и один абзац; ниже обычный текст без заголовков */
+.about-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: center; }
 .about-photo { aspect-ratio: 4 / 3; border-radius: 16px; background: #eee9e3; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .about-photo-initial { font-size: clamp(110px, 14vw, 200px); letter-spacing: 0; color: #d2c8ba; }
+.about-intro h1 { font-size: clamp(44px, 5.4vw, 72px); font-weight: 400; letter-spacing: 0; line-height: 1.05; margin: 0 0 24px; }
+.about-intro p, .about-text p { font-size: 20px; line-height: 1.6; color: #23242b; margin: 0; text-wrap: pretty; }
+.about-text { max-width: 820px; margin-top: 64px; display: flex; flex-direction: column; gap: 20px; }
+@media (max-width: 900px) { .about-hero { gap: 36px; } }
+@media (max-width: 650px) {
+ .about-page { margin-top: 48px; }
+ .about-hero { grid-template-columns: 1fr; gap: 28px; }
+ .about-photo-initial { font-size: 130px; }
+ .about-intro p, .about-text p { font-size: 18px; }
+ .about-text { margin-top: 40px; }
+}
+.about-nw { white-space: nowrap; }

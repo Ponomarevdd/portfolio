@@ -1,46 +1,24 @@
 ---
 import Page from '../layouts/Page.astro';
 import BackLink from '../components/BackLink.astro';
-import '../styles/school-case.css';
 import '../styles/about.css';
 ---
 <Page title="Обо мне">
-  <article class="sc about">
-    <header class="page-heading sc-cover">
-      <BackLink/>
-      <div class="sc-cover__grid">
-        <div class="sc-cover__text">
-          <h1>Дмитрий<br/>Пономарев</h1>
-          <p class="sc-cover__lead">Senior UI/UX-дизайнер, больше пяти лет в продуктовом дизайне. Проектирую сложные цифровые продукты: образовательные платформы, интерактивные сервисы и e-learning.</p>
-        </div>
-        <div class="about-photo" role="img" aria-label="Место для фотографии Дмитрия">
-          <span class="about-photo-initial" aria-hidden="true">Д.</span>
-        </div>
+  <div class="about-page">
+    <div class="about-back"><BackLink/></div>
+    <section class="about-hero" aria-labelledby="about-title">
+      <div class="about-photo" role="img" aria-label="Место для фотографии Дмитрия">
+        <span class="about-photo-initial" aria-hidden="true">Д.</span>
       </div>
-      <dl class="sc-meta">
-        <div><dt>Роль</dt><dd>Senior UI/UX Designer</dd></div>
-        <div><dt>Опыт</dt><dd>5 лет</dd></div>
-        <div><dt>Город</dt><dd>Москва</dd></div>
-        <div><dt>Формат</dt><dd>Удалённо или гибрид</dd></div>
-      </dl>
-    </header>
-
-    <div class="sc-body">
-      <section class="sc-sec" aria-labelledby="h-exp">
-        <div class="sc-head"><h2 id="h-exp">Опыт</h2></div>
-        <div class="sc-main">
-          <p class="sc-lead">Два года руководил отделом дизайна в Pulsar Production. Вёл команду из 5–7 дизайнеров, переводил бизнес-требования в продуктовые задачи и UX/UI-решения, участвовал в продуктовой логике и roadmap, выстраивал процессы с разработкой и QA.</p>
-          <p>До этого три года был Middle UI/UX-дизайнером в той же студии: делал интерактивные продукты, обучающие модули и тесты, готовил макеты к разработке и развивал дизайн-систему.</p>
-        </div>
-      </section>
-
-      <section class="sc-sec" aria-labelledby="h-approach">
-        <div class="sc-head"><h2 id="h-approach">Подход</h2></div>
-        <div class="sc-main">
-          <p class="sc-lead">Начинаю со сценариев и информационной архитектуры: User Flow, CJM, вайрфреймы. Дальше прототипы в Figma, интерфейсы и дизайн-система, которая держит продукт консистентным.</p>
-          <p>Люблю чистую типографику, отзывчивую вёрстку и движение, у которого есть смысл.</p>
-        </div>
-      </section>
+      <div class="about-intro">
+        <h1 id="about-title">Дмитрий<br/>Пономарев</h1>
+        <p>Senior UI/UX-дизайнер, больше пяти лет в продуктовом дизайне. Проектирую сложные цифровые продукты: образовательные платформы, интерактивные сервисы и e-learning.</p>
+      </div>
+    </section>
+    <div class="about-text">
+      <p>Два года руководил отделом дизайна в Pulsar Production. Вёл команду из <span class="about-nw">5–7</span> дизайнеров, переводил бизнес-требования в продуктовые задачи и UX/UI-решения, участвовал в продуктовой логике и roadmap, выстраивал процессы с разработкой и QA.</p>
+      <p>До этого три года был Middle UI/UX-дизайнером в той же студии: делал интерактивные продукты, обучающие модули и тесты, готовил макеты к разработке и развивал дизайн-систему.</p>
+      <p>Начинаю со сценариев и информационной архитектуры: User Flow, CJM, вайрфреймы. Дальше прототипы в Figma, интерфейсы и дизайн-система, которая держит продукт консистентным. Люблю чистую типографику, отзывчивую вёрстку и движение, у которого есть смысл.</p>
     </div>
-  </article>
+  </div>
 </Page>
