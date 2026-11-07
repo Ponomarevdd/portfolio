@@ -1,13 +1,16 @@
 import { gsap } from 'gsap';
 
 const dialog = document.querySelector<HTMLDialogElement>('#contact-dialog')!;
-const opener = document.querySelector<HTMLButtonElement>('[data-contact-open]')!;
+// Открыть контакты можно из меню и из других кнопок с data-contact-open (например, карточка в «Обо мне»)
+const openers = [...document.querySelectorAll<HTMLButtonElement>('[data-contact-open]')];
+let opener: HTMLElement = openers[0];
 const closer = dialog.querySelector<HTMLButtonElement>('.contact-close')!;
 let closing = false;
 let previousOverflow = '';
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
-const open = () => {
+const open = (event?: Event) => {
   if (dialog.open) return;
+  if (event?.currentTarget instanceof HTMLElement) opener = event.currentTarget;
   previousOverflow = document.documentElement.style.overflow;
   document.documentElement.style.overflow = 'hidden';
   dialog.showModal();
@@ -29,11 +32,11 @@ const close = () => {
   } });
 };
 const cancel = (event: Event) => { event.preventDefault(); close(); };
-opener.addEventListener('click', open);
+openers.forEach((button) => button.addEventListener('click', open));
 closer.addEventListener('click', close);
 dialog.addEventListener('cancel', cancel);
 if (import.meta.hot) import.meta.hot.dispose(() => {
-  opener.removeEventListener('click', open);
+  openers.forEach((button) => button.removeEventListener('click', open));
   closer.removeEventListener('click', close);
   dialog.removeEventListener('cancel', cancel);
   gsap.killTweensOf([dialog, dialog.querySelector('.contact-layout')]);
